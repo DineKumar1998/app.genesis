@@ -1,0 +1,6 @@
+node_modules
+.env
+core/uploads
+pharma_dashboard/node_modules
+pharma_dashboard/build
+firebase_notification/admin-sdk.json
