@@ -12,10 +12,10 @@ module.exports = async (filters) => {
   let sortBy = {};
 
   if (process.env.SORT_BY_NAME == "true") sortBy["name"] = 1;
-  if (process.env.SORT_BY_TYPE == "true") sortBy["type_id.name"] = 1;
-  if (process.env.SORT_BY_CATEGORY == "true") sortBy["category_id.name"] = 1;
-  if (process.env.SORT_BY_CREATED_DATE == "true") sortBy["created_on"] = 1;
-  if (process.env.SORT_BY_DIVISION == "true") sortBy["division_id.name"] = 1;
+  else if (process.env.SORT_BY_TYPE == "true") sortBy["type_id.name"] = 1;
+  else if (process.env.SORT_BY_CATEGORY == "true") sortBy["category_id.name"] = 1;
+  else if (process.env.SORT_BY_CREATED_DATE == "true") sortBy["created_on"] = 1;
+  else if (process.env.SORT_BY_DIVISION == "true") sortBy["division_id.name"] = 1;
 
   if (sortBy && Object.keys(sortBy).length === 0 && sortBy.constructor === Object) sortBy["created_on"] = -1;
    
