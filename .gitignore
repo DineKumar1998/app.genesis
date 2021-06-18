@@ -4,3 +4,5 @@ core/uploads
 pharma_dashboard/node_modules
 pharma_dashboard/build
 firebase_notification/admin-sdk.json
+.DS_Store
+.idea
