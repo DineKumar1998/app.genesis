@@ -1,6 +1,7 @@
 import fetcher from "src/lib/fetcher";
+import C from '../../constants';
 
-const URL = '/product';
+const URL = `${C.API_URL}/product`;
 
 const AttachPic = async (data) => {
   let d = { ...data }

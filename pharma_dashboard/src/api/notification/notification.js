@@ -1,6 +1,7 @@
 import fetcher from "src/lib/fetcher";
+import C from '../../constants';
 
-const URL = '/notification';
+const URL = `${C.API_URL}/notification`;
 
 const SendNotification = async (d) => {
   let data = { ...d };
@@ -8,7 +9,7 @@ const SendNotification = async (d) => {
   return rs
 }
 
-const newUrl = "/rep/get"
+const newUrl = `${C.API_URL}/rep/get`; 
 
 const NotifiGetMr = async () => {
   let data = { "is_owner": false }

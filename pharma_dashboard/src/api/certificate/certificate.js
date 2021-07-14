@@ -1,7 +1,7 @@
-// import axios from 'axios'
-
 import fetcher from "src/lib/fetcher";
-const URL = '/certificate';
+import C from '../../constants';
+
+const URL = `${C.API_URL}/certificate`;
 
 
 const GetCertificate = async () => {

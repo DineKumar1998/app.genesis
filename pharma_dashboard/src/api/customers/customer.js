@@ -1,5 +1,7 @@
 import fetcher from "src/lib/fetcher";
-const URL = '/customer';
+import C from '../../constants';
+
+const URL = `${C.API_URL}/customer`;
  
 const GetCustomer = async (data) => {
   let d ={...data}

@@ -1,6 +1,7 @@
 import fetcher from "src/lib/fetcher";
+import C from '../../constants';
 
-const URL = '/franchisee';
+const URL = `${C.API_URL}/franchisee`;
 
 
 const GetFranchisee = async (data) => {

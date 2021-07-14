@@ -1,7 +1,7 @@
 import fetcher from "src/lib/fetcher";
+import C from '../../../constants';
 
-
-const URL = '/division';
+const URL = `${C.API_URL}/division`;
 
 
 const GetDivisionType = async () => {

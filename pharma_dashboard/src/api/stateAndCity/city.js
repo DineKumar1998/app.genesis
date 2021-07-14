@@ -1,7 +1,7 @@
 import fetcher from "src/lib/fetcher";
+import C from '../../constants';
 
-const URL = '/states';
-
+const URL = `${C.API_URL}/states`
 
 const GetCity = async (id) => {
   let rs = await fetcher({ method: "get", url: `${URL}/${id}` })

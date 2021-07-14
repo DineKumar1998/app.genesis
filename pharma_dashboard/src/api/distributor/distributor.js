@@ -1,8 +1,7 @@
 import fetcher from "src/lib/fetcher";
+import C from '../../constants';
 
-
-const URL = '/rep';
-
+const URL = `${C.API_URL}/rep`;
 
 const GetDistributor = async (data) => {
   let d = { ...data }
@@ -17,11 +16,9 @@ const SearchDistributor = async (data) => {
   return rs
 }
 
-const URLDist = "/franchisee/addRepAndFranchisee"
+const URLDist = `${C.API_URL}/franchisee/` ;
 
 const AddRepAndFranchisee = async (data) => {
-
-  
   var bodyFormData = new FormData();
   bodyFormData.append('firm_name', data.firm_name);
   bodyFormData.append('gst_number', data.gst_number);
@@ -47,9 +44,7 @@ const AddRepAndFranchisee = async (data) => {
   bodyFormData.append('aadhar_no', data.aadhar_no);
   bodyFormData.append('profile_pic', data.profile_pic);
   bodyFormData.append('active', data.active);
-
-
-  let rs = await fetcher({ method: "post", url: URLDist, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" } })
+  let rs = await fetcher({ method: "post", url: `${URLDist}/addRepAndFranchisee`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" } })
  return rs
 }
 
@@ -84,7 +79,7 @@ const UpdateRepAndFranchisee = async (data) => {
   bodyFormDataDst.append('image', data.profile_pic);
   bodyFormDataDst.append('active', data.active);
 
-  let rs = await fetcher({ method: "post", url: "/franchisee/update", data: bodyFormData, headers: { "Content-Type": "multipart/form-data" } })
+  let rs = await fetcher({ method: "post", url: `${URLDist}/update`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" } })
   let DsRs = await fetcher({ method: "post", url: `${URL}/update`, data: bodyFormDataDst, headers: { "Content-Type": "multipart/form-data" } })
   
   let response = null ;

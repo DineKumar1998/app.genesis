@@ -1,7 +1,7 @@
 import fetcher from "src/lib/fetcher";
+import C from '../../constants';
 
-const URL = '/promo';
-
+const URL = `${C.API_URL}/promo`
 
 const GetPromo = async () => {
   let rs = await fetcher({ method: "post", url: URL, })
