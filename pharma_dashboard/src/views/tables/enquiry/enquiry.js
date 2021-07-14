@@ -20,6 +20,7 @@ const Table = () => {
 
   const toggleModal = (id) => { updateShowModal(state => !state); setDeleteItemId(id) };
 
+
   // ------------------ Table Header fields --------------------
 
   const fields = [

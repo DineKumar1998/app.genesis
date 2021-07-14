@@ -4,7 +4,6 @@ import { ModalContext } from "./context";
 
 const ConfirmDelete = () => {
     const btnStyle = { borderRadius: "300px" }
-
     return (
         <ModalContext.Consumer>
             {context => {

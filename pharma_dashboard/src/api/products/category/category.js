@@ -1,7 +1,7 @@
 import fetcher from "src/lib/fetcher";
 import C from '../../../constants';
 
-const URL = `${C.API_URL}/category`;
+const URL = `${C.API_URL}/product/category`;
 
 const GetCategoryType = async (id) => {
   let rs = await fetcher({ method: "post", url: `${URL}/get` })
