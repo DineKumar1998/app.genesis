@@ -2,7 +2,6 @@
   "name": "webhopers",
   "version": "2.1.0",
   "description": "pharma app dashboard",
-  "proxy": "http://192.168.0.155:3014/api/web",
   "main": "index.js",
   "private": true,
   "repository": {
