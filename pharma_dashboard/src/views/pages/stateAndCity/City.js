@@ -21,37 +21,26 @@ class City extends Component {
 
   addItemToState = (item) => {
     this.setState({ updated: true });
-    this.setState((prevState) => ({
-      items: [...prevState.items, item],
-    }));
   };
 
   // ****************** Update Function *****************************
 
   updateState = (item) => {
-    const itemIndex = this.state.items.findIndex((data) => data.id === item.id);
-    const newArray = [
-      ...this.state.items.slice(0, itemIndex),
-      item,
-      ...this.state.items.slice(itemIndex + 1),
-    ];
-    this.setState({ items: newArray });
     this.setState({ updated: true });
   };
 
   // ****************** Delete Function *****************************
 
   deleteItemFromState = (id) => {
-    const updatedItems = this.state.items.filter((item) => item.id !== id);
-    this.setState({ items: updatedItems });
+    this.setState({ updated: true });
   };
 
   // ****************** ComponentDidMount Function ********************
 
   async componentDidMount() {
     let rs = await GetCity(this.state.stateId);
-    if (rs) {
-      let json = rs.map(function (value, key) {
+    if (rs.success === true) {
+      let json = rs.data.map(function (value, key) {
         return {
           id: uuid(),
           name: value,
@@ -66,8 +55,8 @@ class City extends Component {
   async componentDidUpdate() {
     if (this.state.updated) {
       let rs = await GetCity(this.state.stateId);
-      if (rs) {
-        let json = rs.map(function (value, key) {
+      if (rs.success === true) {
+        let json = rs.data.map(function (value, key) {
           return {
             id: uuid(),
             name: value,

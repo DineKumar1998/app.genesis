@@ -397,7 +397,8 @@ button.bg-default:focus {
 
 .rounded-circle {
     border-radius: 50% !important;
-    padding-bottom: 80% !important
+    width: 100px !important;
+    height: 100px !important;
 }
 
 .d-flex {

@@ -32,7 +32,7 @@ class AddEditForm extends React.Component {
     min_order_qty: "1",
     images: [],
     visualate: [],
-    technical_detail: "",
+    details: "",
     packing: "",
     packing_type: "",
     sku: "",
@@ -95,44 +95,7 @@ class AddEditForm extends React.Component {
     this.setState({visUrls : newstate})
   };
 
-// ***************** IMAGE FUNCTION ****************************
 
-  handleChangePhotoFileInput = e => {
-    const target = e.currentTarget;
-    const file = target.files.item(0);
-
-    // validate file as image
-    if (!file.type.startsWith("image/")) {
-      return NotificationManager.error("Image Format Not Supported", "Info", 2000)
-    }
-
-    // store reference to the File object and a base64 representation of it
-    readDataUrl(file).then(dataUrl => {
-      this.setState({
-        ...this.state,
-        file,
-        base64: dataUrl,
-      });
-    });
-  };
-
-  handleChangePhotoFileInputVisual = e => {
-    const target = e.currentTarget;
-    const file2 = target.files.item(0);
-
-    // validate file as image
-    if (!file2.type.startsWith("image/")) {
-      return NotificationManager.error("Image Format Not Supported", "Info", 2000)
-    }
-    // store reference to the File object and a base64 representation of it
-    readDataUrl(file2).then(dataUrl => {
-      this.setState({
-        ...this.state,
-        file2,
-        base642: dataUrl,
-      });
-    });
-  };
 
   selectFormater() {
     let pkgType = ""
@@ -192,7 +155,7 @@ class AddEditForm extends React.Component {
         description: this.state.description,
         price: parseInt(this.state.price),
         min_order_qty: parseInt(this.state.min_order_qty),
-        technical_detail : this.state.technical_detail,
+        details : this.state.details, 
         packing : this.state.packing,
         type_id : this.state.type_id,
         category_id : this.state.category_id,
@@ -200,17 +163,19 @@ class AddEditForm extends React.Component {
         division_id : this.state.division_id,
         sku : this.state.sku,
         hsn_code : this.state.hsn_code,
-        images : this.state.images,
-        visualate : this.state.visualate,
-        new_launched : new_launched
+        images : this.state.imgFile,
+        visualate : this.state.visFile,
+        new_launched : new_launched 
       });
-      if (rs !== true) {
-        this.props.addItemToState(rs);
+
+      if (rs.success === true) {
+        this.props.addItemToState(true);
         NotificationManager.info("Product Added Successfully", "Info", 2000);
       }
       else {
-        NotificationManager.error("Something Went Wrong", "Info", 2000);
+        NotificationManager.error(rs.message, "Info", 2000);
       }
+
       this.props.toggle();
     }
   };
@@ -232,7 +197,7 @@ class AddEditForm extends React.Component {
         description: this.state.description,
         price: parseInt(this.state.price),
         min_order_qty: parseInt(this.state.min_order_qty),
-        technical_detail : this.state.technical_detail,
+        details : this.state.details,
         packing : this.state.packing,
         type_id : this.state.type_id,
         category_id : this.state.category_id,
@@ -244,12 +209,13 @@ class AddEditForm extends React.Component {
         visualate : this.state.visFile,
         new_launched : new_launched
       });
-      if (rs !== true && rs.id) {
-        this.props.updateState(rs.id);
+      
+      if (rs.success === true) {
+        this.props.updateState(true);
         NotificationManager.success("Product Updated Successfully", "Info", 2000);
       }
       else{
-        NotificationManager.error("Something Went Wrong", "Info", 2000);
+        NotificationManager.error(rs.message, "Error", 3000);
       }
       this.props.toggle();
     }
@@ -327,16 +293,16 @@ class AddEditForm extends React.Component {
     let rsDivision = await GetDivisionType()
     let rsCategory = await GetCategoryType()
 
-    if (rsPackaging && rsType && rsDivision && rsCategory) {
-      this.setState({ packageType: rsPackaging })
-      this.setState({ type: rsType })
-      this.setState({ divisionType: rsDivision })
-      this.setState({ category: rsCategory })
+    if (rsPackaging.success === true && rsType.success === true && rsDivision.success === true && rsCategory.success === true) {
+      this.setState({ packageType: rsPackaging.data })
+      this.setState({ type: rsType.data })
+      this.setState({ divisionType: rsDivision.data })
+      this.setState({ category: rsCategory.data })
     }
 
     if (this.props.item) {
-      const { id, name, description, price, min_order_qty, technical_detail, packing, sku, hsn_code } = this.props.item;
-      this.setState({ id, name, description, price, min_order_qty, technical_detail, packing, sku, hsn_code });
+      const { id, name, description, price, min_order_qty, details, packing, sku, hsn_code } = this.props.item;
+      this.setState({ id, name, description, price, min_order_qty, details, packing, sku, hsn_code });
 
       if (this.props.item.new_launched === true){
         this.setState({new_launched  : "true"})
@@ -423,16 +389,15 @@ class AddEditForm extends React.Component {
       if (this.state.update === true){
         this.getData()
         this.setState({update : false})
-
       }
     }
   
 
   render() {
+
     return (
 
       <>
-  
       {/* _________________________________TEXT INPUT______________________________________ */}
 
       <Row form>
@@ -466,8 +431,8 @@ class AddEditForm extends React.Component {
       <Row form>
         <Col md={6}>
           <FormGroup>
-          <Label>Technical Detail</Label>
-          <Input type="text" name="technical_detail" onChange={this.onChange} value={this.state.technical_detail === null ? '' : this.state.technical_detail} />
+          <Label>Description</Label>
+          <Input type="text" name="details" onChange={this.onChange} value={this.state.details === null ? '' : this.state.details} />
           </FormGroup>
         </Col>
         <Col md={6}>
@@ -479,7 +444,6 @@ class AddEditForm extends React.Component {
       </Row>
 
       {/* ___________________________________SELECT___________________________________ */}
-
 
       <Row form>
         <Col md={6}>
@@ -588,14 +552,12 @@ class AddEditForm extends React.Component {
               return (
                 <>
                   {this.state.visUrls.length < 50 ?
-                  
                   <div style={{position:"relative"}}>
                   <button onClick={(e) => this.removeimage(f.url, "Vis")} class="close AClass">
                      <span>&times;</span>
                   </button>
                   <img src={f.url} alt='products' height="80" width="80" /> 
-
-              </div>                  
+                </div>                  
                   :
                     <img src={f.url} alt='products' height="30" width="30" />
                   }

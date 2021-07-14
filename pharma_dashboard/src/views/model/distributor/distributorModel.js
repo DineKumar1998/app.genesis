@@ -27,23 +27,25 @@ class ModalForm extends Component {
 
       if(label === 'Edit'){
         button =  <CButton size="sm" color="info" 
-                  style={{float: "left", marginRight:"10px"}}
+                  style={{float: "left"}}
                   onClick={this.toggle}>
                     <IconEdit />
                   </CButton> 
         title = 'Edit Distributor'
       } else {
         button = <Button
+                  id = "sucessbtn"
+                  style={{width : "160px", marginRight : "50px",}}
                   size="sm"
                   color="success"
                   onClick={this.toggle}>
-                  <b>{label}</b>
+                  <b>{label}{' '}<i class="fas fa-plus"></i></b>
                 </Button>
         title = 'Add Distributor'
       }
       return (
       <div  style={{marginRight:"5px"}}>
-        {button}
+        {button}{' '}
         <Modal size="xl" isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
           <ModalHeader toggle={this.toggle} close={closeBtn}>{title}</ModalHeader>
           <ModalBody>

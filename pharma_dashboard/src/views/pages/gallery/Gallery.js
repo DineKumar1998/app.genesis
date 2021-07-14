@@ -126,8 +126,8 @@ class CardGridView extends React.Component {
     let rs = await GetProducts();
 
     let newData = [];
-    if (rs !== true) {
-      rs.map((it) => {
+    if (rs.success === true) {
+      rs.data.map((it) => {
         if (Array.isArray(it.images)) {
           it.images.map((img) => {
             newData.push({
@@ -158,8 +158,8 @@ class CardGridView extends React.Component {
     let rs = await GetProducts();
     if (this.state.updated === true) {
       let updatedData = [];
-      if (rs !== true) {
-        rs.map((it) => {
+      if (rs.success === true) {
+        rs.data.map((it) => {
           if (Array.isArray(it.images)) {
             it.images.map((img) => {
               updatedData.push({

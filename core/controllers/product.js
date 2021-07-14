@@ -97,6 +97,7 @@ exports.addProduct = async(productImages, product) => {
                 }
             })
         }
+        
         if (productImages.visualate) {
 
 
@@ -573,15 +574,19 @@ exports.attachPic = async(productprops) => {
     }
     //detach image from product
 exports.detachPic = async(productprops) => {
+
     if (!productprops.id) throw new Error("Please provide product Id");
     if (!productprops.url) throw new Error("Please provide product image url");
     if (!productprops.type) throw new Error("Please provide product image type");
 
     let productId = productprops.id;
     let filter = {}
+    productprops.url = (productprops.url).replace(process.env.BASE_URL+"/", "")
+    console.log("productprops.url", productprops.url)
     if (productprops.url) filter.url = productprops.url;
     if (productprops.type) filter.type = productprops.type;
     // filter.modified_on = new Date(Date.now());
+
     let productRecords = await detachPic(productId, filter);
 
     return productRecords;

@@ -67,6 +67,16 @@ const deleteOrder = async(req,res,next)=>{
     }
 }
 
+const searchOrder = async(req, res, next) => {
+    try {
+        let orderRes = await orderController.searchOrder(req.body)
+        req.data = orderRes
+        next()
+    } catch (e) {
+        req.status = 400;
+        next(e)
+    }
+}
 
 
-module.exports = {addOrder, getOrder, countOrder, deleteOrder}
+module.exports = {addOrder, getOrder, countOrder, deleteOrder, searchOrder}

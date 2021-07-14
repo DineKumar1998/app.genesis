@@ -3,46 +3,27 @@ import fetcher from "src/lib/fetcher";
 const URL = '/product/category';
 
 const GetCategoryType = async (id) => {
-  try{
-    let rs = await fetcher({ method: "post", url: `${URL}/get`})
-    return rs.data.data
-  }
-  catch(e){
-    return true
-  }
+  let rs = await fetcher({ method: "post", url: `${URL}/get` })
+  return rs
 }
 
 const AddCategoryType = async (data) => {
-  let d = {...data};
-  try{
-    let rs = await fetcher({ method: "post", url: `${URL}/add`, data: d})
-    return rs.data.data
-  }
-  catch(e){
-    return true
-  }
+  let d = { ...data };
+  let rs = await fetcher({ method: "post", url: `${URL}/add`, data: d })
+  return rs
 }
 
 const UpdateCategoryType = async (data) => {
-  let d = {...data};
-  try {
-    let rs = await fetcher({ method: "post", url: `${URL}/update`, data: d })
-    return rs;
-  } catch (e) {
-    return true
-  }
+  let d = { ...data };
+  let rs = await fetcher({ method: "post", url: `${URL}/update`, data: d })
+  return rs;
 }
 
 const DeleteCategoryType = async (id) => {
-  try {
-    let rs = await fetcher({ method: "get", url: `${URL}/delete/${id}` })
-    if (rs) {
-      return id;
-    }
-  } catch (e) {
-    return true
-  }
+  let rs = await fetcher({ method: "get", url: `${URL}/delete/${id}` })
+  return rs;
+
 };
 
 
-export  { GetCategoryType , AddCategoryType , UpdateCategoryType ,  DeleteCategoryType};
+export { GetCategoryType, AddCategoryType, UpdateCategoryType, DeleteCategoryType };

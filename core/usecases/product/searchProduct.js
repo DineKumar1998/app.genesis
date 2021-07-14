@@ -4,8 +4,6 @@ const model = require("../../models/product");
 //get product  
 module.exports = async(filters) => {
         //const regex = new RegExp(escapeRegex(filters.data), 'gi');
-        console.log("filters", filters)
-
         let filter = {};
         if(filters.data){
             filter.$or = [

@@ -18,36 +18,46 @@ class Offer extends Component {
   // ****************** Add Function *****************************
 
   addItemToState = (item) => {
-    if(item){
-      this.setState({updated : true})
+    if (item) {
+      this.setState({ updated: true })
     }
   };
 
   // ****************** Update Function *****************************
 
   updateState = (item) => {
-    if(item){
-      this.setState({updated : true})
+    if (item) {
+      this.setState({ updated: true })
     }
   };
 
   // ****************** Delete Function *****************************
 
   deleteItemFromState = (id) => {
-   if(id){
-    this.setState({updated : true})
-   }
+    if (id) {
+      this.setState({ updated: true })
+    }
   };
 
   // ****************** Get Data Function *****************************
 
   getData = async () => {
     let rs = await GetOffer();
-    if (rs) {
-      this.setState({ items: rs });
-      this.setState({ loading: false })
-      this.setState({updated : false})
+    if (rs.success === true) {
+      let newRS = []
+      rs.data.map((it) => {
+        newRS.push({
+          id: it.id,
+          valid_upto: it.valid_upto,
+          title: it.title,
+          reps: it.reps,
+          description: it.description,
+          image: it.image.split(",")
+        })
+      })
+      this.setState({ items: newRS });
     }
+    this.setState({ loading: false })
   }
 
   // ****************** ComponentDidMount Function ********************
@@ -60,8 +70,8 @@ class Offer extends Component {
 
   async componentDidUpdate() {
     if (this.state.updated) {
-      this.setState({updated: false});
       this.getData()
+      this.setState({ updated: false });
     }
   }
 

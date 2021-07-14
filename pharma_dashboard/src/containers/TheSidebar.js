@@ -16,8 +16,6 @@ import logo from '../assets/images/profile.png'
 // sidebar nav config
 import navigation from "./_nav";
 import { UserProfile } from "src/api/user/user";
-// import C from "src/constants";
-// import Constants from "src/secrets";
 
 const TheSidebar = () => {
   const dispatch = useDispatch();
@@ -27,19 +25,19 @@ const TheSidebar = () => {
 
   React.useEffect(() => {
     async function fetchMyAPI() {
-        let rs = await UserProfile()
-        if (rs !== true){
-            setlogotext(rs.company)
-            if (rs.profile_pic !== null){
-              setlogoImg(rs.profile_pic)
-            }
-            else {
-              setlogoImg(logo)
-            }
+      let rs = await UserProfile()
+      if (rs.success === true) {
+        setlogotext(rs.data.company)
+        if (rs.data.profile_pic !== null) {
+          setlogoImg(rs.data.profile_pic)
         }
         else {
-          setlogotext("Demo App")
+          setlogoImg(logo)
         }
+      }
+      else {
+        setlogotext("Demo App")
+      }
     }
     fetchMyAPI()
   }, [])

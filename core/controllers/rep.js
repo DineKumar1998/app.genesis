@@ -57,6 +57,7 @@ async function convertcsvtojson(filePath) {
 //Add rep
 exports.addRep = async(rep) => {
 
+    console.log("reps Data", rep)
     if (!rep.franchisee_id) throw new Error('Franchisee Id is Required'); //will changed by auth
     if (!rep.name) throw new Error('Name is Required');
     if (!rep.email) throw new Error('Email is Required');
@@ -80,6 +81,9 @@ exports.addRep = async(rep) => {
     if (rep.profile_pic) profile_pic = rep.profile_pic
         //hashing password
     let passwordHash = bcrypt.hashSync(rep.password, 10);
+    let rep_active = false
+    if(rep.active === "true") { rep_active = true}
+    else {rep_active = false}
 
     let newrep = {
         franchisee_id: rep.franchisee_id,
@@ -95,7 +99,7 @@ exports.addRep = async(rep) => {
         password_hash: passwordHash,
         is_owner: rep.is_owner,
         op_area: rep.op_area,
-        active: rep.active,
+        active: rep_active,
         created_on: new Date(Date.now())
     }
 
@@ -503,10 +507,6 @@ exports.updateRep = async(repprops) => {
         if(typeof phone == "boolean") throw new Error('Invalid Phone number');
         filter.phone = phone;
     }
-
-    
-
-
     if (repprops.dob != null && repprops.dob != "null" && repprops.dob != "NA") {
         filter.dob = repprops.dob;
     }
@@ -523,6 +523,7 @@ exports.updateRep = async(repprops) => {
     filter.modified_on = new Date(Date.now());
     let repRecord = await updateRep(repId, filter);
     return Formatter.RepFormatter(repRecord)
+    
 }
 
 exports.changePassword = async(repprops) => {

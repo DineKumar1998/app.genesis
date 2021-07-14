@@ -17,20 +17,8 @@ const Table = (props) => {
     { key: "address", label: "Address", },
     { key: "phone", label: "Phone", },
     { key: "created_on", label: "Created On", },
-    {
-      key: "Edit",
-      label: "",
-      _style: { width: "1%" },
-      sorter: false,
-      filter: false,
-    },
-    {
-      key: "Delete",
-      label: "",
-      _style: { width: "1%" },
-      sorter: false,
-      filter: false,
-    },
+    { key: "Edit", label: "", _style: { width: "1%" }, sorter: false, filter: false, },
+    { key: "Delete", label: "", _style: { width: "1%" }, sorter: false, filter: false, },
   ];
 
 
@@ -51,12 +39,12 @@ const Table = (props) => {
     let confirmDelete = window.confirm("Delete item forever?");
     if (confirmDelete){
       let rs = await DeleteDivisionType(id)
-      if (rs){
+      if (rs.success === true){
         props.deleteItemFromState(id);
         return NotificationManager.info("Deleted SuccessFully", "Success", 2000);
       }
       else{
-        return NotificationManager.error("Something Went Wrong", "Info", 2000);
+        return NotificationManager.error(rs.message, "Info", 2000);
       }
     }
   };

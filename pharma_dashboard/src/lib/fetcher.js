@@ -1,34 +1,39 @@
 import axios from 'axios'
 require("dotenv").config();
 
-const fetcher = async (data) =>{
+const fetcher = async (data) => {
 
-    // try{
+    try {
         const token = localStorage.getItem('token');
 
-    let RequestData = {
-        method: data.method,
-        url : `/api/web${data.url}`,
-        headers: {"x-access-token": token }
-    }
+        let RequestData = {
+            method: data.method,
+            url: data.url,
+            data: data.data,
+            headers: { "x-access-token": token }
+        }
 
-    if(data.data != null){
-        RequestData.data = data.data;
-    }
-    if(data.header !=null){
-        RequestData.headers = {
-            "x-access-token": token,
-            ...data.headers
+        let rs = await axios(RequestData).catch(function (error) {
+            if (error.response) {
+                return error.response.data
+            } else if (error.request) {
+                return error.request
+            } else {
+                return error.message
+            }
+        });
+
+        if (rs.data) {
+            rs = rs.data
+            return rs;
+        }
+        else {
+            return rs;
         }
     }
-
-    let rs = await axios(RequestData);
-
-    return rs;
-    // }
-    // catch(e){
-    //     return e;
-    // }
+    catch (e) {
+        return new Error(e.request.response.message);
+    }
 }
 
 

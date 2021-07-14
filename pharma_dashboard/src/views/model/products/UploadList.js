@@ -28,12 +28,12 @@ const ImportFromCsv = (props) => {
       let rs = await UploadListCsv({
         productFile: selectedFile
       })
-      if (rs && rs !== true) {
+      if (rs.success === true) {
         NotificationManager.success('Upload SuccessFully', 'Success');
         props.updateState(true)
       }
       else {
-        NotificationManager.error('Something Went Wrong', 'Error');
+        NotificationManager.error(rs.message, 'Error');
         setSelectedFile([])
       }
     }

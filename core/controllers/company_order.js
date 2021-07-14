@@ -18,7 +18,8 @@ const moment = require("moment");
 //Formatter
 const Formatter = require("../Formatters/index")
 
-const fs = require("fs")
+const fs = require("fs");
+const searchOrderWeb = require("../usecases/companyOrder/searchOrderWeb");
 //Add Order
 exports.addOrder = async(order) => {
     if (!order.orderlist) throw new Error('Order List is Required');
@@ -116,6 +117,7 @@ exports.addOrder = async(order) => {
         Subject: "New Order Placed By " + repInfo.name + " at " + moment(new Date(Date.now())).format("LLL"),
         Body: message
     }
+    console.log("email data", EmailData)
 
 
     for(let i=0; i< divisions.length; i++){
@@ -225,4 +227,16 @@ exports.deleteOrder = async(orderId)=>{
     let OrderResponse = await deleteOrder(orderId);
     return OrderResponse;
     
+}
+
+exports.searchOrder = async(orderFilter) => {
+
+    let orderRecords = await searchOrderWeb(orderFilter);
+
+        // orderRecords = sortByCondition.sort(orderRecords);
+    //     orderRecords = sortByCondition.sort(orderRecords, [{select: "name", order: "ascending"},{select: "type_name",order: "ascending"}]);
+
+    // console.log("*****************  4", orderRecords)
+
+    return orderRecords;
 }

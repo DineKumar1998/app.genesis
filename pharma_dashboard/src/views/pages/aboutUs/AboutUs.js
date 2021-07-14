@@ -76,71 +76,73 @@ class AboutUs extends React.Component {
     if (this.state.valid === true) {
       let rs = AddUpdateAbout({
         image: this.state.file,
-        phone: this.state.phone,
-        whatsapp: this.state.whatsapp,
-        website: this.state.website,
-        email: this.state.email,
+        phone: this.state.phone.trim(),
+        whatsapp: this.state.whatsapp.trim(),
+        website: this.state.website.trim(),
+        email: this.state.email.trim(),
         about: this.state.about,
         address: this.state.address,
         address2: this.state.address2,
         address3: this.state.address3,
-        facebook: this.state.facebook,
-        linkedin: this.state.linkedin,
-        pinterest: this.state.pinterest,
-        twitter: this.state.twitter,
+        facebook: this.state.facebook.trim(),
+        linkedin: this.state.linkedin.trim(),
+        pinterest: this.state.pinterest.trim(),
+        twitter: this.state.twitter.trim(),
         whatsapp_greeting: this.state.whatsapp_greeting,
-        corporate_video: this.state.corporate_video,
+        corporate_video: this.state.corporate_video.trim(),
         download_links: this.state.drive_List
       })
       if (rs) {
         NotificationManager.info("Info Updated Successfully", "Info", 2000);
         this.setState({ updated: true })
       }
+      this.setState({ valid: false })
     }
   };
 
   // ******************************Validation Function*************************************
 
   validation = () => {
-    if (!this.state.phone) { return NotificationManager.error("Enter your Phone No.", "Info", 2000) }
-    if (!this.state.whatsapp) { return NotificationManager.error("Enter your WhatsApp No.", "Info", 2000) }
-    if (!this.state.website) { return NotificationManager.error("Enter your Website", "Info", 2000) }
-    if (!this.state.email) { return NotificationManager.error("Enter your Email", "Info", 2000) }
-    if (!this.state.about) { return NotificationManager.error("Enter your Company Info", "Info", 2000) }
-    if (!this.state.address) { return NotificationManager.error("Enter your Address", "Info", 2000) }
-    if (!this.state.base64) { return NotificationManager.error("Upload Banner Image", "Info", 2000) }
-    if (!this.state.drive_List) { return NotificationManager.error("Enter Webhopers Product List Link", "Info", 2000) }
-    this.setState({ valid: true })
+    if (!this.state.phone.trim()) { return NotificationManager.error("Enter your Phone No.", "Info", 2000); }
+    else if ( this.state.phone.length <= 9 || this.state.phone.length > 12 || this.state.phone.length === 11 ) { return NotificationManager.error("Enter Valid Phone No.", "Info", 2000); }
+    else if (!this.state.whatsapp.trim()) { return NotificationManager.error("Enter your WhatsApp No.", "Info", 2000); }
+    else if (!this.state.website.trim()) { return NotificationManager.error("Enter your Website", "Info", 2000); }
+    else if (!this.state.email.trim()) { return NotificationManager.error("Enter your Email", "Info", 2000); }
+    else if (!this.state.about.trim()) { return NotificationManager.error("Enter your Company Info", "Info", 2000); }
+    else if (!this.state.address.trim()) { return NotificationManager.error("Enter your Address", "Info", 2000); }
+    else if (!this.state.base64.trim()) { return NotificationManager.error("Upload Banner Image", "Info", 2000); }
+    else if (!this.state.drive_List) { return NotificationManager.error("Enter Webhopers Product List Link", "Info", 2000) }
+    else{ this.setState({ valid: true })}
   }
 
   // ******************************ComponentDidMount Function*************************************
 
   async componentDidMount() {
     let rs = await GetAbout();
-    if (rs !== true) {
+    if (rs.success === true) {
       const { id, about, about_img, address, address2, address3, phone, whatsapp, whatsapp_greeting, website,
-        email, twitter, facebook, pinterest, linkedin, corporate_video } = rs;
+        email, twitter, facebook, pinterest, linkedin, corporate_video } = rs.data;
 
       this.setState({
         id, about, about_img, address, address2, address3, phone, whatsapp, whatsapp_greeting, website,
         email, twitter, facebook, pinterest, linkedin, corporate_video
       });
 
-      this.setState({ base64: rs.about_img })
-      this.setState({ drive_List: rs.download_links })    
+      this.setState({ base64: rs.data.about_img })
+      this.setState({ drive_List: rs.data.download_links })    
 
       let rsProfile = await UserProfile()
-      if (rsProfile !== true){
-        this.setState({companyName : rsProfile.company})
-        this.setState({profileImage : rsProfile.profile_pic})
+      if (rsProfile.success === true){
+        this.setState({companyName : rsProfile.data.company})
+        this.setState({profileImage : rsProfile.data.profile_pic})
       }
-      this.setState({loading : false})
     }
     else {
       this.setState({companyName : "Demo"})
       this.setState({profileImage : `${profile}`})
-      this.setState({loading : false})
     }
+    this.setState({loading : false})
+
   }
 
   // ******************************componentDidUpdate Function*************************************
@@ -149,18 +151,18 @@ class AboutUs extends React.Component {
 
     if (this.state.updated === true) {
       let rs = await GetAbout();
-      if (rs !== true) {
+      if (rs.success === true) {
 
         const { id, about, about_img, address, address2, address3, phone, whatsapp, whatsapp_greeting, website,
-          email, twitter, facebook, pinterest, linkedin, corporate_video } = rs;
+          email, twitter, facebook, pinterest, linkedin, corporate_video } = rs.data;
 
         this.setState({
           id, about, about_img, address, address2, address3, phone, whatsapp, whatsapp_greeting, website,
           email, twitter, facebook, pinterest, linkedin, corporate_video
         });
 
-        this.setState({ base64: rs.about_img })
-        this.setState({ drive_List: rs.download_links })
+        this.setState({ base64: rs.data.about_img })
+        this.setState({ drive_List: rs.data.download_links })
         this.setState({ updated: false })
       }
     }
@@ -201,7 +203,7 @@ class AboutUs extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <div className="text-center">
+                    <div className="text-center" style={{marginTop: '25px'}}>
                       <h5 className="h3" style={{ fontSize: "20px" }}>
                         {this.state.companyName}
                       </h5>

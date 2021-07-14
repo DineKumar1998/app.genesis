@@ -14,28 +14,6 @@ class Orders extends Component {
     };
   }
 
-  // ****************** Add Function *****************************
-
-  addItemToState = (item) => {
-    this.setState({ updated: true });
-    this.setState((prevState) => ({
-      items: [...prevState.items, item],
-    }));
-  };
-
-  // ****************** Update Function *****************************
-
-  updateState = (item) => {
-    const itemIndex = this.state.items.findIndex((data) => data.id === item.id);
-    this.setState({ updated: true });
-    const newArray = [
-      ...this.state.items.slice(0, itemIndex),
-      item,
-      ...this.state.items.slice(itemIndex + 1),
-    ];
-    this.setState({ items: newArray });
-  };
-
   // ****************** Delete Function *****************************
 
   deleteItemFromState = (id) => {
@@ -47,10 +25,10 @@ class Orders extends Component {
 
   getData = async() => {
     let rs = await GetOrders();
-    if (rs) {
-      this.setState({ items: rs });
-      this.setState({loading : false})
+    if (rs.success === true) {
+      this.setState({ items: rs.data });
     }
+    this.setState({loading : false})
   }
 
   // ****************** ComponentDidMount Function ********************
@@ -63,8 +41,9 @@ class Orders extends Component {
 
   async componentDidUpdate() {
     if (this.state.updated) {
-      this.setState({updated: false});
       this.getData()
+      this.setState({updated: false});
+
     }
   }
 
@@ -86,12 +65,12 @@ class Orders extends Component {
         </div>
         <Row>
           <Col>
-          {this.state.items === true ? <Page404/> :
+          {this.state.items.length === 0 ? <Page404/> :
             <Table
-              items={this.state.items}
-              updateState={this.updateState}
-              deleteItemFromState={this.deleteItemFromState}
-            /> }
+            items={this.state.items}
+            deleteItemFromState={this.deleteItemFromState}
+            /> 
+           } 
           </Col>
         </Row>
       </Container> }

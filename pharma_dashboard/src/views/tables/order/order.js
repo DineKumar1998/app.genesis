@@ -13,8 +13,8 @@ const Table = (props) => {
 
   const fields = [
     { key: "rep_name", label: "Distributor",  },
-    { key: "created_on", label: "Created On",  },
     { key: "Products", label: "Products and Quantity",  },
+    { key: "created_on", label: "Created On",  },
     { key: "Delete", label: "", _style: { width: "1%" }, sorter: false,filter: false,},
   ];
 
@@ -25,12 +25,12 @@ const Table = (props) => {
     let confirmDelete = window.confirm("Delete item forever?");
     if (confirmDelete){
       let rs = await DeleteOrder(id)
-      if (rs){
+      if (rs.success === true){
         props.deleteItemFromState(id);
         return NotificationManager.info("Deleted SuccessFully", "Info", 2000);
       }
       else{
-        return NotificationManager.error("Something Went Wrong", "Info", 2000);
+        return NotificationManager.error(rs.message, "Info", 2000);
       }
     }
   };
@@ -59,7 +59,7 @@ const Table = (props) => {
         rep_name : (item) => {
           return (
             <td className="py-2">
-              <p style={{fontSize:"16px", letterSpacing:"0.3px"}}>{item.rep_name}</p>
+              <p className="p_name">{item.rep_name}</p>
             </td>
           )
         },
@@ -72,10 +72,11 @@ const Table = (props) => {
                     <div className="course-preview">
                     </div>
                     <div className="course-info">
-                      <h6>{it.product.name}</h6>
-                      <p style={{fontSize:"16px"}}>Quantity : {it.product.min_order_qty}</p>
+                      <p className="p_name"><i className="fad p_icon fa-cart-plus"></i> &nbsp;{it.product.name.toUpperCase()}</p>
+                      <p  className="p_quantity"><i className="fad p_icon fa-balance-scale"></i>&nbsp; Quantity : {it.product.min_order_qty}</p>
+                      <p className="p_info">{it.product.division_name}</p>
                       <Link onClick={()=> openDist(it.product.name)} style={{color:"#0085ba", letterSpacing:"0.4px"}}>
-                        <button className="btn-product">View Product</button>
+                        <button className="btn-product"><span style={{fontSize : "14px"}}>View Product</span></button>
                       </Link>
                     </div>
                   </div>

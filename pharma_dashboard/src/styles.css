@@ -51,7 +51,7 @@ input {
   transition: all 0.2s ease-in-out;
 }
 .grow:hover {
-  transform: scale(2.1);
+  transform: scale(2.5);
 }
 
 /* --------------------------------------- */
@@ -628,4 +628,203 @@ a-login:hover {
 
 .btn {
   outline: none;
+}
+
+
+.p_name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #747474;
+}
+
+.p_quantity {
+  font-size: 15px;
+  font-weight: 500;
+  color: #5e5e5e;
+}
+
+.p_icon {
+  font-size: 18px;
+  color: #706f6f;
+}
+
+
+.p_info {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1c7742;
+}
+
+/* --------------------------PRODUCT IMG ------------------- */
+.box_pd {
+  width:60px;
+  height:60px;
+  position:relative;
+  border:1px solid #BBB;
+  background:#eee;
+}
+
+.ribbon_pd {
+  position: absolute;
+  right: -5px; top: -5px;
+  z-index: 1;
+  overflow: hidden;
+  width: 60px; height: 60px; 
+  text-align: right;
+}
+.ribbon_pd span {
+  letter-spacing: 4px;
+  font-size: 9px;
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  /* line-height: 20px; */
+  transform: rotate(
+45deg
+);
+  -webkit-transform: rotate(
+45deg
+);
+  width: 50px;
+  display: block;
+  background: #79A70A;
+  background: linear-gradient(#9BC90D 0%, #79A70A 100%);
+  box-shadow: 0 3px 10px -5px rgb(0 0 0);
+  position: absolute;
+  top: 10px;
+  right: -9px;
+}
+
+.td {
+  font-size: 14px; 
+}
+
+/* ------------------------------view Frenchisee info modal ------------------------ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bree+Serif&family=EB+Garamond:ital,wght@0,500;1,800&display=swap');
+
+#container_modal{
+	box-shadow: 0 15px 30px 1px grey;
+	background: rgba(255, 255, 255, 0.90);
+	text-align: center;
+	border-radius: 5px;
+	overflow: hidden;
+	height: auto;
+	width: 600px;
+}
+
+@media only screen and (max-width: 768px) {
+  div#container_modal {
+    width: 100%;
+}
+}
+
+.product-details {
+	position: relative;
+	text-align: left;
+	overflow: hidden;
+	padding: 30px;
+	height: 100%;
+	float: left;
+	width: 50%;
+
+}
+
+#container_modal .product-details h1{
+	font-family: 'Bebas Neue', cursive;
+	display: inline-block;
+	position: relative;
+	font-size: 30px;
+	color: #344055;
+	margin: 0;
+}
+
+#container_modal .product-details h1:before {
+	position: absolute;
+	content: '';
+	right: 0%; 
+	top: 0%;
+	transform: translate(25px, -15px);
+	font-family: 'Bree Serif', serif;
+	display: inline-block;
+	background: #ffe6e6;
+	border-radius: 5px;
+	font-size: 14px;
+	padding: 5px;
+	color: white;
+	margin: 0;
+	animation: chan-sh 6s ease infinite;
+}
+
+.hint-star {
+	display: inline-block;
+	margin-left: 0.5em;
+	color: gold;
+	width: 50%;
+}
+
+
+#container_modal .product-details > p {
+  margin-top : 30px;
+  font-family: 'EB Garamond', serif;
+	/* text-align: center; */
+	font-size: 15px;
+	color: #7d7d7d;
+}
+
+.control_modal{
+	position: absolute;
+	bottom: 20%;
+	left: 22.8%;
+}
+
+.product-image {
+	transition: all 0.3s ease-out;
+	display: inline-block;
+	position: relative;
+	overflow: hidden;
+	height: 100%;
+	float: right;
+	width: 45%;
+	display: inline-block;
+}
+
+
+
+#container_modal img {width: 100%;height: 100%;}
+
+
+
+.info_modal {
+    background: rgba(27, 26, 26, 0.9);
+    font-family: 'Bree Serif', serif;
+    transition: all 0.3s ease-out;
+    transform: translateX(-100%);
+    position: absolute;
+    line-height: 1.8;
+    text-align: left;
+    font-size: 105%;
+    cursor: no-drop;
+    color: #FFF;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
+
+[class*='close-'] {
+  color: #777;
+  cursor: pointer;
+  font: 18px/100% arial, sans-serif;
+  position: absolute;
+  right: 5px;
+  text-decoration: none;
+  text-shadow: 0 1px 0 #fff;
+  top: 5px;
+}
+
+.close-thik:after {
+  content: '✖'; /* UTF-8 symbol */
 }

@@ -25,7 +25,7 @@ class ModalForm extends Component {
       url: (this.props.images).replace(C.SERVER_URL, ''),
       type: this.props.type
     })
-    if (rs) {
+    if (rs.success === true) {
       NotificationManager.success("Image Detached Successfully", "Info", 2000);
       this.props.updated(true)
     }
@@ -41,24 +41,26 @@ class ModalForm extends Component {
     let button = ''
     let title = ''
     if (label === 'Detach') {
-      button =  <button className="btn btn-sm btn-outline-danger"
-                  style={{ float: "left", marginRight: "10px" }}
-                  onClick={this.toggle}>
-                  <b>{label}</b>
-                </button> 
-                title = 'Detach'
+      button = <button className="btn btn-sm btn-outline-danger"
+        style={{ float: "left", marginRight: "10px" }}
+        onClick={this.toggle}>
+        <b>{label}</b>
+      </button>
+      title = 'Detach'
     } else {
-      button =  <button className="btn btn-sm btn-outline-primary"
-                  onClick={this.toggle}>
-                  <b>{label}</b>
-                </button>
-                title = 'Attach'
+      button = <button className="btn btn-sm btn-outline-primary"
+        onClick={this.toggle}>
+        <b>{label}</b>
+      </button>
+      title = 'Attach'
     }
+
+    
     return (
       <div container="true">
         {button}
         {this.props.buttonLabel === "Attach" ?
-            <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+          <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
             <ModalHeader toggle={this.toggle} close={closeBtn}>{title}</ModalHeader>
             <ModalBody>
               <AddEditForm
@@ -68,7 +70,7 @@ class ModalForm extends Component {
                 updated={this.props.updated}
                 visualate={this.props.visualate}
                 toggle={this.toggle}
-                 />
+              />
             </ModalBody>
           </Modal>
           :

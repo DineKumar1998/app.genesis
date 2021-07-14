@@ -79,7 +79,9 @@ class Distributor extends Component {
         "name" : this.state.search,
         is_owner: true
       })
-      this.setState({ items: rs });
+      if (rs.success === true){
+        this.setState({ items: rs.data });
+      }
       this.setState({ loading: false });
       this.setState({ update: false })
     }
@@ -100,8 +102,8 @@ class Distributor extends Component {
     })
 
     let rsCount = await DistributorCount()
-    if (rs !== true && rsCount) {
-      let page = rsCount.count / this.state.rowPerPage
+    if (rs.success === true && rsCount.success === true) {
+      let page = rsCount.data.count / this.state.rowPerPage
       let num = Number(page) === page && page % 1 !== 0;
       if (num === true) {
         var str = page.toString();
@@ -112,9 +114,8 @@ class Distributor extends Component {
       else {
         this.setState({ totalPage: page });
       }
-      this.setState({ items: rs });
+      this.setState({ items: rs.data });
       this.setState({ loading: false });
-      this.setState({ update: false })
     }
   }
   }
@@ -134,8 +135,8 @@ class Distributor extends Component {
 
   async componentDidUpdate() {
     if (this.state.update === true) {
-      this.setState({updated: false});
       this.GetData()
+      this.setState({ update: false })
     }
   }
 
@@ -154,14 +155,13 @@ class Distributor extends Component {
                   </div>
                   {this.state.items.length === 0 ? <></> :
                     <div className="row">
-                      <div class="col-12 col-md-4 ">
+                      <div class="col-12 col-md-6 ">
                         <ImportFromCsv
                           updateState={this.updateState}
                           buttonLabel="Upload Excel sheet" />
                       </div>
-                      <div class="col-12 col-md-3 ">
-                      </div>
-                      <div class="col-12 col-md-4 ">
+
+                      <div class="col-12 col-md-6 ">
                         <ModalForm
                           stateId={this.props.location.id}
                           buttonLabel="Add Distributor"
@@ -195,7 +195,9 @@ class Distributor extends Component {
                         updateState={this.updateState}
                         deleteItemFromState={this.deleteItemFromState}
                       />
-                      <div className={'mt-2'} >
+                      {
+                        this.state.search === "" ?
+                        <div className={'mt-2'} >
                         <CPagination
                           className="pagination"
                           activePage={this.state.currentPage}
@@ -203,6 +205,10 @@ class Distributor extends Component {
                           onActivePageChange={(e) => this.activePageChange(e)}
                         ></CPagination>
                       </div>
+                      :
+                      <></>
+                      }
+                      
                     </>
                   }
                 </Col>

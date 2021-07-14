@@ -4,21 +4,13 @@ const URL = '/about';
 
 
 const GetAbout = async () => {
-  try {
-    let rs = await fetcher({ method: "get", url: URL})
-    return rs.data.data
-  }
-  catch (e) {
-    return true
-  }
+  let rs = await fetcher({ method: "get", url: URL })
+  return rs
 }
 
 const AddUpdateAbout = async (data) => {
-
   var bodyFormData = new FormData();
-  if (data.id) {
-    bodyFormData.append('id', data.id);
-  }
+  if (data.id) { bodyFormData.append('id', data.id); }
   bodyFormData.append('phone', data.phone);
   bodyFormData.append('whatsapp', data.whatsapp);
   bodyFormData.append('email', data.email);
@@ -35,14 +27,10 @@ const AddUpdateAbout = async (data) => {
   bodyFormData.append('about_img', data.image);
   bodyFormData.append('whatsapp_greeting', data.whatsapp_greeting);
   bodyFormData.append('corporate_video', data.corporate_video);
-  try {
-    let rs = await fetcher({ method: "post", url: URL, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" } })
-    if (rs) {
-      return rs.data.data
-    }
-  } catch (e) {
-    return true
-  }
+
+  let rs = await fetcher({ method: "post", url: URL, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" } })
+  
+  return rs
 }
 
 

@@ -9,7 +9,6 @@ import Routes from './routes/index';
 class App extends Component {
 
   render() {
-    
     return <Routes />
   }
 }

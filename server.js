@@ -52,9 +52,9 @@ const app = express();
 
 
 let options = {
-    cert: fileStream.readFileSync(path.join(__dirname, "..", "..", "sslfiles", "ssl.cert")),
-    key: fileStream.readFileSync(path.join(__dirname, "..", "..", "sslfiles", "ssl.key")),
-    ca: fileStream.readFileSync(path.join(__dirname, "..", "..", "sslfiles", "ssl.ca"))
+    // cert: fileStream.readFileSync(path.join(__dirname, "..", "..", "sslfiles", "ssl.cert")),
+    // key: fileStream.readFileSync(path.join(__dirname, "..", "..", "sslfiles", "ssl.key")),
+    // ca: fileStream.readFileSync(path.join(__dirname, "..", "..", "sslfiles", "ssl.ca"))
 }
 let http = httpx.createServer(options, app);
 
@@ -120,7 +120,7 @@ let fs = require("./core/lib/FileStream.js");
 
 
 
-fs.createConfigFileInDashboard('pharma_dashboard/src/config.js');
+// fs.createConfigFileInDashboard('pharma_dashboard/src/config.js');
 fs.createEssentialDirectories();
 
 /////////importing state cities/////////////////

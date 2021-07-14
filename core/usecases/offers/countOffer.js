@@ -4,6 +4,7 @@ const model = require("../../models/offers");
 //get offers  count
 module.exports = async (filters) => {
     filters.valid_upto = {$gte: Date.now() }
+
   let repId = null;
   if(filters.rep_id){
     repId = filters.rep_id;
@@ -37,6 +38,5 @@ module.exports = async (filters) => {
       response = rs;
     }
   }
-
   return response.length;
 }

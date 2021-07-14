@@ -39,9 +39,9 @@ const TheHeader = () => {
   React.useEffect(() => {
     async function fetchMyAPI() {
         let rs = await UserProfile()
-        if (rs !== true ){
-            setlogoImg(rs.profile_pic)
-            setlogotext(rs.company)
+        if (rs.success === true){
+            setlogoImg(rs.data.profile_pic)
+            setlogotext(rs.data.company)
         }
         else{
           setlogoImg(logo)

@@ -21,6 +21,7 @@ const VIS_WIDTH = process.env.VIS_WIDTH || 1000; //1000PX
 
 
 module.exports = async (productImages,imagesType) => {
+
     let picsUploadError = [];
     //checking the images type
     if(imagesType != "IMG" && imagesType != "VIS")

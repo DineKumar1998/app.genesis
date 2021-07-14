@@ -93,10 +93,10 @@ class Profile extends React.Component {
 
     validation = (type) => {
         if (type === "INFO") {
-            if (!this.state.name) { return NotificationManager.error("Enter your Name", "Info", 2000) }
-            if (!this.state.company) { return NotificationManager.error("Enter your Company", "Info", 2000) }
-            if (!this.state.phone) { return NotificationManager.error("Enter your Phone", "Info", 2000) }
-            if (!this.state.email) { return NotificationManager.error("Enter your Email", "Info", 2000) }
+            if (!this.state.name.trim()) { return NotificationManager.error("Enter your Name", "Info", 2000) }
+            if (!this.state.company.trim()) { return NotificationManager.error("Enter your Company", "Info", 2000) }
+            if (!this.state.phone.trim()) { return NotificationManager.error("Enter your Phone", "Info", 2000) }
+            if (!this.state.email.trim()) { return NotificationManager.error("Enter your Email", "Info", 2000) }
             this.setState({ valid: true })
         }
         else {
@@ -113,18 +113,18 @@ class Profile extends React.Component {
 
     async componentDidMount() {
         let rs = await UserProfile();
-        if (rs !== true) {
-            const { company, email, id, name, phone } = rs;
+        if (rs.success === true) {
+            const { company, email, id, name, phone } = rs.data;
             this.setState({ company, email, id, name, phone })
-            if (rs.profile_pic !== null) {
-                this.setState({ base64: rs.profile_pic })
+            if (rs.data.profile_pic !== null) {
+                this.setState({ base64: rs.data.profile_pic })
                 this.setState({ checkImg: true })
             }
             let infoRs = {
-                name: rs.name,
-                email: rs.email,
-                company: rs.company,
-                image: rs.profile_pic
+                name: rs.data.name,
+                email: rs.data.email,
+                company: rs.data.company,
+                image: rs.data.profile_pic
             }
             this.setState({ info: infoRs })
         }

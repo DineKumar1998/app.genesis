@@ -50,8 +50,8 @@ class Mr extends Component {
       limit: 50,
       skip: 0
     });
-    if (rs) {
-      this.setState({ items: rs });
+    if (rs.success === true) {
+      this.setState({ items: rs.data });
     }
   }
 

@@ -19,27 +19,27 @@ class ModalForm extends Component {
   }
 
   render() {
-      const closeBtn = <button className="close" onClick={this.toggle}>&times;</button>
-      const label = this.props.buttonLabel
-      let button = ''
-      let title = ''
-      if(label === 'Edit'){
-        button =  <CButton size="sm" color="info" 
-                  style={{float: "left", marginRight:"10px"}}
-                  onClick={this.toggle}>
-                  <IconEdit />
-                  </CButton> 
-        title = 'Edit Certificate'
-      } else {
-        button = <Button
-                  color="success"
-                  onClick={this.toggle}>
-                  <b>{label}</b>
-                </Button>
-        title = 'Add New Certificate'
-      }
+    const closeBtn = <button className="close" onClick={this.toggle}>&times;</button>
+    const label = this.props.buttonLabel
+    let button = ''
+    let title = ''
+    if (label === 'Edit') {
+      button = <CButton size="sm" color="info"
+        style={{ float: "left", marginRight: "10px" }}
+        onClick={this.toggle}>
+        <IconEdit />
+      </CButton>
+      title = 'Edit Certificate'
+    } else {
+      button = <Button
+        color="success"
+        onClick={this.toggle}>
+        <b>{label}</b>
+      </Button>
+      title = 'Add New Certificate'
+    }
 
-      return (
+    return (
       <div>
         {button}
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>

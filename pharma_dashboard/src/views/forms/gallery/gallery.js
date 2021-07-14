@@ -9,8 +9,8 @@ import C from '../../../constants'
 
 class AddEditForm extends React.Component {
   state = {
-    id:"",
-    type:"",
+    id: "",
+    type: "",
     data: [],
     url: "",
     selectedOption: [],
@@ -35,20 +35,19 @@ class AddEditForm extends React.Component {
     let newId = this.state.selectedOption.value
     await this.validation();
     if (this.state.valid === true) {
-      let newUrl = this.state.url ;
-      let newType = this.state.type ;      
+      let newUrl = this.state.url;
+      let newType = this.state.type;
       let rs = await AttachPic({
-        id : newId,
-        url : newUrl.replace(C.SERVER_URL, ''),
-        type : newType
+        id: newId,
+        url: newUrl.replace(C.SERVER_URL, ''),
+        type: newType
       });
-      if (rs) {
-        // this.props.addItemToState(rs);
-        NotificationManager.success("Image Attached Successfully", "Info", 2000);
+      if (rs.success === true) {
         this.props.updated(true)
+        NotificationManager.success("Image Attached Successfully", "Info", 2000);
       }
-      else{
-        NotificationManager.error("Something Went Wrong", "Error", 2000);
+      else {
+        NotificationManager.error(rs.message, "Error", 2000);
       }
       this.props.toggle();
     }
@@ -60,13 +59,13 @@ class AddEditForm extends React.Component {
     e.preventDefault();
     await this.validation();
     if (this.state.valid === true) {
-      let rs = await UpdatePackingType({id: this.state.id, name: this.state.name });
-      if (rs) {
-          NotificationManager.info("Image detached Successfully", "Info", 2000);
-          this.props.updateState(rs);
+      let rs = await UpdatePackingType({ id: this.state.id, name: this.state.name });
+      if (rs.success === true) {
+        NotificationManager.info("Image detached Successfully", "Info", 2000);
+        this.props.updateState(rs);
       }
       else {
-        NotificationManager.error("Something Went Wrong", "Error", 2000);
+        NotificationManager.error(rs.message, "Error", 2000);
       }
       this.props.toggle();
     }
@@ -75,7 +74,7 @@ class AddEditForm extends React.Component {
   // ****************** Validation Function *****************************
 
   validation = (e) => {
-    if (Array.isArray(this.state.selectedOption) ) {
+    if (Array.isArray(this.state.selectedOption)) {
       return NotificationManager.error("Please Choose Product", "Info", 2000);
     } else {
       this.setState({ valid: true });
@@ -87,16 +86,16 @@ class AddEditForm extends React.Component {
 
   async componentDidMount() {
     if (this.props) {
-      this.setState({id : this.props.id})
-      this.setState({type : this.props.type})
-      this.setState({url : this.props.url})
+      this.setState({ id: this.props.id })
+      this.setState({ type: this.props.type })
+      this.setState({ url: this.props.url })
     }
     let rs = await GetProducts();
     let newData = [];
-    if (rs) {
-      rs.map((it) => {
+    if (rs.success === true) {
+      rs.data.map((it) => {
         if (it.id && it.name) {
-          newData.push({value : it.id, label:it.name})
+          newData.push({ value: it.id, label: it.name })
         } return null
       });
       return this.setState({ data: newData });
@@ -110,22 +109,22 @@ class AddEditForm extends React.Component {
     } = this.state;
     return (
       <div className="goldberg">
-      <Form
-        onSubmit={this.props.item ? this.submitFormDetach : this.submitFormAdd}
-      >
-        
-        <FormGroup>
-        <Label for="name">Choose Product</Label>
-        <Select
-        isClearable={isClearable}
-        isSearchable={isSearchable}
-        value={this.state.selectedOption}
-        onChange={this.handleChange}
-        options={this.state.data}
-      />
-      </FormGroup> 
-        <Button>Submit</Button>
-      </Form></div>
+        <Form
+          onSubmit={this.props.item ? this.submitFormDetach : this.submitFormAdd}
+        >
+
+          <FormGroup>
+            <Label for="name">Choose Product</Label>
+            <Select
+              isClearable={isClearable}
+              isSearchable={isSearchable}
+              value={this.state.selectedOption}
+              onChange={this.handleChange}
+              options={this.state.data}
+            />
+          </FormGroup>
+          <Button>Submit</Button>
+        </Form></div>
     );
   }
 }

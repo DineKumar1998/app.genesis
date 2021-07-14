@@ -98,7 +98,7 @@ exports.franchiseeFormatter = (franchisee) => {
         id: franchisee._id,
         name: franchisee.name,
         gst_number: franchisee.gst_number,
-        drug_license: franchisee.drug_license,
+        drug_license: franchisee.drug_license ? franchisee.drug_license=="null" || "" ? null : franchisee.drug_license : franchisee.drug_license,
         email: franchisee.email,
         phone: franchisee.phone,
         address: franchisee.address,
@@ -118,11 +118,12 @@ exports.franchiseeFormatter = (franchisee) => {
             }
         }),
         active: franchisee.active,
-        bank_acc_no: franchisee.bank_acc_no,
-        bank_ifsc: franchisee.bank_ifsc,
-        bank_name: franchisee.bank_name,
-        bank_payee_name: franchisee.bank_payee_name,
-        created_on: moment(franchisee.created_on).format("LLL"),
+        bank_acc_no: franchisee.bank_acc_no ? franchisee.bank_acc_no=="null" || "" ? null : franchisee.bank_acc_no : franchisee.bank_acc_no,
+        bank_ifsc: franchisee.bank_ifsc ? franchisee.bank_ifsc=="null" || "" ? null : franchisee.bank_ifsc : franchisee.bank_ifsc,
+        bank_name: franchisee.bank_name ? franchisee.bank_name=="null" || "" ? null : franchisee.bank_name : franchisee.bank_name,
+        bank_payee_name: franchisee.bank_payee_name ? franchisee.bank_payee_name=="null" || ""? null : franchisee.bank_payee_name : franchisee.bank_payee_name,
+
+        created_on: moment(franchisee.created_on).format("LLL") ,
         modified_on: moment(franchisee.modified_on).format("LLL"),
     }
 }

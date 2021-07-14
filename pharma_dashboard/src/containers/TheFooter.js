@@ -9,7 +9,7 @@ const TheFooter = () => {
     <CFooter fixed={false}>
       <div className="mfs-auto">
         <span className="mr-1">ALL rights Reserved © {year} </span>
-        <a href="https://www.webhopers.com/"><b style={{color:"#126cdc"}}>Web</b><b style={{color:"#ff7713"}}>Hopers</b></a>
+        <a target="_blank" href="https://www.webhopers.com/"><b style={{color:"#126cdc"}}>Web</b><b style={{color:"#ff7713"}}>Hopers</b></a>
       </div>
     </CFooter>
   )

@@ -14,9 +14,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      let response = await GetAbout()      
-      if(response !== true && response.about_img != null) {
-        setBanner(response.about_img)
+      let response = await GetAbout()   
+
+      if(response.success === true && response.data.about_img != null) {
+        setBanner(response.data.about_img)
       }
       else {
         setBanner(process.env.PUBLIC_URL + '/images/dashboard/banner.jpg')

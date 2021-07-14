@@ -6,23 +6,34 @@ const updateOffer = require("../usecases/offers/updateOffer");
 const deleteOffer = require("../usecases/offers/deleteOffer");
 //import moment for date formatting
 const moment = require("moment");
-
+const moveFile = require('move-file');
 
 //Add Offer
-exports.addOffer = async(offerImage, offer) => {
+exports.addOffer = async (offerImage, offer) => {
 
-    if(offer.reps){
+    if (offer.reps) {
         offer.reps = (offer.reps).split(",");
     }
-    
+
     if (!offer.title) throw new Error('offer title is Required');
     if (!offer.description) throw new Error('offer description is Required');
     if (!offer.valid_upto) throw new Error('offer valid_upto is Required');
 
     offer.image = null;
 
-    if (offerImage)
-        offer.image = offerImage.path;
+    let Image = [];
+
+    if (offerImage.image) {
+
+        Image = offerImage.image.map(it => {
+            moveFile.sync(it.path, "./core/uploads/offers/" + it.originalname)
+            let path = `${process.env.BASE_URL}/core/uploads/offers/` + it.originalname
+            return path;
+        })
+    }
+
+    if (Image.length > 0) offer.image = Image;
+
 
     let newoffer = {
         title: offer.title,
@@ -47,43 +58,50 @@ exports.addOffer = async(offerImage, offer) => {
 }
 
 //get offers
-exports.getOffer = async(offerprops) => {
+exports.getOffer = async (offerprops) => {
     let filter = {}
     // if (offerprops.id) filter._id = offerprops.id;
     // if(offerprops.rep_id) filter.rep_id = offerprops.rep_id;
     let offerRecords = await getOffer(filter);
 
-
     if (offerRecords.length == 1 && offerprops.id) {
-        let reps = offerRecords[0].reps ? (offerRecords[0].reps).map(it=>{
+        let reps = offerRecords[0].reps ? (offerRecords[0].reps).map(it => {
             return {
                 id: it._id,
                 name: it.name
             }
-        })  : [];
+        }) : [];
         return {
             id: offerRecords[0]._id,
             title: offerRecords[0].title,
             description: offerRecords[0].description,
-            image: offerRecords[0].image ? `${process.env.BASE_URL}/${ offerRecords[0].image}` : `${process.env.BASE_URL}/assets/images/offer.png`,
+
+            image: offerRecords[0].image ?
+                Array.isArray(offerRecords[0].image) ?
+                    (offerRecords[0].image).map(it => `${process.env.BASE_URL}/${it}`)
+                    :
+                    `${process.env.BASE_URL}/${offerRecords[0].image}`
+                :
+                `${process.env.BASE_URL}/assets/images/offer.png`,
+
             reps: reps,
             created_on: moment(offerRecords[0].created_on).format("YYYY/MM/DD"),
             valid_upto: moment(offerRecords[0].valid_upto).format("YYYY/MM/DD")
         }
     } else {
         offerRecords = offerRecords.map(it => {
-            let reps = it.reps ? (it.reps).map(iit=>{
+            let reps = it.reps ? (it.reps).map(iit => {
                 return {
                     id: iit._id,
                     name: iit.name
                 }
-            })  : [];
+            }) : [];
             return {
                 id: it._id,
                 title: it.title,
                 description: it.description,
                 reps: reps,
-                image: (it.image) ? `${process.env.BASE_URL}/${it.image}` : `${process.env.BASE_URL}/assets/images/offer.png`,
+                image: (it.image) ? `${it.image}` : `${process.env.BASE_URL}/assets/images/offer.png`,
                 created_on: moment(it.created_on).format("YYYY/MM/DD"),
                 valid_upto: moment(it.valid_upto).format("YYYY/MM/DD")
             }
@@ -95,13 +113,14 @@ exports.getOffer = async(offerprops) => {
 }
 
 //count offers
-exports.countOffer = async(props) => {
+exports.countOffer = async (props) => {
 
     let filter = {};
 
     // if(props.rep_id) filter.rep_id = props.rep_id;
 
     let offerCount = await countOffer(filter);
+    console.log("***********COUNT**********", offerCount)
 
     return { count: offerCount };
 }
@@ -109,27 +128,45 @@ exports.countOffer = async(props) => {
 
 
 //update offer
-exports.updateOffer = async(offerImage, offerprops) => {
-        let offerId = offerprops.id;
-        if(offerprops.reps){
-            offerprops.reps = (offerprops.reps).split(",");
-        }
-        if (!offerprops.id) throw new Error("Please provide Offer Id");
-        let filter = {}
-        if (offerprops.title) filter.title = offerprops.title;
-        if (offerprops.description) filter.description = offerprops.description;
-        if (offerprops.valid_upto) filter.valid_upto = offerprops.valid_upto;
-        if (offerImage) filter.image = offerImage.path;
-        if(offerprops.reps)
-        if (Array.isArray(offerprops.reps)) filter.reps = offerprops.reps
-        let OfferRecords = await updateOffer(offerId, filter);
-
-        return OfferRecords;
+exports.updateOffer = async (offerImage, offerprops) => {
+    let offerId = offerprops.id;
+    if (offerprops.reps) {
+        offerprops.reps = (offerprops.reps).split(",");
     }
-    //delete offer
-exports.deleteOffer = async(offerId) => {
+
+    offerprops.image = null;
+
+    let Image = [];
+    if (offerImage.image) {
+        Image = offerImage.image.map(it => {
+            moveFile.sync(it.path, "./core/uploads/offers/" + it.originalname)
+            let path = `${process.env.BASE_URL}/core/uploads/offers/` + it.originalname
+            return path;
+        })
+    }
+
+    if (Image.length > 0) offerprops.image = Image;
+
+
+    if (!offerprops.id) throw new Error("Please provide Offer Id");
+    let filter = {}
+    if (offerprops.title) filter.title = offerprops.title;
+    if (offerprops.description) filter.description = offerprops.description;
+    if (offerprops.valid_upto) filter.valid_upto = offerprops.valid_upto;
+    if (offerprops.image) filter.image = offerprops.image;
+    if (offerprops.reps)
+        if (Array.isArray(offerprops.reps)) filter.reps = offerprops.reps
+
+
+    let OfferRecords = await updateOffer(offerId, filter);
+
+    return OfferRecords;
+}
+//delete offer
+exports.deleteOffer = async (offerId) => {
     if (!offerId) throw new Error("Please provide Offer Id");
 
     let Response = await deleteOffer(offerId);
     return Response;
 }
+

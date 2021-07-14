@@ -38,12 +38,12 @@ const Table = (props) => {
     let confirmDelete = window.confirm("Delete item forever?");
     if (confirmDelete){
       let rs = await DeleteCertificate(id)
-      if (rs){
+      if (rs.success === true){
         props.deleteItemFromState(id);
         return NotificationManager.info("Certificate Deleted SuccessFully", "Info", 2000);
       }
       else{
-        return NotificationManager.error("Something Went Wrong", "Info", 2000);
+        return NotificationManager.error(rs.message, "Info", 2000);
       }
     }
   };

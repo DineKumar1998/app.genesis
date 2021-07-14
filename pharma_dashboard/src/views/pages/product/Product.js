@@ -78,31 +78,32 @@ class Products extends Component {
       let rs = await SearchProducts({
         "name" : this.state.search
       })
-      this.setState({ items: rs });
-      this.setState({ loading: false });
-      this.setState({ updated: false })
-      
+      console.log("RSS", rs.data)
+      if(rs.success === true){
+       this.setState({ items: rs.data });
+      }
     }
-    else {
+
+    else  {
       let skip = 0
       if (this.state.currentPage === 0) {
         skip = 1 * this.state.rowPerPage
       }
+
       else {
         skip = this.state.currentPage * this.state.rowPerPage
       }
 
-      let skipVal = skip - this.state.rowPerPage
 
+      let skipVal = skip - this.state.rowPerPage
       let rs = await GetProducts({
         "limit": this.state.rowPerPage,
         "skip": skipVal
       })
 
       let rsCount = await GetProductsCount()
-
-      if (rs !== true && rsCount) {
-        let page = rsCount.count / this.state.rowPerPage
+      if (rs.success === true && rsCount.success === true) {
+        let page = rsCount.data.count / this.state.rowPerPage
         let num = Number(page) === page && page % 1 !== 0;
         if (num === true) {
           var str = page.toString();
@@ -113,34 +114,37 @@ class Products extends Component {
         else {
           this.setState({ totalPage: page });
         }
-        this.setState({ items: rs });
-        this.setState({ loading: false });
-        this.setState({ updated: false })
+        this.setState({ items: rs.data });
       }
     }
+    console.log("ITEMS", this.state.items);
+    this.setState({ loading: false });
+
   }
 
   // ****************** ComponentDidMount Function *****************************
 
-  async componentDidMount() {
+  componentDidMount() {
     if (this.props.location.name){
       this.setState({search : this.props.location.name})
       this.setState({updated : true})
     }
-    this.GetData()
-  }
-
-  // ****************** ComponentDidUpdate Function *****************************
-
-  async componentDidUpdate() {
-    if (this.state.updated === true) {
-      this.setState({updated: false});
+    else{
       this.GetData()
     }
   }
 
-  render() {
+  // ****************** ComponentDidUpdate Function *****************************
 
+  componentDidUpdate() {
+    if (this.state.updated === true) {
+      this.GetData()
+      this.setState({ updated: false })
+
+    }
+  }
+
+  render() {
     return (
       <>
         {this.state.loading ? <div className="loader"></div> :
@@ -199,7 +203,7 @@ class Products extends Component {
                   updateState={this.updateState}
                   deleteItemFromState={this.deleteItemFromState}
                 />
-                {this.state.items === true && this.state.search === "" ? <></> :
+                {!this.state.search ?
                   <div className={'mt-2'} >
                     <CPagination
                       className="pagination"
@@ -208,6 +212,8 @@ class Products extends Component {
                       onActivePageChange={(e) => this.activePageChange(e)}
                     ></CPagination>
                   </div>
+                  : 
+                  <></>
                 }
               </Col>
             </Row>

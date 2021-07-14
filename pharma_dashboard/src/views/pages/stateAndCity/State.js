@@ -4,7 +4,6 @@ import ModalForm from "../../model/StateAndCity/state";
 import Table from "../../tables/StateAndCity/state";
 import { GetState } from "../../../api/stateAndCity/state";
 import Page404 from "../page404/Page404";
-import { times } from "lodash";
 
 class State extends Component {
   constructor(props) {
@@ -20,45 +19,30 @@ class State extends Component {
 
   addItemToState = (item) => {
     this.setState({ updated: true });
-    this.setState((prevState) => ({
-      items: [...prevState.items, item],
-    }));
   };
 
   // ****************** Update Function *****************************
 
   updateState = (item) => {
-    const itemIndex = this.state.items.findIndex((data) => data.id === item.id);
-    const newArray = [
-      ...this.state.items.slice(0, itemIndex),
-      item,
-      ...this.state.items.slice(itemIndex + 1),
-    ];
-    this.setState({ items: newArray });
+    this.setState({ updated: true });
   };
 
   // ****************** Delete Function *****************************
 
   deleteItemFromState = (id) => {
-    const updatedItems = this.state.items.filter((item) => item.id !== id);
-    this.setState({ items: updatedItems });
+    this.setState({ updated: true });
   };
 
   // ****************** Get Data Function ********************
 
   getData = async() => {
     let rs = await GetState();
-    if (rs != true) {
+    if (rs.success === true) {
       let field='name';
-      let sRs = rs.sort((a, b) => (a[field] || "").toString().localeCompare((b[field] || "").toString()))
+      let sRs = rs.data.sort((a, b) => (a[field] || "").toString().localeCompare((b[field] || "").toString()))
       this.setState({ items: sRs });
-
       this.setState({loading :false})
       this.setState({updated : false})
-
-
-
-
     }
   }
 

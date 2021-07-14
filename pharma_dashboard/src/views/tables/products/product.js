@@ -43,12 +43,12 @@ const Table = (props) => {
     let confirmDelete = window.confirm("Delete item forever?");
     if (confirmDelete){
       let rs = await DeleteProducts(id)
-      if (rs){
+      if (rs.success === true){
         props.deleteItemFromState(id);
         return NotificationManager.info("Product Deleted SuccessFully", "Info", 2000);
       }
       else{
-        return NotificationManager.error("Something Went Wrong", "Info", 2000);
+        return NotificationManager.error(rs.message, 2000);
       }
     }
   };
@@ -99,15 +99,18 @@ const Table = (props) => {
               <td className="py-2">
                 {item.images && item.images.length > 0 ? item.images.map((it) => {
                     if(it.type === "IMG"){
-                       return <img className="grow" style={{width:"60px", height:"60px", paddingLeft:"5px"}} src={it.url} alt="product "/>
+                       return  <img className="grow" style={{width:"60px", height:"60px",  border : "dashed", borderColor : "#14ccff"}} src={it.url} alt="product"/>
                     }
                     else {
-                        return( <img className="grow" style={{width:"60px", height:"60px", paddingLeft:"5px"}} src={it.url} alt="product"/>)
+                        return( <img className="grow" style={{width:"60px", height:"60px", marginLeft :"5px",  border : "dashed", borderColor : "#92fcac"}} src={it.url} alt="visulate"/>)
                     }
-                }) :  <>
-                      <img className="grow" style={{width:"60px", height:"60px"}} src={productImage} alt="no_product"/> 
-                      <img className="grow" style={{width:"60px", height:"60px", paddingLeft:"5px"}} src={VisualateImage} alt="no_product"/> 
-                      </>}
+                  }) 
+                  :  
+                  <>
+                    <img className="grow" style={{width:"60px", height:"60px"}} src={productImage} alt="no_product"/> 
+                    <img className="grow" style={{width:"60px", height:"60px", paddingLeft:"5px"}} src={VisualateImage} alt="no_product"/> 
+                  </>
+                  }
               </td>
             )
           },

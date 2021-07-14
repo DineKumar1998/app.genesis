@@ -1,9 +1,8 @@
 const offerController = require("../../../core/controllers/offer")
 
-const addOffer =async (req, res, next)=>{
-
+const addOffer = async (req, res, next) => {
     try {
-        let Offer = await offerController.addOffer(req.file,req.body)
+        let Offer = await offerController.addOffer(req.files, req.body)
         req.data = Offer
         next()
     }
@@ -13,7 +12,7 @@ const addOffer =async (req, res, next)=>{
     }
 }
 
-const getOffer = async(req,res,next)=>{
+const getOffer = async (req, res, next) => {
     try {
         let offers = await offerController.getOffer(req.body)
         req.data = offers
@@ -26,7 +25,7 @@ const getOffer = async(req,res,next)=>{
 }
 
 
-const countOffer = async(req,res,next)=>{
+const countOffer = async (req, res, next) => {
     try {
         let offerCount = await offerController.countOffer();
         req.data = offerCount
@@ -38,10 +37,10 @@ const countOffer = async(req,res,next)=>{
     }
 }
 
-const updateOffer = async(req,res,next)=>{
+const updateOffer = async (req, res, next) => {
 
     try {
-        let offerRecords = await offerController.updateOffer(req.file,req.body)
+        let offerRecords = await offerController.updateOffer(req.files, req.body)
         req.data = offerRecords
         next()
     }
@@ -51,15 +50,15 @@ const updateOffer = async(req,res,next)=>{
     }
 }
 
-deleteOffer = async(req,res,next)=>{
+deleteOffer = async (req, res, next) => {
 
     try {
         let OfferRes = await offerController.deleteOffer(req.params.Id)
-        if(OfferRes.Error){
+        if (OfferRes.Error) {
             req.status = 400;
             next(OfferRes.Error)
         }
-        else{
+        else {
             req.message = OfferRes.Message;
             req.data = null;
             next()
@@ -72,4 +71,4 @@ deleteOffer = async(req,res,next)=>{
 }
 
 
-module.exports = { addOffer, getOffer, countOffer, updateOffer, deleteOffer}//, updateOffer, deleteOffer
+module.exports = { addOffer, getOffer, countOffer, updateOffer, deleteOffer  }//, updateOffer, deleteOffer

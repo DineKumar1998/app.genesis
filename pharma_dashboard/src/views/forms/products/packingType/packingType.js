@@ -41,12 +41,12 @@ class AddEditForm extends React.Component {
     await this.validation();
     if (this.state.valid === true) {
       let rs = await UpdatePackingType({id: this.state.id, name: this.state.name });
-      if (rs) {
+      if (rs.success === true) {
           NotificationManager.info("Updated Successfully", "Info", 2000);
-          this.props.updateState(rs);
+          this.props.updateState(true);
       }
       else {
-        NotificationManager.error("Something Went Wrong", "Error", 2000);
+        NotificationManager.error(rs.message, "Error", 2000);
       }
       this.props.toggle();
     }
@@ -55,7 +55,7 @@ class AddEditForm extends React.Component {
   // ****************** Validation Function *****************************
 
   validation = (e) => {
-    if (!this.state.name) {
+    if (!this.state.name.trim()) {
       return NotificationManager.error("Please Enter Packaging type", "Info", 2000);
     } else {
       this.setState({ valid: true });
@@ -73,9 +73,7 @@ class AddEditForm extends React.Component {
 
   render() {
     return (
-      <Form
-        onSubmit={this.props.item ? this.submitFormEdit : this.submitFormAdd}
-      >
+      <Form onSubmit={this.props.item ? this.submitFormEdit : this.submitFormAdd}>
         <FormGroup>
         <Label for="name">Packing Type</Label>
         <Input

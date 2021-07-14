@@ -63,10 +63,10 @@ module.exports = async (filters) => {
         $sort: { ...sortBy },
       },
       {
-        $skip: skip,
+        $skip: skip || 0,
       },
       {
-        $limit: limit,
+        $limit: limit || 100,
       }
     ])
     .collation({ locale: "es" });

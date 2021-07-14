@@ -6,7 +6,7 @@ import wave from '../../../assets/images/wave.png'
 import bg from '../../../assets/images/bg.svg'
 import avatar from '../../../assets/images/avatar.svg'
 import { AdminLogin, AdminResetPassword } from "src/api/login/login";
-import validator from "validator";
+import { isEmail } from "src/lib/validator";
 
 export default class Login extends Component {
   state ={
@@ -17,7 +17,9 @@ export default class Login extends Component {
     prevPass:"",
     valid: false,
     error : false,
-    modal : false
+    modal : false,
+    loading: false,
+    loadingR: false
   }
 
   // ---------------------------- ON CHANGE ------------------------------------
@@ -38,17 +40,20 @@ export default class Login extends Component {
 
     e.preventDefault()
     await this.validation()
+    this.setState({loading: true})
     if (this.state.valid === true) {
       let rs = await AdminLogin({
         email : this.state.email,
         password : this.state.password
       })
-      if (rs && rs!== true && rs.token){
-          localStorage.setItem("token", rs.token)
+      this.setState({loading: false})
+
+      if (rs.success === true){
+          localStorage.setItem("token", rs.data.token)
           window.location.assign("/")
       }
       else {
-        NotificationManager.error("Email & Password didn't Match", "Info", 2000)
+        NotificationManager.error(rs.message, "Info", 2000)
         this.setState({valid : false})
       }
     }
@@ -60,17 +65,25 @@ export default class Login extends Component {
     if (!this.state.recoverEmail){
       return NotificationManager.error("Please Enter Email", "Info", 2000)
     }
-    else if (validator.isEmail(this.state.recoverEmail) === false){
+    else if (!isEmail(this.state.recoverEmail)){
       return NotificationManager.error("Please Enter Valid Email", "Info", 2000)
     }
     else {
+      this.setState({loadingR: true})
+
       let rs = await AdminResetPassword ({
         email : this.state.recoverEmail
       })
-      if (rs){
+      this.setState({loadingR: false})
+
+      if (rs.success === true){
         NotificationManager.success("Password Reset SuccessFully", "Info", 2000)
-        this.toggle()
       }
+      else {
+          NotificationManager.error(rs.message, "Info", 2000)
+      }
+      this.toggle()
+
     }
   }
 
@@ -80,7 +93,7 @@ export default class Login extends Component {
     if (!this.state.email){
       return NotificationManager.error("Please Enter Email", "Info", 2000)
     }
-    else if (validator.isEmail(this.state.email) === false){
+    else if (! isEmail(this.state.email)){
       return NotificationManager.error("Please Enter Valid Email", "Info", 2000)
     }
     else if (!this.state.password){
@@ -155,10 +168,18 @@ export default class Login extends Component {
             </div>
               </ModalBody>
               <ModalFooter>
-                <Button color="#2ed198 btn-sm" style={{backgroundColor:"#2ed198", color:"white", borderRadius:"30px"}} onClick={this.resetPassword}>Reset Password</Button>{' '}
+                <Button color="#2ed198 btn-sm" style={{backgroundColor:"#2ed198", color:"white", borderRadius:"30px"}} onClick={this.resetPassword}>
+                { this.state.loading ? <>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                {" "} Loading... </> : <>Reset Password</>  }
+                </Button>{' '}
               </ModalFooter>
             </Modal>
-            <button type="submit" className="btn-login" onClick={this.login}>login</button>
+            <button type="submit" className="btn-login" onClick={this.login}>
+            { this.state.loading ? <>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+             {" "} Loading... </> : <>login</>  }
+            </button>
           </form>
         </div>
       </div>

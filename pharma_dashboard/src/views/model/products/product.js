@@ -35,7 +35,7 @@ class ModalForm extends Component {
                   size="sm"
                   color="success"
                   onClick={this.toggle}>
-                  <b>{label}</b>
+                  <b>{label}{' '}<i class="fas fa-plus"></i></b>
                 </Button>
         title = 'Add Product'
       }

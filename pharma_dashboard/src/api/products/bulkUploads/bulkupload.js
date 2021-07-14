@@ -1,52 +1,37 @@
 import fetcher from "src/lib/fetcher";
 
 const URL = '/product';
- 
+
 
 const UploadListCsv = async (data) => {
   let bodyFormData = new FormData();
 
-  if(data.productFile.length>0){
+  if (data.productFile.length > 0) {
     data.productFile.map((it) => bodyFormData.append('productsfile', it))
   }
+  let rs = await fetcher({ method: "post", url: `${URL}/bulkListUpload`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" } })
+  return rs;
 
-  try{
-    let rs = await fetcher({ method: "post", url: `${URL}/bulkListUpload`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" }})
-    return rs
-  }
-  catch(e){
-    return true
-  }
 }
 
 const UploadImgVis = async (data) => {
   let bodyFormData = new FormData();
-  if(data.productImages.length>0){
-    data.productImages.map((it) => bodyFormData.append('images', it)) 
+  if (data.productImages.length > 0) {
+    data.productImages.map((it) => bodyFormData.append('images', it))
   }
-  bodyFormData.append('imagesType', data.imagesType);
-  try{
-    let rs = await fetcher({ method: "post", url: `${URL}/bulkImagesUpload`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" }})
-    return rs.data.data
-  }
-  catch(e){
-    return true
-  }
+  bodyFormData.append('type', data.imagesType);
+  let rs = await fetcher({ method: "post", url: `${URL}/bulkImagesUpload`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" } })
+  return rs;
 }
 
 const TechDetails = async (data) => {
   let bodyFormData = new FormData();
 
-  if(data.productFile.length>0){
+  if (data.productFile.length > 0) {
     data.productFile.map((it) => bodyFormData.append('docs', it))
   }
-    try{
-      let rs = await fetcher({ method: "post", url: `${URL}/bulkDocsUpload`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data"}})
-      return rs.data.data
-    }
-    catch(e){
-      return true
-    }
-  }
+  let rs = await fetcher({ method: "post", url: `${URL}/bulkDocsUpload`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" } })
+  return rs;
+}
 
-export  { UploadListCsv , UploadImgVis , TechDetails};
+export { UploadListCsv, UploadImgVis, TechDetails };

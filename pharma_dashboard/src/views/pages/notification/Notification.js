@@ -41,12 +41,10 @@ export default class Notification extends Component {
         title : this.state.title,
         send_to : this.state.send_to
       })
-      if(rs){
-        if(rs.success === true) {
+      if(rs.success === true ){
           NotificationManager.success("Notification Sent Successfully","Info",2000);
-        }
       }else {
-        NotificationManager.error("Something Went Wrong","Info",2000);
+        NotificationManager.error(rs.message,"Error",2000);
       }
       this.setState({ valid: false });
     }
@@ -74,9 +72,9 @@ export default class Notification extends Component {
   // ***************************FORM VALIDATION FUNCTION ***************************
   
   validation = async () => {
-    if (!this.state.title) {
+    if (!this.state.title.trim()) {
       return NotificationManager.error("Please Enter Title", "Info", 2000);
-    } else if (!this.state.message) {
+    } else if (!this.state.message.trim()) {
       return NotificationManager.error("Please Enter Message", "Info", 2000);
     } else if (this.state.user === null || this.state.user.length === 0) {
       return NotificationManager.error("Please Select User", "Info", 2000);
@@ -97,8 +95,8 @@ export default class Notification extends Component {
     let newListDb = [];
     let newListMr = [];
 
-    if (rsDb !== true) {
-      rsDb.map((it) => {
+    if (rsDb.success === true) {
+      rsDb.data.map((it) => {
         if (it.device_token === null || it.device_token === "undefine" || it.device_token === "") {
           return true
         }
@@ -108,8 +106,8 @@ export default class Notification extends Component {
       });
       this.setState({ mrList: newListMr });
     }
-    if (rsMr !== true) {
-      rsMr.map((it) => {
+    if (rsMr.success === true) {
+      rsMr.data.map((it) => {
         if (it.device_token === null || it.device_token === "undefine" || it.device_token === "") {
          return true
         }

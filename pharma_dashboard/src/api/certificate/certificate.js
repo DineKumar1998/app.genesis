@@ -1,21 +1,12 @@
 // import axios from 'axios'
 
 import fetcher from "src/lib/fetcher";
-
-  
-
 const URL = '/certificate';
- 
 
 
 const GetCertificate = async () => {
-  try{
-    let rs = await fetcher({ method: "post", url: URL  })
-    return rs.data.data
-  }
-  catch(e){
-    return true
-  }
+  let rs = await fetcher({ method: "post", url: URL })
+  return rs
 }
 
 const AddCertificate = async (data) => {
@@ -23,14 +14,8 @@ const AddCertificate = async (data) => {
   bodyFormData.append('title', data.title);
   bodyFormData.append('description', data.description);
   bodyFormData.append('image', data.image);
-  try {
-    let rs = await fetcher({ method: "post", url: `${URL}/add`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data"}})
-    if (rs) {
-      return rs.data.data
-    }
-  } catch (e) {
-    return true
-  }
+  let rs = await fetcher({ method: "post", url: `${URL}/add`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" } })
+  return rs
 }
 
 const UpdateCertificate = async (data) => {
@@ -39,27 +24,14 @@ const UpdateCertificate = async (data) => {
   bodyFormData.append('title', data.title);
   bodyFormData.append('description', data.description);
   bodyFormData.append('image', data.image);
-  try {
-    let rs = await fetcher({ method: "post", url: `${URL}/update`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data"},})
-    if (rs) {
-      return data
-    }
-  } catch (e) {
-    return true
-  }
-
+  let rs = await fetcher({ method: "post", url: `${URL}/update`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" }, })
+  return rs
 }
 
 const DeleteCertificate = async (id) => {
-  try {
-    let rs = await fetcher({ method: "delete", url: `${URL}/${id}`})
-    if (rs) {
-      return id;
-    }
-  } catch (e) {
-    return true
-  }
+  let rs = await fetcher({ method: "delete", url: `${URL}/${id}` })
+  return rs
 };
 
 
-export  { GetCertificate , AddCertificate , DeleteCertificate , UpdateCertificate };
+export { GetCertificate, AddCertificate, DeleteCertificate, UpdateCertificate };

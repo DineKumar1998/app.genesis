@@ -8,25 +8,13 @@ import { DeleteCategoryType } from "src/api/products/category/category";
 const Table = (props) => {
   const Data = props.items;
 
-// *******************Table Headers *****************************
+  // *******************Table Headers *****************************
 
   const fields = [
     { key: "name", label: "Name", },
     { key: "active", label: "active", },
-    {
-      key: "Edit",
-      label: "",
-      _style: { width: "1%" },
-      sorter: false,
-      filter: false,
-    },
-    {
-      key: "Delete",
-      label: "",
-      _style: { width: "1%" },
-      sorter: false,
-      filter: false,
-    },
+    { key: "Edit", label: "", _style: { width: "1%" }, sorter: false, filter: false,},
+    { key: "Delete", label: "", _style: { width: "1%" }, sorter: false, filter: false,},
   ];
 
 
@@ -36,23 +24,23 @@ const Table = (props) => {
         return "success";
       case false:
         return "secondary";
-        default:
+      default:
 
     }
   };
 
-// *******************Delete City*****************************
+  // *******************Delete City*****************************
 
   const deleteItem = async (id) => {
     let confirmDelete = window.confirm("Delete item forever?");
-    if (confirmDelete){
+    if (confirmDelete) {
       let rs = await DeleteCategoryType(id)
-      if (rs){
+      if (rs.success === true) {
         props.deleteItemFromState(id);
         return NotificationManager.info("Deleted SuccessFully", "Success", 2000);
       }
-      else{
-        return NotificationManager.error("Something Went Wrong", "Info", 2000);
+      else {
+        return NotificationManager.error(rs.message, "Info", 2000);
       }
     }
   };
@@ -61,9 +49,9 @@ const Table = (props) => {
     <CDataTable
       items={Data}
       fields={fields}
-    //   columnFilter
+      //   columnFilter
       tableFilter
-      itemsPerPageSelect={{label: 'Items per page:',  values: [20, 50, 100, 150]}}
+      itemsPerPageSelect={{ label: 'Items per page:', values: [20, 50, 100, 150] }}
       itemsPerPage={20}
       hover
       sorter
@@ -72,15 +60,15 @@ const Table = (props) => {
         name: (item) => {
           return (
             <td className="py-2">
-              <b style={{color:"#5b5a5a",letterSpacing:"2px"}}>{item.name}</b>
+              <b style={{ color: "#5b5a5a", letterSpacing: "2px" }}>{item.name}</b>
             </td>
           )
         },
         active: (item) => {
           return (
             <td className="py-2">
-            <CBadge color={getBadge(item.active)}>{item.active === true ? <span>Active</span> : <span>Inactive</span>}</CBadge>
-          </td>
+              <CBadge color={getBadge(item.active)}>{item.active === true ? <span>Active</span> : <span>Inactive</span>}</CBadge>
+            </td>
           )
         },
         Edit: (item) => {

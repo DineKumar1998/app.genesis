@@ -23,9 +23,14 @@ class AddEditForm extends React.Component {
       let rs = await AddState({
         name: this.state.name,
       });
-      this.props.addItemToState(rs);
+      if (rs.success === true) {
+        this.props.addItemToState(true);
+        NotificationManager.info("State Added Successfully", "Info", 2000);
+      }
+      else {
+        NotificationManager.info(rs.message, "Info", 2000);
+      }
       this.props.toggle();
-      NotificationManager.info("State Added Successfully", "Info", 2000);
     }
   };
 
@@ -39,17 +44,21 @@ class AddEditForm extends React.Component {
         id: this.state.id,
         name: this.state.name,
       });
-        this.props.updateState(rs);
-        this.props.toggle();
+      if (rs.success === true) {
+        this.props.updateState(true);
         NotificationManager.info("State Updated Successfully", "Info", 2000);
-      
+      }
+      else {
+        NotificationManager.info(rs.message, "Info", 2000);
+      }
+      this.props.toggle();
     }
   };
 
   // ****************** Validation Function *****************************
 
   validation = (e) => {
-    if (!this.state.name) {
+    if (!this.state.name.trim()) {
       return NotificationManager.error("Please Enter State", "Info", 2000);
     } else {
       this.setState({ valid: true });
@@ -78,7 +87,7 @@ class AddEditForm extends React.Component {
             value={this.state.name === null ? "" : this.state.name}
           />
         </FormGroup>
-        <Button  color="primary">Submit</Button>
+        <Button color="primary">Submit</Button>
       </Form>
     );
   }

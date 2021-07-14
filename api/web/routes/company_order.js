@@ -11,4 +11,9 @@ router.post('/count',check_auth, orderHandler.countOrder)
 
 router.delete('/:Id',check_auth, orderHandler.deleteOrder)
 
+
+/*****************Order Search******************** */
+
+router.post('/search', check_auth, orderHandler.searchOrder);
+
 module.exports = router

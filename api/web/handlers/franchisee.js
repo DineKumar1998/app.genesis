@@ -33,6 +33,9 @@ const RegisterRepandFranchisee = async(req,res,next)=>{
         req.body.op_area=null;
     if(!req.body.city) req.body.city = null;
     if(!req.body.state) req.body.state = null;
+
+    if(!req.body.active) req.body.state = true;
+
     let franchiseeData = {
         name:req.body.firm_name,
         gst_number:req.body.gst_number,
@@ -49,6 +52,7 @@ const RegisterRepandFranchisee = async(req,res,next)=>{
         logo_url:null,
         divisions: req.body.divisions
     }
+
     let repData ={
         name:req.body.name,
         email:req.body.email,
@@ -58,9 +62,10 @@ const RegisterRepandFranchisee = async(req,res,next)=>{
         address:req.body.address,
         dob:req.body.dob,
         password:req.body.password,
+        aadhar_no : req.body.aadhar_no ,
+        active : req.body.active,
         op_area:req.body.op_area,
         is_owner :true,
-        active :req.body.active,
         profile_pic: req.body.profile_pic ? req.body.profile_pic : null
     }
     try {

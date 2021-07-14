@@ -26,12 +26,12 @@ const Table = (props) => {
         stateId : props.stateId,
         cityName : name
       })
-      if (rs){
+      if (rs.success === true){
         props.deleteItemFromState(cityId);
         return NotificationManager.info("City Deleted SuccessFully", "Info", 2000);
       }
       else{
-        return NotificationManager.error("Something Went Wrong", "Info", 2000);
+        return NotificationManager.error(rs.message, "Info", 2000);
       }
     }
   };

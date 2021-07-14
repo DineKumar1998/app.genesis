@@ -45,12 +45,12 @@ const Table = () => {
       let rs = await SearchCustomer({
         "name": search,
       })
-      if (rs !== true) {
-        for (let i = 0; i < rs.length; i++) {
-          rs[i].rep_name = rs[i].rep_id.name;
-          rs[i].franchisee_name = rs[i].franchisee_id.name;
+      if (rs.success === true) {
+        for (let i = 0; i < rs.data.length; i++) {
+          rs.data[i].rep_name = rs.data[i].rep_id.name;
+          rs.data[i].franchisee_name = rs.data[i].franchisee_id.name;
         }
-        setData(rs)
+        setData(rs.data)
       }
       setLoading(false)
     }
@@ -70,8 +70,9 @@ const Table = () => {
       })
 
       let rsCount = await GetCustomerCount()
-      if (rs && rsCount) {
-        let page = rsCount.count / rowPerPage
+
+      if (rs.success=== true && rsCount.success === true) {
+        let page = rsCount.data.count / rowPerPage
         let num = Number(page) === page && page % 1 !== 0;
         if (num === true) {
           var str = page.toString();
@@ -84,12 +85,12 @@ const Table = () => {
           setTotalPage(page)
         }
 
-        if (rs !== true && rs.length > 0) {
-          for (let i = 0; i < rs.length; i++) {
-            rs[i].rep_name = rs[i].rep_id.name;
-            rs[i].franchisee_name = rs[i].franchisee_id.name;
+        if (rs.success === true && rs.data.length > 0) {
+          for (let i = 0; i < rs.data.length; i++) {
+            rs.data[i].rep_name = rs.data[i].rep_id.name;
+            rs.data[i].franchisee_name = rs.data[i].franchisee_id.name;
           }
-          setData(rs)
+          setData(rs.data)
         }
         setLoading(false)
       }

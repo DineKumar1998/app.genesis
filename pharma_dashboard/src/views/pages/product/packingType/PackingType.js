@@ -19,39 +19,28 @@ class PackingType extends Component {
 
   addItemToState = (item) => {
     this.setState({ updated: true });
-    this.setState((prevState) => ({
-      items: [...prevState.items, item],
-    }));
   };
 
   // ****************** Update Function *****************************
 
   updateState = (item) => {
-    const itemIndex = this.state.items.findIndex((data) => data.id === item.id);
     this.setState({ updated: true });
-    const newArray = [
-      ...this.state.items.slice(0, itemIndex),
-      item,
-      ...this.state.items.slice(itemIndex + 1),
-    ];
-    this.setState({ items: newArray });
   };
 
   // ****************** Delete Function *****************************
 
   deleteItemFromState = (id) => {
-    const updatedItems = this.state.items.filter((item) => item.id !== id);
-    this.setState({ items: updatedItems });
+    this.setState({ updated: true });
   };
 
   // ****************** GetData Function ***************************
 
   getData = async () => {
     let rs = await GetPackingType();
-    if (rs) {
-      this.setState({ items: rs });
-      this.setState({ loading: false })
+    if (rs.success === true) {
+      this.setState({ items: rs.data });
     }
+    this.setState({ loading: false })
   }
 
   // ****************** ComponentDidMount Function ********************
@@ -64,8 +53,8 @@ class PackingType extends Component {
 
   componentDidUpdate() {
     if (this.state.updated) {
-      this.setState({updated: false})
       this.getData()
+      this.setState({updated: false})
     }
   }
 

@@ -7,8 +7,8 @@ const productSchema = new mongoose.Schema({
     category_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Product_category', required: [true, "Product Category Id is Required"] },
     name: { type: String, required: [true, "Product Name is Required"] },
     price: { type: Number, required: [true, "Product Price is Required"] },
-    description: { type: String, required: [true, "Product Description is Required"] },
-    details: { type: String, default: null },
+    description: { type: String, required: [true, "Product Description is Required"] }, //used as composition
+    details: { type: String, default: null }, //description
     min_order_qty: { type: Number, default: 1 },
     images: [{
         url: { type: String, required: [true, "Product Image/Visual-aid Url is Required"] },

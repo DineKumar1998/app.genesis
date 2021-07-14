@@ -48,10 +48,10 @@ class Division extends Component {
 
   getData = async () => {
     let rs = await GetDivisionType();
-    if (rs) {
-      this.setState({ items: rs });
-      this.setState({ loading: false })
+    if (rs.success === true) {
+      this.setState({ items: rs.data });
     }
+    this.setState({ loading: false })
   }
 
   // ****************** ComponentDidMount Function ********************
@@ -64,8 +64,8 @@ class Division extends Component {
 
   async componentDidUpdate() {
     if (this.state.updated) {
-      this.setState({updated: false});
       this.getData()
+      this.setState({updated: false});
     }
   }
 

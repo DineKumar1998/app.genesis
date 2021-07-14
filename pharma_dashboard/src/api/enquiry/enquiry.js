@@ -1,41 +1,23 @@
 import fetcher from "src/lib/fetcher";
 
 const URL = '/enquiry';
- 
+
 
 const GetEnquiry = async (id) => {
-  try{
-    let rs = await fetcher({ method: "post", url: `${URL}/get`})
-    return rs.data.data
-  }
-  catch(e){
-    return true
-  }
+    let rs = await fetcher({ method: "post", url: `${URL}/get` })
+    return rs
 }
 
 const SearchEnquiry = async (data) => {
-  let d = {...data}
-  try{
-    let rs = await fetcher({ method: "post", url: `${URL}/search`, data : d})
-    return rs.data.data
-  }
-  catch(e){
-    return true
-  }
+    let d = { ...data }
+    let rs = await fetcher({ method: "post", url: `${URL}/search`, data: d })
+    return rs
 }
 
-
-
 const DeleteEnquiry = async (id) => {
-  try {
-    let rs = await fetcher({ method: "post", url: `${URL}/${id}`})
-    if (rs) {
-      return rs;
-    }
-  } catch (e) {
-    return true
-  }
-};
+    let rs = await fetcher({ method: "delete", url: `${URL}/${id}` })
+    console.log("DeleteEnquiry", DeleteEnquiry)
+    return rs
+}
 
-
-export  { GetEnquiry , DeleteEnquiry , SearchEnquiry};
+export { GetEnquiry, DeleteEnquiry, SearchEnquiry };

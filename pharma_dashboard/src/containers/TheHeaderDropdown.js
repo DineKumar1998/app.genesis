@@ -28,8 +28,8 @@ const TheHeaderDropdown = () => {
   React.useEffect(() => {
     async function fetchMyAPI() {
         let rs = await UserProfile()
-        if (rs && rs.profile_pic !== null){
-          setAvatar(rs.profile_pic)
+        if (rs.success === true && rs.data.profile_pic !== null){
+          setAvatar(rs.data.profile_pic)
         }
         else{
           setAvatar(User)

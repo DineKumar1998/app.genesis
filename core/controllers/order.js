@@ -9,13 +9,14 @@ const RepCtrl = require("../controllers/rep");
 //import moment for date formatting
 const moment = require("moment");
 const fs = require("fs");
+const { Console } = require("console");
 
 //Add Order 
 exports.addOrder = async(order) => {
 
     if (!order.customer_id) throw new Error('Customer Id is Required');
     if (!order.orderlist) throw new Error('Order List is Required');
-
+    
     let neworder = {
         customer_id: order.customer_id,
         rep_id: order.rep_id,
@@ -24,20 +25,21 @@ exports.addOrder = async(order) => {
         created_on: new Date(Date.now())
     }
     let savedorder = await addOrder(neworder);
-    console.log("savedorder: ",savedorder)
-    delete savedorder.__v
 
+    delete savedorder.__v
     //notification module
+
+
     if (process.env.NOTIFICATION_STATUS) {
         let distributors = await RepCtrl.getRep({franchisee_id: order.franchisee_id, is_owner: true});
         const sendNotification = require("../../firebase_notification");
         let orderDEtails = await exports.getOrder({ id: savedorder._id });
-        
+
         for(let i=0; i< distributors.length; i++){
             let rep = distributors[i];
             if(rep.device_token){
                 let message = "Order From " + orderDEtails[0].rep_name + " MR is Recived on " + orderDEtails[0].created_on;
-                let notificationResponse = await sendNotification({ title: "New Order Received", message: message }, rep.device_token)
+                 await sendNotification({ title: "New Order Received", message: message }, rep.device_token)
             }
         }
     }
@@ -47,13 +49,11 @@ exports.addOrder = async(order) => {
 //get Order
 exports.getOrder = async(orderprops) => {
     let filter = {}
-
     if (orderprops.id) filter._id = orderprops.id;
     if (orderprops.rep_id) filter.rep_id = orderprops.rep_id;
     if (orderprops.customer_id) filter.customer_id = orderprops.customer_id;
     if (orderprops.franchisee_id) filter.franchisee_id = orderprops.franchisee_id;
-    let orderRecords = await getOrder(filter);
-
+    let orderRecords = await getOrder(filter);    
     if (!orderRecords)
         return null;
 
@@ -67,10 +67,8 @@ exports.getOrder = async(orderprops) => {
             // franchisee_id: it.franchisee_id._id,
             // franchisee_name: it.franchisee_id.name,
             created_on: moment(it.created_on).format("LLL"),
-
             orderlist: it.orderlist.map(item => {
                 item = item.toObject()
-
                 let images = null
                 if (item.product_id.hasOwnProperty('images')) {
                     let tmpImages = item.product_id.images;

@@ -59,9 +59,14 @@ class AddEditForm extends React.Component {
         description: this.state.description,
         image: this.state.file,
       });
-      this.props.addItemToState(rs);
+      if(rs.success === true){
+        this.props.addItemToState(rs);
+        NotificationManager.info("Added Successfully", "Info", 2000);
+      }
+      else{
+        NotificationManager.error(rs.message, "Info", 2000);
+      }
       this.props.toggle();
-      NotificationManager.info("Added Successfully", "Info", 2000);
     }
   };
 
@@ -77,17 +82,25 @@ class AddEditForm extends React.Component {
         description: this.state.description,
         image: this.state.file,
       });
-        this.props.updateState(rs, this.state.id);
-        this.props.toggle();
+      if(rs.success === true){
+        this.props.updateState(true);
         NotificationManager.info("Updated Successfully", "Info", 2000);
+      }
+      else{
+        NotificationManager.error(rs.message, "Info", 2000);
+      }
+      this.props.toggle();
     }
   };
 
   // ****************** Validation Function *****************************
 
   validation = (e) => {
-    if (!this.state.title) {return NotificationManager.error("Please Enter  Title", "Info", 2000);} 
-    if (!this.state.base64) {return NotificationManager.error("Please select Image", "Info", 2000);} 
+    if (!this.state.title.trim()) {return NotificationManager.error("Please Enter Title", "Info", 2000);} 
+    else if (this.state.title.trim().length < 5) {return NotificationManager.error("Title lenght should be more than 5 characters", "Info", 2000);} 
+    else if (!this.state.description.trim().length !== "" && this.state.description.trim().length >= 1 && this.state.description.trim().length < 5) 
+    {return NotificationManager.error("Please Enter Proper Description", "Info", 2000);} 
+
     else {this.setState({ valid: true }); }
   };
 
@@ -110,7 +123,6 @@ class AddEditForm extends React.Component {
     }
     else {
       defaultImage = this.state.base64 }
-
 
     return (
       <Form onSubmit={this.props.item ? this.submitFormEdit : this.submitFormAdd}>

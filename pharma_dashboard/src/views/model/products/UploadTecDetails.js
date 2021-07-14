@@ -28,11 +28,11 @@ const UploadTechDetails = (props) => {
       let rs = await TechDetails({
         productFile: selectedFile,
       });
-      if (rs !== true && rs.success) {
+      if (rs.success === true) {
         NotificationManager.success("Upload SuccessFully", "Success");
         props.updateState(true)
       } else {
-        NotificationManager.error("Something Went Wrong", "Error");
+        NotificationManager.error(rs.message, "Error");
       }
       toggle();
     }
