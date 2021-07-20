@@ -7,6 +7,7 @@ import UploadTechDetails from '../../model/products/UploadTecDetails'
 import ImportFromCsv from "src/views/model/products/UploadList";
 import UploadImgVis from "src/views/model/products/UploadImgVisulate";
 import { CPagination } from "@coreui/react";
+import Page404 from "../page404/Page404";
 
 class Products extends Component {
   constructor(props) {
@@ -78,7 +79,6 @@ class Products extends Component {
       let rs = await SearchProducts({
         "name" : this.state.search
       })
-      console.log("RSS", rs.data)
       if(rs.success === true){
        this.setState({ items: rs.data });
       }
@@ -117,7 +117,6 @@ class Products extends Component {
         this.setState({ items: rs.data });
       }
     }
-    console.log("ITEMS", this.state.items);
     this.setState({ loading: false });
 
   }
@@ -182,7 +181,13 @@ class Products extends Component {
                 </Col>
               </Row>
             </div>
-            <div className="p-2">
+            
+            {
+             this.state.items.length ===0 ? 
+             <Page404 />
+             :
+             <>
+             <div className="p-2">
               <fieldset class="field-container col-6 col-md-12">
                 <input type="text" value={this.state.search} onChange={(e) =>  this.onSearch(e)} 
                   placeholder="Search..." class="field-search" />
@@ -195,28 +200,34 @@ class Products extends Component {
                 </div>
               </fieldset>
             </div>
-            <Row>
-              <Col>
-                <Table
-                  loading={this.state.loading}
-                  items={this.state.items}
-                  updateState={this.updateState}
-                  deleteItemFromState={this.deleteItemFromState}
-                />
-                {!this.state.search ?
-                  <div className={'mt-2'} >
-                    <CPagination
-                      className="pagination"
-                      activePage={this.state.currentPage}
-                      pages={this.state.totalPage}
-                      onActivePageChange={(e) => this.activePageChange(e)}
-                    ></CPagination>
-                  </div>
-                  : 
-                  <></>
-                }
-              </Col>
-            </Row>
+             <Row>
+             <Col>
+               <Table
+                 loading={this.state.loading}
+                 items={this.state.items}
+                 updateState={this.updateState}
+                 deleteItemFromState={this.deleteItemFromState}
+               />
+               {!this.state.search  ?
+                 <div className={'mt-2'} >
+                   <CPagination
+                     className="pagination"
+                     activePage={this.state.currentPage}
+                     pages={this.state.totalPage}
+                     onActivePageChange={(e) => this.activePageChange(e)}
+                   ></CPagination>
+                 </div>
+                 : 
+                 <></>
+               }
+             </Col>
+           </Row>
+           </>
+
+
+
+            }
+          
           </Container>
         }
       </>

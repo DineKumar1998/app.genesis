@@ -188,7 +188,7 @@ class CardGridView extends React.Component {
       <>
         {this.state.loading ? <div className="loader"></div> :
           <>
-          {this.state.data === true ? <Page404 /> : 
+          {this.state.data.length === 0 ? <Page404 /> : 
           <div className="card-grid-view row" >
             {this.state.data.map((cardData, index) => (
               <Card updated={this.updateState} data={cardData} key={"card-id-" + index} />

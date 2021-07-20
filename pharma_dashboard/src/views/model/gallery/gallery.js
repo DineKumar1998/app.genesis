@@ -41,14 +41,14 @@ class ModalForm extends Component {
     let button = ''
     let title = ''
     if (label === 'Detach') {
-      button = <button className="btn btn-sm btn-outline-danger"
-        style={{ float: "left", marginRight: "10px" }}
+      button = <button className="glass_button"
+        // style={{ float: "left", marginRight: "10px" }}
         onClick={this.toggle}>
         <b>{label}</b>
       </button>
       title = 'Detach'
     } else {
-      button = <button className="btn btn-sm btn-outline-primary"
+      button = <button className="glass_button"
         onClick={this.toggle}>
         <b>{label}</b>
       </button>
@@ -57,7 +57,7 @@ class ModalForm extends Component {
 
     
     return (
-      <div container="true">
+      <div >
         {button}
         {this.props.buttonLabel === "Attach" ?
           <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>

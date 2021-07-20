@@ -1,15 +1,15 @@
 const model = require("../../models/company_order");
+// const mongoose = require('mongoose')
 
 module.exports = async(filters) => {
-    // const regex = new RegExp(escapeRegex(filters), 'gi');
 
-    return await model.find(filters).populate("rep_id").exec()
+    // let searchFilters = {...filters};
+    // if(filters._id) 
+    // searchFilters._id = mongoose.Types.ObjectId(`${filters._id}`);
 
-    // return await model.find({ $or: [{
-    //     [field]: regex }] }).exec()
+     let rs =  await model.find(filters).populate({path:"orderlist.product_id",populate:{path:"division_id",select:"name"}}).exec()
+
+    return rs
+
 }
-
-// function escapeRegex(text) {
-//     return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-// };
 

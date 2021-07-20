@@ -31,11 +31,13 @@ class ModalForm extends Component {
                   </CButton> 
         title = 'Edit Item'
       } else {
-        button = <Button
+        button = <button
+                  size="sm"
+                  className = "button_add" 
                   color="success"
                   onClick={this.toggle}>
-                  <b>{label}</b>
-                </Button>
+                  {label}{' '}<i class="fas fa-plus"></i>
+                </button>
         title = 'Add New Item'
       }
 

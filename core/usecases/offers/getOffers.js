@@ -4,7 +4,7 @@ const model = require("../../models/offers");
 //get offers 
 module.exports = async (filters) => {
 
-    return await model.find(filters).populate("reps").sort({valid_upto: -1}).exec()
+    return await model.find(filters).populate("reps").populate("division").sort({valid_upto: -1}).exec()
   }
 
 

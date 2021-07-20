@@ -184,7 +184,7 @@ class Profile extends React.Component {
                             <div className="card-header">
                                 <div className="row align-items-center">
                                     <div className="col-8">
-                                        <h3 className="mb-0" style={{ fontSize: "20px", }}><b>Edit Profile</b></h3>
+                                        <h3 className="mb-0 h3_cstm"><b>Edit Profile</b></h3>
                                     </div>
                                 </div>
                             </div>
@@ -241,8 +241,10 @@ class Profile extends React.Component {
                                             onChange={this.handleChangePhotoFileInput} ref={input => (this.inputFileRef = input)} />
                                         <label className="custom-file-label rounded-pill" style={{ fontSize: "10px", margin: "20px" }}>Choose file</label>
                                     </div>
-                                    <div style={{ marginBottom: "100px" }}>
-                                        <button className="btn btn-primary btn-sm " onClick={this.saveInfo} style={{ backgroundColor: "#55acee", float: "right", marginTop: "40px" }}
+                                    {/* <hr className="my-4" /> */}
+
+                                    <div style={{ marginBottom: "100px", marginTop : "40px" }}>
+                                        <button className="prof_save_button" onClick={this.saveInfo} 
                                         ><i className="fas fa-save"></i> Save Changes</button>
                                     </div>
                                 </div>
@@ -276,8 +278,8 @@ class Profile extends React.Component {
                                         </div>
                                     </div>
                                 </div>
-                                <hr className="my-4" />
-                                <button className="btn btn-primary btn-sm" onClick={this.savePassword} style={{ backgroundColor: "#55acee", float: "right", marginTop: "20px" }}
+                                <div style={{marginTop : "40px"}}/>
+                                <button className="prof_save_button" onClick={this.savePassword} 
                                 ><i class="fa fa-lock" style={{ color: "white" }}></i> Save Password</button>
                             </div>
                         </div>

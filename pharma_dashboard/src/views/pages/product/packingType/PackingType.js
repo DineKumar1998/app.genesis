@@ -68,7 +68,7 @@ class PackingType extends Component {
                 <Col>
                   <div className="d-flex bg-light border">
                     <div className="p-2 flex-grow-1">
-                      <h5><b>Packaging Type</b></h5>
+                      <h5 className="h5_cstm"><b>Packaging Type</b></h5>
                     </div>
                     {this.state.items === true ? <></> :
                       <div className="p-2">

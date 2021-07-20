@@ -4,10 +4,16 @@ import { IconDelete } from "../../icon";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { Link, useHistory } from "react-router-dom";
 import { DeleteOrder } from "src/api/orders/orders";
+import ConfirmDelete from '../../../lib/deleteDilog'
+import { ModalContext } from "src/lib/context";
 
 const Table = (props) => {
   const Data = props.items;
   let history = useHistory();
+  const [showModal, updateShowModal] = React.useState(false);
+  const [deleteItemId, setDeleteItemId] = React.useState(false);
+
+  const toggleModal = (id) => { updateShowModal(state => !state); setDeleteItemId(id) };
 
 // *******************Table Headers *****************************
 
@@ -22,17 +28,15 @@ const Table = (props) => {
 // *******************Delete City*****************************
 
   const deleteItem = async (id) => {
-    let confirmDelete = window.confirm("Delete item forever?");
-    if (confirmDelete){
       let rs = await DeleteOrder(id)
       if (rs.success === true){
         props.deleteItemFromState(id);
-        return NotificationManager.info("Deleted SuccessFully", "Info", 2000);
+        NotificationManager.info("Deleted SuccessFully", "Info", 2000);
       }
       else{
-        return NotificationManager.error(rs.message, "Info", 2000);
+        NotificationManager.error(rs.message, "Info", 2000);
       }
-    }
+      toggleModal()
   };
 
   const openDist = (name) => {
@@ -45,6 +49,7 @@ const Table = (props) => {
   };
 
   return (
+    <>
     <CDataTable
       items={Data}
       fields={fields}
@@ -76,7 +81,7 @@ const Table = (props) => {
                       <p  className="p_quantity"><i className="fad p_icon fa-balance-scale"></i>&nbsp; Quantity : {it.product.min_order_qty}</p>
                       <p className="p_info">{it.product.division_name}</p>
                       <Link onClick={()=> openDist(it.product.name)} style={{color:"#0085ba", letterSpacing:"0.4px"}}>
-                        <button className="btn-product"><span style={{fontSize : "14px"}}>View Product</span></button>
+                        <button className="btn-product"><span style={{fontSize : "14px"}}><i class="fad fa-box-full"></i>&nbsp;View Product</span></button>
                       </Link>
                     </div>
                   </div>
@@ -90,7 +95,7 @@ const Table = (props) => {
               <CButton
                 color="danger"
                 size="sm"
-                onClick={() => deleteItem(item.id)}
+                onClick={() => toggleModal(item.id)}
               >
                 <IconDelete />
               </CButton>
@@ -99,6 +104,10 @@ const Table = (props) => {
         },
       }}
     />
+    <ModalContext.Provider value={{ showModal, toggleModal, deleteItem, id: `${deleteItemId}` }}>
+      <ConfirmDelete canShow={showModal} updateModalState={toggleModal} />
+    </ModalContext.Provider>
+    </>
   );
 };
 

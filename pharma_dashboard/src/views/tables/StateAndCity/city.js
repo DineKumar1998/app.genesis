@@ -4,9 +4,22 @@ import ModalForm from "src/views/model/StateAndCity/city";
 import { IconDelete } from "../../icon";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { DeleteCity } from "src/api/stateAndCity/city";
+import ConfirmDelete from '../../../lib/deleteDilog'
+import { ModalContext } from "src/lib/context";
 
 const Table = (props) => {
   const Data = props.items;
+  const [showModal, updateShowModal] = React.useState(false);
+  const [deleteItemId, setDeleteItemId] = React.useState(false);
+  const [deleteItemState, setDeleteItemState] = React.useState(false);
+  const [deleteItemName, setDeleteItemName] = React.useState(false);
+
+  const toggleModal = (state, name , id) => {     
+            updateShowModal(state => !state); 
+            setDeleteItemId(id) ;
+            setDeleteItemName(name) ;
+            setDeleteItemState(state) ;
+          };
 
 // *******************Table Headers *****************************
 
@@ -19,24 +32,27 @@ const Table = (props) => {
 
 // *******************Delete City*****************************
 
-  const deleteItem = async (id, name , cityId) => {
-    let confirmDelete = window.confirm("Delete item forever?");
-    if (confirmDelete){
-      let rs = await DeleteCity(id , {
-        stateId : props.stateId,
-        cityName : name
+  const deleteItem = async (props_) => {
+
+    console.log("ID PROPS ", props)
+      let rs = await DeleteCity(props_.deleteItemId , {
+        stateId : props_.state,
+        cityName : props_.name
       })
       if (rs.success === true){
-        props.deleteItemFromState(cityId);
-        return NotificationManager.info("City Deleted SuccessFully", "Info", 2000);
+        props.deleteItemFromState(props.deleteItemId);
+        NotificationManager.info("City Deleted SuccessFully", "Info", 2000);
       }
       else{
-        return NotificationManager.error(rs.message, "Info", 2000);
+        NotificationManager.error(rs.message, "Info", 2000);
       }
-    }
+      toggleModal()
+
   };
 
   return (
+    <>
+    
     <CDataTable
       items={Data}
       fields={fields}
@@ -66,7 +82,7 @@ const Table = (props) => {
               <CButton
                 color="danger"
                 size="sm"
-                onClick={() => deleteItem(props.stateId , item.name , item.id)}
+                onClick={() => toggleModal(props.stateId , item.name , item.id)}
               >
                 <IconDelete />
               </CButton>
@@ -75,6 +91,10 @@ const Table = (props) => {
         },
       }}
     />
+    <ModalContext.Provider value={{ showModal, toggleModal, deleteItem,  id: {deleteItemId : deleteItemId, name: deleteItemName, state:deleteItemState },  }}>
+      <ConfirmDelete canShow={showModal} updateModalState={toggleModal} />
+    </ModalContext.Provider>
+    </>
   );
 };
 

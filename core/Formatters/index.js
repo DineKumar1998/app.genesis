@@ -1,5 +1,6 @@
 const moment = require("moment");
 const fs = require("fs");
+const { Console } = require("console");
 
 exports.ProductFormatter = (product) => {
 
@@ -7,7 +8,7 @@ exports.ProductFormatter = (product) => {
 
     let images = null;
     let imagesTmp = product.images;
-    if (imagesTmp.length > 0){
+    if (imagesTmp.length > 0 && imagesTmp){
         images = [];
         imagesTmp.forEach(img => {
             if(fs.existsSync(img.url))
@@ -25,6 +26,7 @@ exports.ProductFormatter = (product) => {
         if(fs.existsSync(product.technical_detail)) technical_detail = `${process.env.BASE_URL}${product.technical_detail}`;
         else technical_detail = null
     }
+
 
     return {
         id: product._id,

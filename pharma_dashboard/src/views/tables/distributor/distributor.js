@@ -6,12 +6,18 @@ import { Link } from "react-router-dom";
 import { DeleteRepAndFranchisee } from "src/api/distributor/distributor";
 import { NotificationManager } from "react-notifications";
 import Model from '../../model/distributor/Franchisee'
+import ConfirmDelete from '../../../lib/deleteDilog'
+import { ModalContext } from "src/lib/context";
+
 
 const Table = (props) => {
   const Data = props.items;
   const val = props.searchFilter
   const loading = props.loading
+  const [showModal, updateShowModal] = React.useState(false);
+  const [deleteItemId, setDeleteItemId] = React.useState(false);
 
+  const toggleModal = (id) => { updateShowModal(state => !state); setDeleteItemId(id) };
 
   const fields = [
     { key: "name", label: "Name" },
@@ -39,22 +45,19 @@ const Table = (props) => {
   };
 
   const deleteItem = async (id) => {
-    let confirmDelete = window.confirm("Delete item forever?");
-    if (confirmDelete) {
       let rs = await DeleteRepAndFranchisee(id)
       if (rs.success === true) {
         props.deleteItemFromState(id);
-        return NotificationManager.info("Distributor Deleted SuccessFully", "Success", 2000);
+        NotificationManager.info("Distributor Deleted SuccessFully", "Success", 2000);
       }
       else {
-        return NotificationManager.error(rs.message, "Success", 2000);
-      }
-
-
+        NotificationManager.error(rs.message, "Success", 2000);
     }
+    toggleModal()
   };
 
   return (
+    <>
     <CDataTable
       items={Data}
       tableFilterValue={val}
@@ -143,7 +146,7 @@ const Table = (props) => {
               <CButton
                 color="danger"
                 size="sm"
-                onClick={() => deleteItem(item.id)}
+                onClick={() => toggleModal(item.id)}
               >
                 <IconDelete />
               </CButton>
@@ -152,6 +155,10 @@ const Table = (props) => {
         },
       }}
     />
+    <ModalContext.Provider value={{ showModal, toggleModal, deleteItem, id: `${deleteItemId}` }}>
+      <ConfirmDelete canShow={showModal} updateModalState={toggleModal} />
+    </ModalContext.Provider>
+    </>
   );
 };
 

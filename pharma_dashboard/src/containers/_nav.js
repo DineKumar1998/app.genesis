@@ -59,7 +59,7 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Send Notification',
+    name: 'Notification',
     to: '/notification',
     icon: <CIcon name="cil-bell" customClasses="c-sidebar-nav-icon"/>,
   },

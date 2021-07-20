@@ -4,54 +4,47 @@ import ModalForm from "src/views/model/products/packagingType";
 import { IconDelete } from "../../icon";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { DeletePackingType } from "src/api/products/packingType/packingType";
+import ConfirmDelete from '../../../lib/deleteDilog'
+import { ModalContext } from "src/lib/context";
 
 const Table = (props) => {
   const Data = props.items;
+  const [showModal, updateShowModal] = React.useState(false);
+  const [deleteItemId, setDeleteItemId] = React.useState(false);
 
-// *******************Table Headers *****************************
+  const toggleModal = (id) => { updateShowModal(state => !state); setDeleteItemId(id) };
+
+  // *******************Table Headers *****************************
 
   const fields = [
     { key: "name", label: "Name", },
-    {
-      key: "Edit",
-      label: "",
-      _style: { width: "1%" },
-      sorter: false,
-      filter: false,
-    },
-    {
-      key: "Delete",
-      label: "",
-      _style: { width: "1%" },
-      sorter: false,
-      filter: false,
-    },
+    { key: "Edit", label: "", _style: { width: "1%" }, sorter: false, filter: false, },
+    { key: "Delete", label: "", _style: { width: "1%" }, sorter: false, filter: false, },
   ];
 
 
-// *******************Delete City*****************************
+  // *******************Delete City*****************************
 
   const deleteItem = async (id) => {
-    let confirmDelete = window.confirm("Delete item forever?");
-    if (confirmDelete){
       let rs = await DeletePackingType(id)
-      if (rs.success === true){
+      if (rs.success === true) {
         props.deleteItemFromState(id);
-        return NotificationManager.info("Deleted SuccessFully", "Info", 2000);
+        NotificationManager.info("Deleted SuccessFully", "Info", 2000);
       }
-      else{
-        return NotificationManager.error(rs.message, "Info", 2000);
+      else {
+        NotificationManager.error(rs.message, "Info", 2000);
       }
-    }
+      toggleModal()
   };
 
   return (
+    <>
     <CDataTable
       items={Data}
       fields={fields}
-    //   columnFilter
+      //   columnFilter
       tableFilter
-      itemsPerPageSelect={{label: 'Items per page:',  values: [20, 50, 100, 150]}}
+      itemsPerPageSelect={{ label: 'Items per page:', values: [20, 50, 100, 150] }}
       itemsPerPage={20}
       hover
       sorter
@@ -60,7 +53,7 @@ const Table = (props) => {
         name: (item) => {
           return (
             <td className="py-2">
-              <b style={{color:"#5b5a5a",letterSpacing:"2px"}}>{item.name}</b>
+              <b style={{ color: "#5b5a5a", letterSpacing: "2px" }}>{item.name}</b>
             </td>
           )
         },
@@ -82,7 +75,7 @@ const Table = (props) => {
               <CButton
                 color="danger"
                 size="sm"
-                onClick={() => deleteItem(item.id)}
+                onClick={() => toggleModal(item.id)}
               >
                 <IconDelete />
               </CButton>
@@ -91,6 +84,10 @@ const Table = (props) => {
         },
       }}
     />
+    <ModalContext.Provider value={{ showModal, toggleModal, deleteItem, id: `${deleteItemId}` }}>
+      <ConfirmDelete canShow={showModal} updateModalState={toggleModal} />
+    </ModalContext.Provider>
+    </>
   );
 };
 

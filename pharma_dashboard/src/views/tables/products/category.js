@@ -4,9 +4,15 @@ import ModalForm from "src/views/model/products/categoryType";
 import { IconDelete } from "../../icon";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { DeleteCategoryType } from "src/api/products/category/category";
+import ConfirmDelete from '../../../lib/deleteDilog'
+import { ModalContext } from "src/lib/context";
 
 const Table = (props) => {
   const Data = props.items;
+  const [showModal, updateShowModal] = React.useState(false);
+  const [deleteItemId, setDeleteItemId] = React.useState(false);
+
+  const toggleModal = (id) => { updateShowModal(state => !state); setDeleteItemId(id) };
 
   // *******************Table Headers *****************************
 
@@ -32,20 +38,19 @@ const Table = (props) => {
   // *******************Delete City*****************************
 
   const deleteItem = async (id) => {
-    let confirmDelete = window.confirm("Delete item forever?");
-    if (confirmDelete) {
       let rs = await DeleteCategoryType(id)
       if (rs.success === true) {
         props.deleteItemFromState(id);
-        return NotificationManager.info("Deleted SuccessFully", "Success", 2000);
+        NotificationManager.info("Deleted SuccessFully", "Success", 2000);
       }
       else {
-        return NotificationManager.error(rs.message, "Info", 2000);
+        NotificationManager.error(rs.message, "Info", 2000);
       }
-    }
+      toggleModal()
   };
 
   return (
+    <>
     <CDataTable
       items={Data}
       fields={fields}
@@ -89,7 +94,7 @@ const Table = (props) => {
               <CButton
                 color="danger"
                 size="sm"
-                onClick={() => deleteItem(item.id)}
+                onClick={() => toggleModal(item.id)}
               >
                 <IconDelete />
               </CButton>
@@ -98,6 +103,10 @@ const Table = (props) => {
         },
       }}
     />
+    <ModalContext.Provider value={{ showModal, toggleModal, deleteItem, id: `${deleteItemId}` }}>
+      <ConfirmDelete canShow={showModal} updateModalState={toggleModal} />
+    </ModalContext.Provider>
+    </>
   );
 };
 

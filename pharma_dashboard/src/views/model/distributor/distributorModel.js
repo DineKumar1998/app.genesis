@@ -33,14 +33,13 @@ class ModalForm extends Component {
                   </CButton> 
         title = 'Edit Distributor'
       } else {
-        button = <Button
-                  id = "sucessbtn"
-                  style={{width : "160px", marginRight : "50px",}}
+        button = <button
                   size="sm"
+                  className = "button_add" 
                   color="success"
                   onClick={this.toggle}>
-                  <b>{label}{' '}<i class="fas fa-plus"></i></b>
-                </Button>
+                  {label}{' '}<i class="fas fa-plus"></i>
+                </button>
         title = 'Add Distributor'
       }
       return (

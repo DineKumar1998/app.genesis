@@ -21,22 +21,22 @@ class Distributor extends Component {
     };
   }
 
-    // ****************** onSearch Function *****************************
+  // ****************** onSearch Function *****************************
 
-    onSearch = (e) => {
-      this.setState({search : e.target.value});
-      if (this.state.search !== ""){
-        this.setState({update : true})
-      }
+  onSearch = (e) => {
+    this.setState({ search: e.target.value });
+    if (this.state.search !== "") {
+      this.setState({ update: true })
     }
-  
-    // ****************** onClose Function *****************************
-  
-    onClose = () => {
-      this.setState({search : ""})
-      this.setState({update : true})
-    }
-  
+  }
+
+  // ****************** onClose Function *****************************
+
+  onClose = () => {
+    this.setState({ search: "" })
+    this.setState({ update: true })
+  }
+
 
 
   // ****************** Add Function *****************************
@@ -76,59 +76,60 @@ class Distributor extends Component {
 
     if (this.state.search !== "") {
       let rs = await SearchDistributor({
-        "name" : this.state.search,
+        "name": this.state.search,
         is_owner: true
       })
-      if (rs.success === true){
+      if (rs.success === true) {
         this.setState({ items: rs.data });
       }
       this.setState({ loading: false });
       this.setState({ update: false })
     }
     else {
-    let skip = 0
-    if (this.state.currentPage === 0) {
-      skip = 1 * this.state.rowPerPage
-    }
-    else {
-      skip = this.state.currentPage * this.state.rowPerPage
-    }
-
-    let skipVal = skip - this.state.rowPerPage
-    let rs = await GetDistributor({
-      "limit": this.state.rowPerPage,
-      "skip": skipVal,
-      "is_owner": true
-    })
-
-    let rsCount = await DistributorCount()
-    if (rs.success === true && rsCount.success === true) {
-      let page = rsCount.data.count / this.state.rowPerPage
-      let num = Number(page) === page && page % 1 !== 0;
-      if (num === true) {
-        var str = page.toString();
-        var numarray = str.split('.');
-        var a = parseInt(numarray)
-        this.setState({ totalPage: a + 1 });
+      let skip = 0
+      if (this.state.currentPage === 0) {
+        skip = 1 * this.state.rowPerPage
       }
       else {
-        this.setState({ totalPage: page });
+        skip = this.state.currentPage * this.state.rowPerPage
       }
-      this.setState({ items: rs.data });
-      this.setState({ loading: false });
+
+      let skipVal = skip - this.state.rowPerPage
+      let rs = await GetDistributor({
+        "limit": this.state.rowPerPage,
+        "skip": skipVal,
+        "is_owner": true
+      })
+
+      let rsCount = await DistributorCount()
+      if (rs.success === true && rsCount.success === true) {
+        let page = rsCount.data.count / this.state.rowPerPage
+        let num = Number(page) === page && page % 1 !== 0;
+        if (num === true) {
+          var str = page.toString();
+          var numarray = str.split('.');
+          var a = parseInt(numarray)
+          this.setState({ totalPage: a + 1 });
+        }
+        else {
+          this.setState({ totalPage: page });
+        }
+        this.setState({ items: rs.data });
+        this.setState({ loading: false });
+      }
     }
-  }
   }
 
   // ****************** ComponentDidMount Function *****************************
 
   async componentDidMount() {
-    if (this.props.location.name){
-      this.setState({search : this.props.location.name})
-      this.setState({update : true})
+    if (this.props.location.name) {
+      this.setState({ search: this.props.location.name })
+      this.setState({ update: true })
     }
-    this.GetData()
-
+    else {
+      this.GetData()
+    }
   }
 
   // ****************** ComponentDidUpdate Function *****************************
@@ -153,7 +154,6 @@ class Distributor extends Component {
                       <b>Distributor Details</b>
                     </h5>
                   </div>
-                  {this.state.items.length === 0 ? <></> :
                     <div className="row">
                       <div class="col-12 col-md-6 ">
                         <ImportFromCsv
@@ -169,26 +169,26 @@ class Distributor extends Component {
                         />
                       </div>
                     </div>
-                  }
                 </div>
               </div>
-                <div className="p-2">
-                  <fieldset class="field-container col-6 col-md-12">
-                    <input type="text" value={this.state.search} onChange={(e) => this.onSearch(e)}
-                      placeholder="Search..." class="field-search" />
-                    <div class="icons-container">
-                      <div class="icon-search" style={{top:"0px",left:"0px"}}></div>
-                      <div class="icon-close" style={{top:"0px",left:"-5px"}} onClick={this.onClose}>
-                        <div class="x-up"></div>
-                        <div class="x-down"></div>
+
+              {this.state.items.length === 0 ? <Page404 /> :
+                <>
+                  <div className="p-2">
+                    <fieldset class="field-container col-6 col-md-12">
+                      <input type="text" value={this.state.search} onChange={(e) => this.onSearch(e)}
+                        placeholder="Search..." class="field-search" />
+                      <div class="icons-container">
+                        <div class="icon-search" style={{ top: "0px", left: "0px" }}></div>
+                        <div class="icon-close" style={{ top: "0px", left: "-5px" }} onClick={this.onClose}>
+                          <div class="x-up"></div>
+                          <div class="x-down"></div>
+                        </div>
                       </div>
-                    </div>
-                  </fieldset>
-                </div>
-              <Row>
-                <Col>
-                  {this.state.items.length === 0 ? <Page404 /> :
-                    <>
+                    </fieldset>
+                  </div>
+                  <Row>
+                    <Col>
                       <Table
                         loading={this.state.loading}
                         items={this.state.items}
@@ -197,22 +197,21 @@ class Distributor extends Component {
                       />
                       {
                         this.state.search === "" ?
-                        <div className={'mt-2'} >
-                        <CPagination
-                          className="pagination"
-                          activePage={this.state.currentPage}
-                          pages={this.state.totalPage}
-                          onActivePageChange={(e) => this.activePageChange(e)}
-                        ></CPagination>
-                      </div>
-                      :
-                      <></>
+                          <div className={'mt-2'} >
+                            <CPagination
+                              className="pagination"
+                              activePage={this.state.currentPage}
+                              pages={this.state.totalPage}
+                              onActivePageChange={(e) => this.activePageChange(e)}
+                            ></CPagination>
+                          </div>
+                          :
+                          <></>
                       }
-                      
-                    </>
-                  }
-                </Col>
-              </Row>
+                    </Col>
+                  </Row>
+                </>
+              }
             </Container>
         }
       </>

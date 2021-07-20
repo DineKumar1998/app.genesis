@@ -16,6 +16,7 @@ const GetOfferCount = async () => {
 const AddOffer = async (data) => {
   var bodyFormData = new FormData();
   bodyFormData.append('title', data.title);
+  bodyFormData.append('division', data.division);
 
   bodyFormData.append('description', data.description);
   if (data.image.length > 0) {
@@ -33,7 +34,7 @@ const UpdateOffer = async (data) => {
   bodyFormData.append('id', data.id);
   bodyFormData.append('title', data.title);
   bodyFormData.append('description', data.description);
-  // bodyFormData.append('image', data.image);
+  bodyFormData.append('division', data.division);
   
   if (data.image.length > 0) {
     data.image.forEach(it => bodyFormData.append('image', it))

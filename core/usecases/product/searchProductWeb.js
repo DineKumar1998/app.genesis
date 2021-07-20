@@ -3,6 +3,7 @@ const model = require("../../models/product");
 
 //get product  
 module.exports = async(filters) => {
+    console.log("filter", filters)
         let data = Object.values(filters.data)[0]
         let field = Object.keys(filters.data)[0];
         const regex = new RegExp(escapeRegex(data), 'gi');

@@ -84,7 +84,7 @@ class AddEditForm extends React.Component {
           value={this.state.name === null ? "" : this.state.name}
         />
       </FormGroup> 
-        <Button>Submit</Button>
+        <button className="btn btn-primary">Submit</button>
       </Form>
     );
   }

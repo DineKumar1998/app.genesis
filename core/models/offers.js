@@ -6,6 +6,7 @@ const offersSchema = new mongoose.Schema({
   description:{ type:String,default:null},
   image:[{type:String,default:null}],
   reps: [{type: mongoose.Schema.Types.ObjectId, ref: 'Rep'}],
+  division: [{type: mongoose.Schema.Types.ObjectId, ref: 'Division'}],
   valid_upto: {type: Date, required:true},
   created_on: {type: Date, default: Date.now}
 });

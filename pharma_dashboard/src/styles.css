@@ -6,7 +6,21 @@ h6 {
 
 h5 {
   font-family: "Kotta One", serif;
-  margin-top: 18px;
+  /* margin-top: 18px; */
+}
+
+
+  
+.h3_cstm {
+  font-size: 20px;
+  font-weight: 400;
+  color: #878787d9;
+}
+
+
+.h5_cstm {
+  font-family: "Kotta One", serif;
+  margin-top: 8px;
 }
 
 button:focus {
@@ -54,6 +68,86 @@ input {
   transform: scale(2.5);
 }
 
+.prof_save_button {
+  /* align-items: flex-end; */
+  float: right;
+  font-size: 12px;
+  padding: 10px;
+  padding-left: 14px;
+  padding-right: 14px;
+  background-color: #4a8eff !important;
+  position: relative;
+  color: white;
+  outline: none;
+  transition: all .15s ease;
+  letter-spacing: 0.060em;
+  text-transform: none;
+  will-change: transform;
+  border-radius: 4px;
+  border: none;
+}
+
+.notify_button {
+  /* align-items: flex-end; */
+  float: center;
+  font-size: 12px;
+  padding: 10px;
+  padding-left: 14px;
+  padding-right: 14px;
+  background-color: #4a8eff !important;
+  position: relative;
+  color: white;
+  outline: none;
+  transition: all .15s ease;
+  letter-spacing: 0.060em;
+  text-transform: none;
+  will-change: transform;
+  border-radius: 4px;
+  border: none;
+}
+
+
+.noselect {
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+		-webkit-tap-highlight-color: transparent;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap');
+
+.glass_button {
+	padding: 3px;
+  padding-left: 20px;
+  padding-right: 20px;
+	cursor: pointer;
+	border: none;
+	font-family: 'Comfortaa', cursive;
+	/* color: rgba(255,255,255,0.5); */
+  color: rgb(30 27 27 / 48%);
+
+	font-size: 15px;
+	border-radius: 4px;
+	box-shadow: inset 0px 3px 5px rgba(255,255,255,0.5), 0px 0px 10px rgba(0,0,0,0.15);
+	background: rgb(2,0,36);
+  background: linear-gradient(45deg, rgba(2,0,36,0) 5%, rgba(255,255,255,.5) 6%, rgba(255,255,255,0) 9%, rgba(255,255,255,.5) 10%, rgba(255,255,255,0) 17%, rgba(255,255,255,.5) 19%, rgba(255,255,255,0) 21%);
+	background-size: 150%;
+	background-position: right;
+	transition: 1s;
+}
+
+.glass_button:hover {
+	background-position: left;
+	color: rgb(175, 175, 175);
+	box-shadow: inset 0px 3px 5px rgba(255,255,255,1), 0px 0px 10px rgba(0,0,0,0.25);
+}
+
+.glass_button:focus {
+	outline: none;
+}
 /* --------------------------------------- */
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
@@ -565,10 +659,11 @@ a-login:hover {
   font-size: 20px;
 }
 
-.btn-cstm {
+/* .btn-cstm {
   background-color: #4285f4 !important;
   cursor: pointer;
   color: white;
+  border-radius: 10rem;
   padding: 0.5rem 1.6rem;
   font-size: 0.64rem;
   margin: 0.375rem;
@@ -582,7 +677,35 @@ a-login:hover {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   min-width: 189px !important;
-}
+} */
+/* 
+.btn-cstm {
+  min-width: 189px !important;
+  margin-top: 5px;
+  margin-bottom: 8px;
+
+  cursor: pointer;
+  color: white;
+  border-radius: 10rem;
+  padding: 0.5rem 1.6rem;
+  font-size: 0.64rem;
+  margin: 0.375rem;
+  text-transform: uppercase;
+  white-space: normal;
+
+  border: none;
+  display: inline-block;
+  padding: 5px 1.25rem;
+  border-radius: 10rem;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: .1rem;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+} */
 
 .page-item.active {
   background-color: #4285f4;
@@ -700,6 +823,11 @@ a-login:hover {
   font-size: 14px; 
 }
 
+.notification_heading{
+  font-size: 30px;
+  color: rgb(0, 48, 127);
+}
+
 /* ------------------------------view Frenchisee info modal ------------------------ */
 
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bree+Serif&family=EB+Garamond:ital,wght@0,500;1,800&display=swap');
@@ -711,7 +839,7 @@ a-login:hover {
 	border-radius: 5px;
 	overflow: hidden;
 	height: auto;
-	width: 600px;
+	width: 716px;
 }
 
 @media only screen and (max-width: 768px) {

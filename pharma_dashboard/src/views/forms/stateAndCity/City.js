@@ -28,7 +28,7 @@ class AddEditForm extends React.Component {
       });
       if(rs.success === true) {
         this.props.addItemToState(true);
-        NotificationManager.info("City Added Successfully", "Info", 2000);
+        NotificationManager.info("Added Successfully", "Info", 2000);
       }
       else {
         NotificationManager.error(rs.message, "Error", 2000);
@@ -53,7 +53,7 @@ class AddEditForm extends React.Component {
         let json = `{ "stateId": "${this.state.stateId}" , "name" : "${this.state.name}"}`  
         var newRs = JSON.parse(JSON.stringify(json));
         this.props.updateState(newRs);
-        NotificationManager.info("City Updated Successfully", "Info", 2000);
+        NotificationManager.info("Updated Successfully", "Info", 2000);
       }
       else{
         NotificationManager.error(rs.message, "Error", 2000);
@@ -89,19 +89,7 @@ class AddEditForm extends React.Component {
       <Form
         onSubmit={this.props.item ? this.submitFormEdit : this.submitFormAdd}
       >
-        {this.props.item? 
-        <FormGroup>
-        <Label>Old Name</Label>
-        <Input
-          type="disable"
-          name="name"
-          readonly="readonly"
-          id="name"
-          onChange={this.onChange}
-          value={this.state.name === null ? "" : this.state.name}
-        />
-      </FormGroup> : <></>
-        }
+
 
         <FormGroup>
           <Label>Name</Label>

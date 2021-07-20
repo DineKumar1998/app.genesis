@@ -11,7 +11,6 @@ const getProduct = require("../usecases/product/getProduct");
 // const getAdmin = require("../usecases/admin/getAdmin");
 const divisionController = require("./division");
 
-
 const sendEmail = require("../usecases/Email");
 //import moment for date formatting
 const moment = require("moment");
@@ -20,10 +19,9 @@ const Formatter = require("../Formatters/index")
 
 const fs = require("fs");
 const searchOrderWeb = require("../usecases/companyOrder/searchOrderWeb");
-//Add Order
+//Add Orderf
 exports.addOrder = async(order) => {
     if (!order.orderlist) throw new Error('Order List is Required');
-
     let neworder = {
         rep_id: order.rep_id,
         franchisee_id: order.franchisee_id,
@@ -31,20 +29,16 @@ exports.addOrder = async(order) => {
         created_on: new Date(Date.now())
     }
     let savedorder = await addOrder(neworder);
-    //***************************** */
-
     let filter = {};
-
     filter._id = order.rep_id
     let repRecord = await getRep(filter);
 
     repRecord = Formatter.RepFormatter(repRecord);
-    //distributor info
+
     let repInfo = {
         name: repRecord.name,
         phone: repRecord.phone,
     }
-
     let franchiseeRecord = await getFranchisee({ _id: order.franchisee_id });
     franchiseeRecord = Formatter.franchiseeFormatter(franchiseeRecord[0]);
     //franchisee info
@@ -60,7 +54,6 @@ exports.addOrder = async(order) => {
         orderedproduct = Formatter.ProductFormatter(orderedproduct[0])
         orderedproduct.quantity = order.orderlist[i].quantity;
         orderedproduct.packing_type = order.orderlist[i].packing_type ? order.orderlist[i].packing_type : "";
-
         divisionIds.push((orderedproduct.division_id).toString());
         delete orderedproduct.id;
         delete orderedproduct.images;
@@ -72,7 +65,6 @@ exports.addOrder = async(order) => {
         delete orderedproduct.new_launched;
         delete orderedproduct.created_on;
         delete orderedproduct.modified_on;
-
         productRecords.push(orderedproduct);
     }
 
@@ -117,15 +109,13 @@ exports.addOrder = async(order) => {
         Subject: "New Order Placed By " + repInfo.name + " at " + moment(new Date(Date.now())).format("LLL"),
         Body: message
     }
-    console.log("email data", EmailData)
 
 
     for(let i=0; i< divisions.length; i++){
         let row = divisions[i];
-
         if( divisionIds.includes((row.id).toString()) ){
             EmailData.To = row.email;
-            let rs = await sendEmail(EmailData);
+            sendEmail(EmailData);
         }
     }
 
@@ -232,11 +222,6 @@ exports.deleteOrder = async(orderId)=>{
 exports.searchOrder = async(orderFilter) => {
 
     let orderRecords = await searchOrderWeb(orderFilter);
-
-        // orderRecords = sortByCondition.sort(orderRecords);
-    //     orderRecords = sortByCondition.sort(orderRecords, [{select: "name", order: "ascending"},{select: "type_name",order: "ascending"}]);
-
-    // console.log("*****************  4", orderRecords)
 
     return orderRecords;
 }

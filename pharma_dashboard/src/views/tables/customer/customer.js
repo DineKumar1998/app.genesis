@@ -87,8 +87,10 @@ const Table = () => {
 
         if (rs.success === true && rs.data.length > 0) {
           for (let i = 0; i < rs.data.length; i++) {
-            rs.data[i].rep_name = rs.data[i].rep_id.name;
-            rs.data[i].franchisee_name = rs.data[i].franchisee_id.name;
+            if(rs.data[i].rep_id !== null && rs.data[i].franchisee_id !== null){
+              rs.data[i].rep_name = rs.data[i].rep_id.name;
+              rs.data[i].franchisee_name = rs.data[i].franchisee_id.name;
+            }
           }
           setData(rs.data)
         }
@@ -127,8 +129,9 @@ const Table = () => {
               <Col>
                 <div className="d-flex bg-light border">
                   <div className="p-2 flex-grow-1">
-                    <h5><b>Customer Details</b></h5>
+                    <h5 className="h5_cstm"><b>Customer Details</b></h5>
                   </div>
+                  {Data === null ? <></> :
                   <div className="p-2">
                     <div className="form-inline justify-content-sm-end c-datatable-items-per-page">
                       <label className="mfe-2">Items per page:</label>
@@ -141,9 +144,14 @@ const Table = () => {
                       </select>
                     </div>
                   </div>
+                  }
                 </div>
               </Col>
             </Row>
+            
+          </div>
+          {Data === null ? <Page404 /> :
+            <>
             <div className="p-2">
               <fieldset class="field-container col-6 col-md-12">
                 <input type="text" value={search} onChange={(e) => onSearch(e)}
@@ -157,9 +165,6 @@ const Table = () => {
                 </div>
               </fieldset>
             </div>
-          </div>
-          {Data === true ? <Page404 /> :
-            <>
               <CDataTable
                 items={Data}
                 fields={fields}

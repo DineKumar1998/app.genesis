@@ -71,7 +71,7 @@ const ImportFromCsv = (props) => {
 
   return (
     <div>
-      <Button color="primary" size="sm" onClick={toggle}>{buttonLabel}</Button>
+      <button  className="btn-cstm" onClick={toggle}>{buttonLabel}</button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle}>Import From Csv</ModalHeader>
         <ModalBody>

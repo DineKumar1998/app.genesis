@@ -71,7 +71,7 @@ const UploadTechDetails = (props) => {
   return (
     <div>
       <button className="btn-cstm"  onClick={toggle}>
-        {buttonLabel}
+      Upload Technical Details
       </button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle}>Upload Technical Details</ModalHeader>

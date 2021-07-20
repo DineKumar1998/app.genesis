@@ -4,6 +4,7 @@ const model = require("../../models/product");
 
 //get product
 module.exports = async (filters) => {
+
   let skip = filters.skip;
   let limit = filters.limit;
   delete filters.skip;
@@ -29,6 +30,8 @@ module.exports = async (filters) => {
   if(filters.type_id) searchFilters.type_id = mongoose.Types.ObjectId(`${filters.type_id}`);
   if(filters.category_id) searchFilters.category_id = mongoose.Types.ObjectId(`${filters.category_id}`);
 
+  if(filters._id) 
+      searchFilters._id = mongoose.Types.ObjectId(`${filters._id}`);
 
   const rs = await model
     .aggregate([
@@ -70,6 +73,7 @@ module.exports = async (filters) => {
       }
     ])
     .collation({ locale: "es" });
+
   return rs;
 };
 

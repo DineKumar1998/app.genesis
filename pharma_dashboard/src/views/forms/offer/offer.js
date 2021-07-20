@@ -6,6 +6,7 @@ import { GetDistributor } from "src/api/distributor/distributor";
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import moment from "moment";
+import { GetDivisionType } from "src/api/products/divisionType/divisionType";
 const animatedComponents = makeAnimated();
 
 class AddEditForm extends React.Component {
@@ -14,9 +15,8 @@ class AddEditForm extends React.Component {
     title: "",
     description: "",
     valid_upto: "",
-    distributor: [],
-    distributorSelected: [],
-    distributorList: [],
+    distributor: [], distributorSelected: [], distributorList: [],
+    division:[], divisionSelected: [], divisionList : [],
     file: null, image: null, base64: null, objectUrl: null,
     imgUrls: [], imgFile: []
   };
@@ -71,7 +71,7 @@ class AddEditForm extends React.Component {
 
   submitFormAdd = async (e) => {
     e.preventDefault();
-    await this.DistributorFilter()
+    await this.DataFormatter()
     await this.validation();
     if (this.state.valid === true) {
       let rs = await AddOffer({
@@ -80,7 +80,9 @@ class AddEditForm extends React.Component {
         distributor: this.state.distributorSelected,
         image: this.state.imgFile,
         valid_upto: this.state.valid_upto,
-        reps: this.state.distributorSelected
+        reps: this.state.distributorSelected,
+        division : this.state.divisionSelected
+
       });
       if (rs.success === true) {
         this.props.addItemToState(true);
@@ -99,7 +101,7 @@ class AddEditForm extends React.Component {
 
   submitFormEdit = async (e) => {
     e.preventDefault();
-    await this.DistributorFilter()
+    await this.DataFormatter()
     await this.validation();
     if (this.state.valid === true) {
       let rs = await UpdateOffer({
@@ -109,7 +111,8 @@ class AddEditForm extends React.Component {
         distributor: this.state.distributorSelected,
         image: this.state.imgFile,
         valid_upto: this.state.valid_upto,
-        reps: this.state.distributorSelected
+        reps: this.state.distributorSelected,
+        division : this.state.divisionSelected
       });
       if (rs.success === true) {
         this.props.updateState(this.state.id);
@@ -122,10 +125,18 @@ class AddEditForm extends React.Component {
     }
   };
 
+  // ****************** DataFormatter Function *****************************
 
-  DistributorFilter = () => {
+  DataFormatter = () => {
+    let newdivisionSelected = []
     let newDistributorSelected = []
-    if (this.state.distributor) {
+    if (this.state.distributor && this.state.division) {
+
+      this.state.division.map((it) => {
+        newdivisionSelected.push(it.value)
+        return null
+      })
+      
       this.state.distributor.map((it) => {
         newDistributorSelected.push(it.value)
         return null
@@ -142,8 +153,9 @@ class AddEditForm extends React.Component {
       )
     }
     this.setState({ imgFile: imageItem })
-
     this.setState({ distributorSelected: newDistributorSelected })
+    this.setState({ divisionSelected: newdivisionSelected })
+
   }
 
   // ****************** Validation Function *****************************
@@ -172,36 +184,54 @@ class AddEditForm extends React.Component {
 
   async componentDidMount() {
 
-    let rs = await GetDistributor()
-    if (rs.success === true) {
+    // ------------------Api Response--------------------
+
+    let rs = await GetDistributor({ active: true, is_owner: true })
+    let rsDivision = await GetDivisionType()
+    if (rs.success === true && rsDivision.success === true) {
       this.setState({ distributorList: rs.data })
+      this.setState({ divisionList: rsDivision.data })
     }
+
+    // ---------------------Props Formating----------------
 
     if (this.props.item) {
       const { id, title, description } = this.props.item;
       this.setState({ id, title, description });
+
+      // ----------------Images------------
       let selectedImages = [];
       let IMAGES = this.props.item.image
       for (let i = 0; i < IMAGES.length; i++) {
         let fileUrl = IMAGES[i];
         selectedImages.push({ url: fileUrl, type: "not uploaded" })
       }
-
       this.setState({ imgUrls: selectedImages })
 
+      // -------------------Date-------------
       var new_date = moment(this.props.item.valid_upto, "YYYY/MM/DD").add(1, 'days');
       let newDate = new Date(new_date).toISOString()
       this.setState({ valid_upto: newDate })
+
+      // ----------Reps & Division---------
       let reps = []
+      let division = []
       this.props.item.reps.map((it) => {
         reps.push({ value: it.id, label: it.name })
         return null
       })
+      this.props.item.division.map((it) => {
+        division.push({ value: it.id, label: it.name })
+        return null
+      })
       this.setState({ distributor: reps })
+      this.setState({ division: division })
+
     }
   }
 
   render() {
+
 
     const now = new Date()
     const today = moment(now).add(1, 'days').format("YYYY-MM-DD");;
@@ -215,6 +245,11 @@ class AddEditForm extends React.Component {
         <FormGroup>
           <Label>description</Label>
           <Input type="textarea" name="description" id="description" onChange={this.onChange} value={this.state.description === null ? '' : this.state.description} />
+        </FormGroup>
+        <FormGroup>
+            <Label>Division Type</Label>
+            <Select isMulti value={this.state.division} components={animatedComponents} onChange={(selectedOption) => this.setState({division : selectedOption})} options = {this.state.divisionList.map((item) => {
+            return { value: item.id, label: item.name};})}/>
         </FormGroup>
         <FormGroup>
           <Label for="distributor">Distributor</Label>

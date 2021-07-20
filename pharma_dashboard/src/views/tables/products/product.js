@@ -7,12 +7,18 @@ import productImage from '../../../assets/images/no_product.jpg'
 import  VisualateImage from '../../../assets/images/no_visulate.jpg'
 import { DeleteProducts } from "src/api/products/allProducts/products";
 import Page404 from "src/views/pages/page404/Page404";
+import ConfirmDelete from '../../../lib/deleteDilog'
+import { ModalContext } from "src/lib/context";
 
 
 const Table = (props) => {
   const Data = props.items;
   // const val = props.searchFilter
   const loading = props.loading
+  const [showModal, updateShowModal] = React.useState(false);
+  const [deleteItemId, setDeleteItemId] = React.useState(false);
+
+  const toggleModal = (id) => { updateShowModal(state => !state); setDeleteItemId(id) };
 
 // *******************Table Headers *****************************
 
@@ -40,23 +46,22 @@ const Table = (props) => {
 // ******************* Delete *****************************
 
   const deleteItem = async (id) => {
-    let confirmDelete = window.confirm("Delete item forever?");
-    if (confirmDelete){
       let rs = await DeleteProducts(id)
       if (rs.success === true){
         props.deleteItemFromState(id);
-        return NotificationManager.info("Product Deleted SuccessFully", "Info", 2000);
+        NotificationManager.info("Product Deleted SuccessFully", "Info", 2000);
       }
       else{
-        return NotificationManager.error(rs.message, 2000);
+        NotificationManager.error(rs.message, 2000);
       }
-    }
+      toggleModal()
   };
 
   return (
     <>
     {
       Data === true ? <Page404 /> :
+      <>
     <CDataTable
       items={Data}
       fields={fields}
@@ -99,10 +104,10 @@ const Table = (props) => {
               <td className="py-2">
                 {item.images && item.images.length > 0 ? item.images.map((it) => {
                     if(it.type === "IMG"){
-                       return  <img className="grow" style={{width:"60px", height:"60px",  border : "dashed", borderColor : "#14ccff"}} src={it.url} alt="product"/>
+                       return  <img className="grow" style={{width:"60px", height:"60px", marginRight : "2.5px" , marginLeft :"2.5px", border : "dashed", borderColor : "#14ccff"}} src={it.url} alt="product"/>
                     }
                     else {
-                        return( <img className="grow" style={{width:"60px", height:"60px", marginLeft :"5px",  border : "dashed", borderColor : "#92fcac"}} src={it.url} alt="visulate"/>)
+                        return( <img className="grow" style={{width:"60px", height:"60px", marginRight : "2.5px" , marginLeft :"2.5px",  border : "dashed", borderColor : "#92fcac"}} src={it.url} alt="visulate"/>)
                     }
                   }) 
                   :  
@@ -132,7 +137,7 @@ const Table = (props) => {
               <CButton
                 color="danger"
                 size="sm"
-                onClick={() => deleteItem(item.id)}
+                onClick={() => toggleModal(item.id)}
               >
                 <IconDelete />
               </CButton>
@@ -141,6 +146,10 @@ const Table = (props) => {
         },
       }}
     /> 
+    <ModalContext.Provider value={{ showModal, toggleModal, deleteItem, id: `${deleteItemId}` }}>
+      <ConfirmDelete canShow={showModal} updateModalState={toggleModal} />
+    </ModalContext.Provider>    
+    </>
     }
     </>
   );

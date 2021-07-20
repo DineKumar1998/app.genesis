@@ -79,7 +79,7 @@ class City extends Component {
             <Col>
               <div className="d-flex bg-light border">
                 <div className="p-2 flex-grow-1">
-                  <h5>
+                  <h5 className="h5_cstm">
                     <b>City Details</b>
                   </h5>
                 </div>
@@ -96,7 +96,7 @@ class City extends Component {
         </div>
         <Row>
           <Col>
-          {this.state.items === true ? <Page404 /> : 
+          {this.state.items.length === 0 ? <Page404 /> : 
             <Table
               stateId={this.props.location.id}
               items={this.state.items}

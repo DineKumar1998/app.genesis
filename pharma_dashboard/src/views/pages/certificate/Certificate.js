@@ -3,6 +3,7 @@ import { Container, Row, Col } from "reactstrap";
 import ModalForm from "../../model/certificate/certificate";
 import Table from "../../tables/certificate/certificate";
 import { GetCertificate } from "src/api/certificate/certificate";
+import Page404 from "../page404/Page404";
 
 class State extends Component {
   constructor(props) {
@@ -54,7 +55,7 @@ class State extends Component {
   async componentDidUpdate() {
     if (this.state.updated) {
       this.getData()
-      this.setState({updated : false})
+      this.setState({ updated: false })
     }
   }
 
@@ -68,7 +69,7 @@ class State extends Component {
                 <Col>
                   <div className="d-flex bg-light border">
                     <div className="p-2 flex-grow-1">
-                      <h5><b>Certificate Details</b></h5>
+                      <h5 className="h5_cstm"><b>Certificate Details</b></h5>
                     </div>
                     {this.state.items === true ? <> </> :
                       <div className="p-2">
@@ -82,15 +83,18 @@ class State extends Component {
                 </Col>
               </Row>
             </div>
-            <Row>
-              <Col>
-                <Table
-                  items={this.state.items}
-                  updateState={this.updateState}
-                  deleteItemFromState={this.deleteItemFromState}
-                />
-              </Col>
-            </Row>
+            {
+              this.state.items.length === 0 ? <Page404 /> :
+                <Row>
+                  <Col>
+                    <Table
+                      items={this.state.items}
+                      updateState={this.updateState}
+                      deleteItemFromState={this.deleteItemFromState}
+                    />
+                  </Col>
+                </Row>
+            }
           </Container>
         }
       </>

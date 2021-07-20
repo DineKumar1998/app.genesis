@@ -79,7 +79,7 @@ class Division extends Component {
                 <Col>
                   <div className="d-flex bg-light border">
                     <div className="p-2 flex-grow-1">
-                      <h5><b>Division Type</b></h5>
+                      <h5 className="h5_cstm"><b>Division Type</b></h5>
                     </div>
                     {this.state.items === true ? <></> :
                       <div className="p-2">
@@ -95,7 +95,7 @@ class Division extends Component {
             </div>
             <Row>
               <Col>
-                {this.state.items === true ? <Page404 /> :
+                {this.state.items.length === 0 ? <Page404 /> :
                   <Table
                     items={this.state.items}
                     updateState={this.updateState}

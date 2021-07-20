@@ -28,12 +28,17 @@ export default class Notification extends Component {
       mrList: [],
       distributorList: [],
       valid: false,
+      class:"btn_notify",
+      button_text:"SEND"
     };
   }
 
   // ***************************SEND NOTIFICATION FUNCTION ***************************
 
   sendNotification = async () => {
+    this.setState({class : "btn_notify send"})
+    // this.setState({button_text : "Sending..."})
+
     await this.validation();
     if (this.state.valid === true) {
       let rs = await SendNotification({
@@ -42,12 +47,18 @@ export default class Notification extends Component {
         send_to : this.state.send_to
       })
       if(rs.success === true ){
+        this.setState({button_text : "Sent"})
           NotificationManager.success("Notification Sent Successfully","Info",2000);
       }else {
         NotificationManager.error(rs.message,"Error",2000);
       }
       this.setState({ valid: false });
     }
+    // this.setState({class : "btn_notify"})
+    this.setState({class : "btn_notify"})
+    this.setState({button_text : "SEND"})
+
+
   };
 
 
@@ -123,14 +134,14 @@ export default class Notification extends Component {
   render() {
 
     return (
-      <Form onSubmit={this.sendNotification}>
+      <Form >
         <MDBRow>
           <MDBCol>
             <MDBCard>
               <MDBCardBody>
                 <div>
-                  <h5 className="mt-2" style={{ fontSize: "30px", color: "#415c6d" }} >
-                    <MDBIcon icon="envelope" /> Send Notification
+                  <h5 className="mt-2 notification_heading" >
+                     Send Notification
                   </h5>
                 </div>
                 <div className="md-form">
@@ -227,9 +238,12 @@ export default class Notification extends Component {
                 )}
 
                 <div className="text-center" style={{ marginTop: "20px" }}>
-                  <MDBBtn color="info" onClick={this.sendNotification}>
+                <div class="row_notify">
+                <span className={this.state.class} onClick={this.sendNotification}>{this.state.button_text}<i class="fad fa-paper-plane"></i></span>
+                </div>
+                  {/* <button className="notify_button" onClick={this.sendNotification}>
                     Send Notification
-                  </MDBBtn>
+                  </button> */}
                 </div>
               </MDBCardBody>
             </MDBCard>

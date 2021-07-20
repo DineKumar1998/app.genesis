@@ -44,9 +44,10 @@ class AddEditForm extends React.Component {
         id: this.state.id,
         name: this.state.name,
       });
+
       if (rs.success === true) {
         this.props.updateState(true);
-        NotificationManager.info("State Updated Successfully", "Info", 2000);
+        NotificationManager.info("Updated Successfully", "Info", 2000);
       }
       else {
         NotificationManager.info(rs.message, "Info", 2000);

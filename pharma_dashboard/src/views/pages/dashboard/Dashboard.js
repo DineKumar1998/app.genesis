@@ -16,7 +16,7 @@ const Dashboard = () => {
     async function fetchMyAPI() {
       let response = await GetAbout()   
 
-      if(response.success === true && response.data.about_img != null) {
+      if(response.success === true && response.data != null && response.data.about_img != null) {
         setBanner(response.data.about_img)
       }
       else {

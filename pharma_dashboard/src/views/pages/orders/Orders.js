@@ -57,7 +57,7 @@ class Orders extends Component {
             <Col>
               <div className="d-flex bg-light border">
                 <div className="p-2 flex-grow-1">
-                  <h5><b>Orders Details</b></h5>
+                  <h5 className="h5_cstm"><b>Orders Details</b></h5>
                 </div>
               </div>
             </Col>

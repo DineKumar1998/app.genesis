@@ -30,10 +30,10 @@ const Table = () => {
     { key: "message" },
     { key: "valid_upto", label: 'Created On' },
     { key: "Delete", label: "", sorter: false, filter: false },
-    ];
+  ];
 
 
-    // ------------------ Delete Function --------------------
+  // ------------------ Delete Function --------------------
 
   const deleteItem = async (id) => {
     let rs = await DeleteEnquiry(id)
@@ -83,7 +83,7 @@ const Table = () => {
           </div>
           <Row>
             <Col>
-              {Data === true ? <Page404 /> :
+              {Data === null || Data.length === 0 ? <Page404 /> :
                 <CDataTable
                   items={Data}
                   fields={fields}

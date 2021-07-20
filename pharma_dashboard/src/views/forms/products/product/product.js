@@ -11,15 +11,6 @@ import { DetachPic } from "src/api/gallery/gallery";
 import C from "src/constants";
 
 
-async function readDataUrl(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = e => resolve(reader.result);
-      reader.onerror = e => reject(reader.error);
-      reader.readAsDataURL(file);
-    });
-  }
-  
 class AddEditForm extends React.Component {
   state = {
     id: "",
@@ -240,48 +231,54 @@ class AddEditForm extends React.Component {
   // ****************** Remove Function ***********************************
 
   removeimage = async(imgUrl, type) => {
-    if (type === "Vis"){
-      let rs = await DetachPic({
-        id: this.state.id,
-        url: (imgUrl).replace(C.SERVER_URL, ''),
-        type: "VIS"
-      })
-      if (rs) {
-        let newFileVis = []
-        this.state.visUrls.map((it) => 
-        {
-          if (it.url !== imgUrl){
-            newFileVis.push(it)
-          }
-        }
-        )
-        this.setState({visUrls : newFileVis})
-      }
-      else {
-        NotificationManager.error("Something Went Wrong", "Error", 2000);
-      }
 
+    let confirm = window.confirm()
+
+    if (confirm === true) {
+      if (type === "Vis"){
+        let rs = await DetachPic({
+          id: this.state.id,
+          url: (imgUrl).replace(C.SERVER_URL, ''),
+          type: "VIS"
+        })
+        if (rs) {
+          let newFileVis = []
+          this.state.visUrls.map((it) => 
+          {
+            if (it.url !== imgUrl){
+              newFileVis.push(it)
+            }
+          }
+          )
+          this.setState({visUrls : newFileVis})
+        }
+        else {
+          NotificationManager.error("Something Went Wrong", "Error", 2000);
+        }
+  
+      }
+      
+      else {
+        let rs = await DetachPic({
+          id: this.state.id,
+          url: (imgUrl).replace(C.SERVER_URL, ''),
+          type: "IMG"
+        })
+        if (rs) {
+          let newFile = []
+          this.state.imgUrls.map((it) => {
+            if (it.url !== imgUrl){
+              newFile.push(it)
+            }
+            this.setState({imgUrls : newFile})
+          })
+        }
+        else {
+          NotificationManager.error("Something Went Wrong", "Error", 2000);
+        }
+      }
     }
     
-    else {
-      let rs = await DetachPic({
-        id: this.state.id,
-        url: (imgUrl).replace(C.SERVER_URL, ''),
-        type: "IMG"
-      })
-      if (rs) {
-        let newFile = []
-        this.state.imgUrls.map((it) => {
-          if (it.url !== imgUrl){
-            newFile.push(it)
-          }
-          this.setState({imgUrls : newFile})
-        })
-      }
-      else {
-        NotificationManager.error("Something Went Wrong", "Error", 2000);
-      }
-    }
   }
 
   // ********************** Get Data Function *************************************

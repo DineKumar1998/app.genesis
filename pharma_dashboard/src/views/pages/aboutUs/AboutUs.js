@@ -119,7 +119,7 @@ class AboutUs extends React.Component {
 
   async componentDidMount() {
     let rs = await GetAbout();
-    if (rs.success === true) {
+    if (rs.success === true && rs.data !== null) {
       const { id, about, about_img, address, address2, address3, phone, whatsapp, whatsapp_greeting, website,
         email, twitter, facebook, pinterest, linkedin, corporate_video } = rs.data;
 
@@ -220,7 +220,7 @@ class AboutUs extends React.Component {
                   <div className="card-header">
                     <div className="row align-items-center">
                       <div className="col-8">
-                        <h3 className="mb-0" style={{ fontSize: "20px", }}><b>Edit Company Info</b></h3>
+                        <h3 className="mb-0 h3_cstm"><b>Edit Company Info</b></h3>
                       </div>
                     </div>
                   </div>
