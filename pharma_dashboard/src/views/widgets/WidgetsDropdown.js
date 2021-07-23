@@ -27,9 +27,6 @@ const WidgetsDropdown = () => {
       let distributorCount = await DistributorCount()
       let productsCount = await GetProductsCount()
       let ordersCount = await GetOrdersCount()
-
-      console.log("OFFER ", offerCount)
-
       if (OfferCount.success === true && distributorCount.success === true && productsCount.success === true && ordersCount.success === true ){
         setOfferCount(OfferCount.data.count)
         setDistributorsCount(distributorCount.data.count)
@@ -57,7 +54,7 @@ const WidgetsDropdown = () => {
          style={{cursor : 'pointer'}}
           onClick={()=> history.push("/offer")}
           color="gradient-primary"
-          header={offerCount}
+          header={String(offerCount)}
           text="Offers"
           footerSlot={<span>&nbsp;</span>}
         >
@@ -70,7 +67,7 @@ const WidgetsDropdown = () => {
           style={{cursor : 'pointer'}}
           onClick={()=> history.push("/distributor")}
           color="gradient-info"
-          header={distributorsCount}
+          header={String(distributorsCount)}
           text="Distributors"
           footerSlot={<span>&nbsp;</span>}
         >
@@ -83,7 +80,7 @@ const WidgetsDropdown = () => {
           style={{cursor : 'pointer'}}
           onClick={()=> history.push("/product")}
           color="gradient-warning"
-          header={productCount}
+          header={String(productCount)}
           text="Products"
           footerSlot={<span>&nbsp;</span>}
         >
@@ -96,7 +93,7 @@ const WidgetsDropdown = () => {
           style={{cursor : 'pointer'}}
           onClick={()=> history.push("/orders")}
           color="gradient-danger"
-          header={orderCount}
+          header={String(orderCount)}
           text="Orders"
           footerSlot={<span>&nbsp;</span>}
         >

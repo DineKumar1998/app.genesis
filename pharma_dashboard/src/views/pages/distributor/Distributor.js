@@ -145,7 +145,7 @@ class Distributor extends Component {
     return (
       <>
         {
-          this.state.loading ? <div class="loader"></div> :
+          this.state.loading ? <div className="loader"></div> :
             <Container className="App">
               <div>
                 <div className="d-flex bg-light border">
@@ -155,13 +155,13 @@ class Distributor extends Component {
                     </h5>
                   </div>
                     <div className="row">
-                      <div class="col-12 col-md-6 ">
+                      <div className="col-12 col-md-6 ">
                         <ImportFromCsv
                           updateState={this.updateState}
                           buttonLabel="Upload Excel sheet" />
                       </div>
 
-                      <div class="col-12 col-md-6 ">
+                      <div className="col-12 col-md-6 ">
                         <ModalForm
                           stateId={this.props.location.id}
                           buttonLabel="Add Distributor"
@@ -175,14 +175,14 @@ class Distributor extends Component {
               {this.state.items.length === 0 ? <Page404 /> :
                 <>
                   <div className="p-2">
-                    <fieldset class="field-container col-6 col-md-12">
+                    <fieldset className="field-container col-6 col-md-12">
                       <input type="text" value={this.state.search} onChange={(e) => this.onSearch(e)}
-                        placeholder="Search..." class="field-search" />
-                      <div class="icons-container">
-                        <div class="icon-search" style={{ top: "0px", left: "0px" }}></div>
-                        <div class="icon-close" style={{ top: "0px", left: "-5px" }} onClick={this.onClose}>
-                          <div class="x-up"></div>
-                          <div class="x-down"></div>
+                        placeholder="Search..." className="field-search" />
+                      <div className="icons-container">
+                        <div className="icon-search" style={{ top: "0px", left: "0px" }}></div>
+                        <div className="icon-close" style={{ top: "0px", left: "-5px" }} onClick={this.onClose}>
+                          <div className="x-up"></div>
+                          <div className="x-down"></div>
                         </div>
                       </div>
                     </fieldset>
@@ -196,7 +196,7 @@ class Distributor extends Component {
                         deleteItemFromState={this.deleteItemFromState}
                       />
                       {
-                        this.state.search === "" ?
+                        this.state.search === "" && this.state.rowPerPage > 20?
                           <div className={'mt-2'} >
                             <CPagination
                               className="pagination"

@@ -1,7 +1,7 @@
 
 function isPhonenumber(inputtxt) {
     const integer = parseInt(inputtxt, 10);
-    const pattern = RegExp(/^(?:(?:\+|0{0,2})91(\s*|[\-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/    );
+    const pattern = RegExp(/^(?:(?:\+|0{0,2})91(\s*|[-])?|[0]?)?([6789]\d{2}([ -]?)\d{3}([ -]?)\d{4})$/    );
     if(pattern.test(integer)) {
       return true;
     }
@@ -72,7 +72,10 @@ function isIfsc(inputtxt) {
 
 
 function isName(inputtxt) {
-    const pattern = RegExp(/^[a-zA-Z\. ]+$/);
+    const pattern = RegExp(/^[A-Za-z0-9]+(?: +[A-Za-z0-9]+)*$/);
+    // if (inputtxt.trim() === ""){
+    //   return false
+    // }
     if(pattern.test(inputtxt)) {
       return true;
     }

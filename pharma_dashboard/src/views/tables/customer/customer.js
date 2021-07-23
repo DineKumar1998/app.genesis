@@ -153,14 +153,14 @@ const Table = () => {
           {Data === null ? <Page404 /> :
             <>
             <div className="p-2">
-              <fieldset class="field-container col-6 col-md-12">
+              <fieldset className="field-container col-6 col-md-12">
                 <input type="text" value={search} onChange={(e) => onSearch(e)}
-                  placeholder="Search..." class="field-search" />
-                <div class="icons-container">
-                  <div class="icon-search"></div>
-                  <div class="icon-close" onClick={onClose}>
-                    <div class="x-up"></div>
-                    <div class="x-down"></div>
+                  placeholder="Search..." className="field-search" />
+                <div className="icons-container">
+                  <div className="icon-search"></div>
+                  <div className="icon-close" onClick={onClose}>
+                    <div className="x-up"></div>
+                    <div className="x-down"></div>
                   </div>
                 </div>
               </fieldset>
@@ -175,7 +175,7 @@ const Table = () => {
                   rep_name: (item, index) => {
                     return (
                       <td className="py-2">
-                        <p>{item.rep_name}</p>
+                        {item.rep_name}
                       </td>
                     );
                   },
@@ -197,7 +197,7 @@ const Table = () => {
               />
               <div className={'mt-2'} >
                 <CPagination
-                  class="pagination"
+                  className="pagination"
                   activePage={currentPage}
                   pages={totalPage}
                   onActivePageChange={(i) => { setActivePage(i); }}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { NotificationManager } from 'react-notifications';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Alert } from 'reactstrap';
 import { UploadListCsv } from 'src/api/products/bulkUploads/bulkupload';

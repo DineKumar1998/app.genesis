@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Form, FormGroup, Label, Input } from "reactstrap";
 import { NotificationManager } from "react-notifications";
 import { AddCertificate, UpdateCertificate } from "src/api/certificate/certificate";
+import { isAddress, isName } from "src/lib/validator";
 
 
 async function readDataUrl(file) {
@@ -96,9 +97,8 @@ class AddEditForm extends React.Component {
   // ****************** Validation Function *****************************
 
   validation = (e) => {
-    if (!this.state.title.trim()) { return NotificationManager.error("Please Enter Certificate Title", "Info", 2000); }
-    if (!this.state.description.trim() !== "" && this.state.description.trim().length >= 1 && this.state.description.trim().length < 5) 
-    { return NotificationManager.error("Please Enter Proper Description", "Info", 2000); }
+    if (!this.state.title && ! isName(this.state.title)) { return NotificationManager.error("Please Enter Certificate Title", "Info", 2000); }
+    if (!this.state.description !== "" && ! isAddress(this.state.description)){ return NotificationManager.error("Invalid Description", "Info", 2000); }
     if (!this.state.base64) { return NotificationManager.error("Please select Image", "Info", 2000); }
     else { this.setState({ valid: true }); }
   };

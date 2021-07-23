@@ -25,9 +25,9 @@ const Table = (props) => {
   const fields = [
     { key: "name", label: "Name", },
     { key: "type_name", label: "Type Name",},
-    { key: "price", label: "Price", },
+    { key: "price_", label: "Price", },
     { key: "images", label: "Images & Visualate", },
-    { key: "sku", label: "SKU", },
+    { key: "sku_", label: "SKU", },
     { key: "hsn_code", label: "HSN", },
     { key: "Edit", label: "",_style: { width: "1%" }, sorter: false, filter: false, },
     { key: "Delete", label: "", _style: { width: "1%" }, sorter: false, filter: false,},
@@ -78,7 +78,7 @@ const Table = (props) => {
             </td>
           )
         },
-        sku: (item) => {
+        sku_: (item) => {
           return (
             <td className="py-2">
               {item.sku === null  || item.sku === "undefined" ?  <b>--</b> : <p>{item.sku}</p>}
@@ -92,7 +92,7 @@ const Table = (props) => {
             </td>
           )
         },
-        price: (item) => {
+        price_: (item) => {
           return (
             <td className="py-2">
               <b style={{color:"#00407c",fontSize:"14px" , minWidth :"180px"}}>₹ {item.price}</b>

@@ -81,7 +81,7 @@ const Table = (props) => {
                       <p  className="p_quantity"><i className="fad p_icon fa-balance-scale"></i>&nbsp; Quantity : {it.product.min_order_qty}</p>
                       <p className="p_info">{it.product.division_name}</p>
                       <Link onClick={()=> openDist(it.product.name)} style={{color:"#0085ba", letterSpacing:"0.4px"}}>
-                        <button className="btn-product"><span style={{fontSize : "14px"}}><i class="fad fa-box-full"></i>&nbsp;View Product</span></button>
+                        <button className="btn-product"><span style={{fontSize : "14px"}}><i className="fad fa-box-full"></i>&nbsp;View Product</span></button>
                       </Link>
                     </div>
                   </div>

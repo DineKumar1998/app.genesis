@@ -33,8 +33,6 @@ const Table = (props) => {
 // *******************Delete City*****************************
 
   const deleteItem = async (props_) => {
-
-    console.log("ID PROPS ", props)
       let rs = await DeleteCity(props_.deleteItemId , {
         stateId : props_.state,
         cityName : props_.name

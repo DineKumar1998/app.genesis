@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form, FormGroup, Label, Input } from "reactstrap";
+import { Form, FormGroup, Label, Input } from "reactstrap";
 import { NotificationManager } from "react-notifications";
 import { AddPackingType, UpdatePackingType } from "src/api/products/packingType/packingType";
 

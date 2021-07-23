@@ -170,14 +170,14 @@ export default class Login extends Component {
               <ModalFooter>
                 <Button color="#2ed198 btn-sm" style={{backgroundColor:"#2ed198", color:"white", borderRadius:"30px"}} onClick={this.resetPassword}>
                 { this.state.loading ? <>
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                 {" "} Loading... </> : <>Reset Password</>  }
                 </Button>{' '}
               </ModalFooter>
             </Modal>
             <button type="submit" className="btn-login" onClick={this.login}>
             { this.state.loading ? <>
-              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
              {" "} Loading... </> : <>login</>  }
             </button>
           </form>

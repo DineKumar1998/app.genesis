@@ -157,21 +157,21 @@ class Products extends Component {
                     </div>
                     {this.state.items === true ? <></> :
                       <div className="row">
-                        <div class="col-12 col-md-3">
+                        <div className="col-12 col-md-3">
                           <UploadImgVis 
                           updateState={this.updateState}
                           buttonLabel="Upload Images/Visulate" />
                         </div>
-                        <div class="col-12 col-md-3 ">
+                        <div className="col-12 col-md-3 ">
                           <UploadTechDetails 
                           updateState={this.updateState}
                           buttonLabel="Upload Technical Details" />
                         </div>
-                        <div class="col-12 col-md-3 ">
+                        <div className="col-12 col-md-3 ">
                           <ImportFromCsv buttonLabel="Import From Csv"
                           updateState={this.updateState} />
                         </div>
-                        <div class="col-12 col-md-3 ">
+                        <div className="col-12 col-md-3 ">
                           <ModalForm updateState={this.updateState} buttonLabel="Add Product"
                             addItemToState={this.addItemToState} />
                         </div>
@@ -188,14 +188,14 @@ class Products extends Component {
              :
              <>
              <div className="p-2">
-              <fieldset class="field-container col-6 col-md-12">
+              <fieldset className="field-container col-6 col-md-12">
                 <input type="text" value={this.state.search} onChange={(e) =>  this.onSearch(e)} 
-                  placeholder="Search..." class="field-search" />
-                <div class="icons-container">
-                  <div class="icon-search"></div>
-                  <div class="icon-close" onClick={this.onClose}>
-                    <div class="x-up"></div>
-                    <div class="x-down"></div>
+                  placeholder="Search..." className="field-search" />
+                <div className="icons-container">
+                  <div className="icon-search"></div>
+                  <div className="icon-close" onClick={this.onClose}>
+                    <div className="x-up"></div>
+                    <div className="x-down"></div>
                   </div>
                 </div>
               </fieldset>

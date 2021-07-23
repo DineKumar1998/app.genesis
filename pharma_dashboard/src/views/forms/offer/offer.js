@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Form, FormGroup, Label, Input, Col, Row } from "reactstrap";
+import {FormGroup, Label, Input, Col, Row } from "reactstrap";
 import { NotificationManager } from "react-notifications";
 import { AddOffer, UpdateOffer } from "src/api/offer/offer";
 import { GetDistributor } from "src/api/distributor/distributor";
@@ -272,7 +272,7 @@ class AddEditForm extends React.Component {
                       <img src={f.url} alt='products' height="80" width="80" />
                       :
                       <>
-                        <button onClick={() => this.removeimage(f.url)} class="close AClass">
+                        <button onClick={() => this.removeimage(f.url)} className="close AClass">
                           <span>&times;</span>
                         </button>
                         <img src={f.url} alt='products' height="80" width="80" />
@@ -287,7 +287,7 @@ class AddEditForm extends React.Component {
           <Label>Select Image</Label>
           <Input type="file" accept="image/*" multiple onChange={this.handleUploadImg} />
         </FormGroup>
-        <Button onClick={this.props.item ? this.submitFormEdit : this.submitFormAdd}>Submit</Button>
+        <button className="btn btn-primary" onClick={this.props.item ? this.submitFormEdit : this.submitFormAdd}>Submit</button>
       </>
     );
   }

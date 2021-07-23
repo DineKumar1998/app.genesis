@@ -31,7 +31,7 @@ const Dashboard = () => {
   return (
     <>
     {
-      loading ? <div class="loader"></div> : 
+      loading ? <div className="loader"></div> : 
       <>
       <WidgetsDropdown />
       <CCard>

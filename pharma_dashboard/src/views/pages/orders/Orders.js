@@ -9,6 +9,7 @@ class Orders extends Component {
     super(props);
     this.state = {
       items: [],
+      divisionType : [], divisionTypeSelect : [],
       updated: false,
       loading : true
     };
@@ -25,7 +26,7 @@ class Orders extends Component {
 
   getData = async() => {
     let rs = await GetOrders();
-    if (rs.success === true) {
+    if (rs.success === true ) {
       this.setState({ items: rs.data });
     }
     this.setState({loading : false})
@@ -58,6 +59,8 @@ class Orders extends Component {
               <div className="d-flex bg-light border">
                 <div className="p-2 flex-grow-1">
                   <h5 className="h5_cstm"><b>Orders Details</b></h5>
+                </div>
+                <div className="p-3 flex-grow-1">
                 </div>
               </div>
             </Col>

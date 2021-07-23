@@ -19,29 +19,33 @@ class Division extends Component {
 
   addItemToState = (item) => {
     this.setState({ updated: true });
-    this.setState((prevState) => ({
-      items: [...prevState.items, item],
-    }));
+    // this.setState((prevState) => ({
+    //   items: [...prevState.items, item],
+    // }));
   };
 
   // ****************** Update Function *****************************
 
   updateState = (item) => {
-    const itemIndex = this.state.items.findIndex((data) => data.id === item.id);
     this.setState({ updated: true });
-    const newArray = [
-      ...this.state.items.slice(0, itemIndex),
-      item,
-      ...this.state.items.slice(itemIndex + 1),
-    ];
-    this.setState({ items: newArray });
+
+    // const itemIndex = this.state.items.findIndex((data) => data.id === item.id);
+    // this.setState({ updated: true });
+    // const newArray = [
+    //   ...this.state.items.slice(0, itemIndex),
+    //   item,
+    //   ...this.state.items.slice(itemIndex + 1),
+    // ];
+    // this.setState({ items: newArray });
   };
 
   // ****************** Delete Function *****************************
 
   deleteItemFromState = (id) => {
-    const updatedItems = this.state.items.filter((item) => item.id !== id);
-    this.setState({ items: updatedItems });
+    this.setState({ updated: true });
+
+    // const updatedItems = this.state.items.filter((item) => item.id !== id);
+    // this.setState({ items: updatedItems });
   };
 
   // ****************** GetData Function ***************************
@@ -72,7 +76,7 @@ class Division extends Component {
   render() {
     return (
       <>
-        {this.state.loading ? <div class="loader"></div> :
+        {this.state.loading ? <div className="loader"></div> :
           <Container className="App">
             <div>
               <Row>

@@ -53,7 +53,6 @@ function UploadImages(props) {
       productImages: filesUrl,
       imagesType: imgType,
     });
-    console.log("RS", rs)
     if (rs.success === true) {
       NotificationManager.success("Upload SuccessFully", "Success", 2000);
       props.updateState(true)
@@ -69,7 +68,7 @@ function UploadImages(props) {
 
   return (
     <div>
-      <button class="btn-cstm" onClick={toggle}>{buttonLabel}</button>
+      <button className="btn-cstm" onClick={toggle}>{buttonLabel}</button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalHeader toggle={toggle}>Upload Images & Visulate</ModalHeader>
         <ModalBody>

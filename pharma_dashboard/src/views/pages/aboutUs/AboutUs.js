@@ -5,6 +5,7 @@ import "./styles.scss"
 import { AddUpdateAbout, GetAbout } from "src/api/about/about";
 import { NotificationManager } from "react-notifications";
 import { UserProfile } from "src/api/user/user";
+import upload from 'src/assets/images/upload.jpg'
 
 async function readDataUrl(file) {
   return new Promise((resolve, reject) => {
@@ -172,7 +173,7 @@ class AboutUs extends React.Component {
     let { base64 } = this.state;
     let defaultImage
     if (!this.state.base64) {
-      defaultImage = "https://res.cloudinary.com/mhmd/image/upload/v1557366994/img_epm3iz.png"
+      defaultImage = upload
     }
     else {
       defaultImage = this.state.base64

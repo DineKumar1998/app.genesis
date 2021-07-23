@@ -4,8 +4,7 @@ import { Container, Row, Col } from "reactstrap";
 import Table from "../../tables/distributor/mr";
 import { GetMr } from "src/api/distributor/mr";
 import { Redirect } from "react-router";
-// import { GetCompany } from "../../api/company";
-import no_data_found from '../../../assets/images/no_data_found.png'
+
 import Page404 from "../page404/Page404";
 class Mr extends Component {
   constructor(props) {
@@ -59,7 +58,6 @@ class Mr extends Component {
     if (!this.props.location.franchisee_id) {
       return <Redirect to="/distributor" />;
     }
-    console.log("ITEMS ", this.state.items);
     return (
         <Container className="App">
             <div>

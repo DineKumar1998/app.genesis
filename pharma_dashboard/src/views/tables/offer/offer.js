@@ -35,13 +35,13 @@ const Table = (props) => {
   // *******************Delete City*****************************
 
   const deleteItem = async (id) => {
-      let rs = await DeleteOffer(id)
-      if (rs.success === true) {
-        props.deleteItemFromState(id);
-        NotificationManager.info("Offer Deleted SuccessFully", "Info", 2000);
-      }
-      else {
-        NotificationManager.error(rs.message, "Info", 2000);
+    let rs = await DeleteOffer(id)
+    if (rs.success === true) {
+      props.deleteItemFromState(id);
+      NotificationManager.info("Offer Deleted SuccessFully", "Info", 2000);
+    }
+    else {
+      NotificationManager.error(rs.message, "Info", 2000);
     }
     toggleModal()
 
@@ -58,103 +58,102 @@ const Table = (props) => {
 
   return (
     <>
-    <CDataTable
-      items={Data}
-      fields={fields}
-      //   columnFilter
-      tableFilter
-      itemsPerPageSelect
-      itemsPerPage={20}
-      hover
-      sorter
-      pagination
-      scopedSlots={{
-        title: (item) => {
-          return (
-            <td className="py-2">
-              <p style={{ color: "#494949" }}><b>{item.title}</b></p>
-            </td>)
-        },
-        distributors: (item) => {
-          return (
-            <td className="py-2">
-              <p style={{ color: "#0077e8" }}><b>{item.reps.length === 0 ? <Link style={{ color: "#0077e8" }} to={{ pathname: "/distributor", }}><b>ALL DIST</b></Link> :
-                item.reps.map((it) => <>
-                  <Link onClick={() => openDist(it.name)} style={{ color: "#0077e8" }}>
-                   <b> {it.name.toUpperCase()}</b> <br />
-                  </Link>
-                </>)}</b></p>
-            </td>)
-        },
-        Status: (item) => {
-          return (
-            <td className="py-2">
-              <p><b>{moment(item.valid_upto, "YYYY/MM/DD").isBefore(moment()) ?
-                <span class="badge badge-danger">Expired</span>
-                :
-                <span class="badge badge-success">Active</span>
-              }
-              </b></p>
-            </td>)
-        },
-        image: (item) => {
-          return (
-            <td className="py-2">
-              {
-                item.image.length > 1 ?
-                  item.image.map((it) => (
-                    <>
-                    <img className="grow" src={`${it}`} alt="offers" style={{ height: "50px", width: "50px" }} />  &nbsp;
-                    </>
-                  ))
+      <CDataTable
+        items={Data}
+        fields={fields}
+        //   columnFilter
+        tableFilter
+        itemsPerPageSelect
+        itemsPerPage={20}
+        hover
+        sorter
+        pagination
+        scopedSlots={{
+          title: (item) => {
+            return (
+              <td className="py-2">
+                <p style={{ color: "#494949" }}><b>{item.title}</b></p>
+              </td>)
+          },
+          distributors: (item) => {
+            return (
+              <td className="py-2">
+                <p style={{ color: "#0077e8" }}><b>{item.reps.length === 0 ? <Link style={{ color: "#0077e8" }} to={{ pathname: "/distributor", }}><b>ALL DIST</b></Link> :
+                  item.reps.map((it) => <>
+                    <span onClick={() => openDist(it.name)} style={{ color: "#0077e8", cursor: "pointer" }}>
+                      <b> {it.name.toUpperCase()}</b> <br />
+                    </span>
+                  </>)}</b></p>
+              </td>)
+          },
+          Status: (item) => {
+            return (
+              <td className="py-2">
+                <p><b>{moment(item.valid_upto, "YYYY/MM/DD").isBefore(moment()) ?
+                  <span className="badge badge-danger">Expired</span>
                   :
-                  <img className="grow" src={item.image} alt="offers" style={{ height: "50px", width: "50px" }} />
-              }
-            </td>)
-        },
-        division: (item) => {
-          return (
-            <td className="py-2">
-              {/* {console.log("item ss", item)} */}
-              <p style={{ color: "rgb(103 127 33)" }}>
-                <b>{item.division.length === 0 ? <b>&nbsp;&nbsp;&nbsp;&nbsp;- -</b> :
-                item.division.map((it) => 
-                  <p>
-                    {it.name} <br/>
-                  </p>
-                )}
-                </b>
-              </p>
-            </td>)
-        },
-        Edit: (item) => {
-          return (
-            <td className="py-2">
-              <ModalForm
-                stateId={props.stateId}
-                buttonLabel="Edit"
-                item={item}
-                updateState={props.updateState}
-              />
-            </td>
-          );
-        },
-        Delete: (item) => {
-          return (
-            <td className="py-2">
-              <CButton
-                color="danger"
-                size="sm"
-                onClick={() => toggleModal(item.id)}
-              >
-                <IconDelete />
-              </CButton>
-            </td>
-          );
-        },
-      }}
-    />
-     <ModalContext.Provider value={{ showModal, toggleModal, deleteItem, id: `${deleteItemId}` }}>
+                  <span className="badge badge-success">Active</span>
+                }
+                </b></p>
+              </td>)
+          },
+          image: (item) => {
+            return (
+              <td className="py-2">
+                {
+                  item.image.length > 1 ?
+                    item.image.map((it) => (
+                      <>
+                        <img className="grow" src={`${it}`} alt="offers" style={{ height: "50px", width: "50px" }} />  &nbsp;
+                      </>
+                    ))
+                    :
+                    <img className="grow" src={item.image} alt="offers" style={{ height: "50px", width: "50px" }} />
+                }
+              </td>)
+          },
+          division: (item) => {
+            return (
+              <td className="py-2">
+                <div style={{ color: "rgb(103 127 33)" }}>
+                  <b>{item.division.length === 0 ? <b>&nbsp;&nbsp;&nbsp;&nbsp;- -</b> :
+                    item.division.map((it) =>
+                      <p>
+                        {it.name} <br />
+                      </p>
+                    )}
+                  </b>
+                </div>
+              </td>)
+          },
+          Edit: (item) => {
+            return (
+              <td className="py-2">
+                <ModalForm
+                  stateId={props.stateId}
+                  buttonLabel="Edit"
+                  item={item}
+                  updateState={props.updateState}
+                />
+              </td>
+            );
+          },
+          Delete: (item) => {
+            return (
+              <td className="py-2">
+                <CButton
+                  color="danger"
+                  size="sm"
+                  onClick={() => toggleModal(item.id)}
+                >
+                  <IconDelete />
+                </CButton>
+              </td>
+            );
+          },
+        }}
+      />
+      <ModalContext.Provider value={{ showModal, toggleModal, deleteItem, id: `${deleteItemId}` }}>
         <ConfirmDelete canShow={showModal} updateModalState={toggleModal} />
       </ModalContext.Provider>
     </>

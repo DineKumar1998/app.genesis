@@ -41,14 +41,14 @@ class ModalForm extends Component {
     let button = ''
     let title = ''
     if (label === 'Detach') {
-      button = <button className="glass_button"
+      button = <button className="glass_button_detach"
         // style={{ float: "left", marginRight: "10px" }}
         onClick={this.toggle}>
         <b>{label}</b>
       </button>
       title = 'Detach'
     } else {
-      button = <button className="glass_button"
+      button = <button className="glass_button_attach"
         onClick={this.toggle}>
         <b>{label}</b>
       </button>

@@ -16,7 +16,6 @@ const SearchEnquiry = async (data) => {
 
 const DeleteEnquiry = async (id) => {
     let rs = await fetcher({ method: "delete", url: `${URL}/${id}` })
-    console.log("DeleteEnquiry", DeleteEnquiry)
     return rs
 }
 

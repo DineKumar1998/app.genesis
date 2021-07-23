@@ -1,6 +1,6 @@
 import { CButton } from "@coreui/react";
 import React, { Component } from "react";
-import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
+import { Modal, ModalHeader, ModalBody } from "reactstrap";
 import { IconEdit } from "src/views/icon";
 import AddEditForm from "../../forms/offer/offer";
 
@@ -36,7 +36,7 @@ class ModalForm extends Component {
                 className = "button_add" 
                 color="success"
                 onClick={this.toggle}>
-                {label}{' '}<i class="fas fa-plus"></i>
+                {label}{' '}<i className="fas fa-plus"></i>
               </button>
       title = 'Add Offer'
     }

@@ -255,22 +255,22 @@ class Profile extends React.Component {
                                 {/* ************************************FORM******************************************* */}
 
                                 <h6 className="heading-small text-muted mb-4" >Password & Security</h6>
-                                <div class="row">
-                                    <div class="col-sm">
+                                <div className="row">
+                                    <div className="col-sm">
                                         <div className="form-group">
                                             <label className="form-control-label">Old Password</label>
                                             <input type="password" className="form-control" value={this.state.oldPassword}
                                                 onChange={(e) => this.setState({ oldPassword: e.target.value })} />
                                         </div>
                                     </div>
-                                    <div class="col-sm">
+                                    <div className="col-sm">
                                         <div className="form-group">
                                             <label className="form-control-label">Confirm Password</label>
                                             <input type="password" className="form-control" value={this.state.confirmNewPassword}
                                                 onChange={(e) => this.setState({ confirmNewPassword: e.target.value })} />
                                         </div>
                                     </div>
-                                    <div class="col-sm">
+                                    <div className="col-sm">
                                         <div className="form-group">
                                             <label className="form-control-label">New Password</label>
                                             <input type="password" className="form-control" value={this.state.newPassword}
@@ -280,7 +280,7 @@ class Profile extends React.Component {
                                 </div>
                                 <div style={{marginTop : "40px"}}/>
                                 <button className="prof_save_button" onClick={this.savePassword} 
-                                ><i class="fa fa-lock" style={{ color: "white" }}></i> Save Password</button>
+                                ><i className="fa fa-lock" style={{ color: "white" }}></i> Save Password</button>
                             </div>
                         </div>
                     </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { NotificationManager } from "react-notifications";
 import {
   Button,
@@ -11,10 +11,10 @@ import {
 import { TechDetails } from "src/api/products/bulkUploads/bulkupload";
 
 const UploadTechDetails = (props) => {
-  const { buttonLabel, className } = props;
+  const {  className } = props;
   const [modal, setModal] = useState(false);
   const [file, setFile] = useState("");
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
   const[selectedFile, setSelectedFile] = useState([]);
   const toggle = () => setModal(!modal);
 

@@ -45,7 +45,7 @@ class Offer extends Component {
     let rs = await GetOffer();
     if (rs.success === true) {
       let newRS = []
-      rs.data.map((it) => {
+      rs.data.map((it) => (
         newRS.push({
           id: it.id,
           valid_upto: it.valid_upto,
@@ -55,7 +55,7 @@ class Offer extends Component {
           division : it.division,
           image: it.image.split(",")
         })
-      })
+      ))
       this.setState({ items: newRS });
     }
     this.setState({ loading: false })

@@ -75,9 +75,8 @@ class AddEditForm extends React.Component {
     if (this.state.active === "true") { newActive = true } else { newActive = false }
 
     if (this.state.valid === true) {
-      if (!this.state.password && isPassword(this.state.password))  return NotificationManager.error("Please Enter Password", "Info", 2000);
-
-    
+      if (!this.state.password && isPassword(this.state.password))  
+          return NotificationManager.error("Please Enter Password", "Info", 2000);
 
       let fields = {
                     frId : this.state.frId,
@@ -256,15 +255,15 @@ class AddEditForm extends React.Component {
       return NotificationManager.error("Invalid Franchisee Address", "Error", 2000);
     else if (this.state.firm_district !== null  && ! isName(this.state.firm_district) ) 
       return NotificationManager.error("Please Enter Valid District", "Error", 2000);
-    else if (this.state.gst_number !== "" && ! isGstNo(this.state.gst_number)){ 
+    else if (this.state.gst_number !== "" && this.state.gst_number !== 'NA' && ! isGstNo(this.state.gst_number)){ 
       return NotificationManager.error("Invalid GST No.", "Error", 2000);}
-    else if (this.state.drug_license !== null && this.state.drug_license.trim() !== "" && this.state.drug_license.trim().length === 1  ) 
+    else if (this.state.drug_license !== null && this.state.drug_license !== "" && this.state.drug_license.length === 1  ) 
         return NotificationManager.error("Please Enter Valid Drug Licence No.", "Error", 2000);
-    else if (this.state.bank_name !== null ) { if(!isName(this.state.bank_name))
-          return NotificationManager.error("Invalid Bank Name", "Error", 2000);}
-    else if (this.state.bank_acc_no !== null){ if(!isBankAccNo(this.state.bank_acc_no)) 
+    else if (this.state.bank_name !== "" && this.state.bank_name !== null && !isName(this.state.bank_name)) 
+          return NotificationManager.error("Invalid Bank Name", "Error", 2000);
+    else if (this.state.bank_acc_no !== "" && this.state.bank_acc_no !== null){ if(!isBankAccNo(this.state.bank_acc_no)) 
         return NotificationManager.error("Invalid Bank Acc No.", "Error", 2000);}
-    else if (this.state.bank_ifsc !== null && ! isIfsc(this.state.bank_ifsc)) 
+    else if (this.state.bank_ifsc !== "" && this.state.bank_ifsc !== null && ! isIfsc(this.state.bank_ifsc)) 
         return NotificationManager.error("Invalid IFSC Code", "Error", 2000);
     else if (this.state.bank_payee_name !== "" && !isName(this.state.bank_payee_name)) 
         return NotificationManager.error("Invalid Payee Name", "Error", 2000);
@@ -272,7 +271,7 @@ class AddEditForm extends React.Component {
       return NotificationManager.error("Invalid Distributor Name", "Error", 2000);
     else if (this.state.email !== null && !isEmail(this.state.email)) 
       return NotificationManager.error("Invalid Distributor email", "Error", 2000);
-    else if (this.state.phone !== null && !this.state.phone.trim()) 
+    else if (this.state.phone !== null && !this.state.phone) 
       return NotificationManager.error("Invalid Distributor Phone", "Error", 2000);
     else if (this.state.phone !== null && !isPhonenumber(this.state.phone)) 
       return NotificationManager.error("Invalid Distributor Phone", "Error", 2000);
@@ -284,10 +283,19 @@ class AddEditForm extends React.Component {
       return NotificationManager.error("Invalid Distributor Operation Area", "Error", 2000);
     else if (this.state.aadhar_no !== "" && !isAadhar(this.state.aadhar_no)) 
       return NotificationManager.error("Invalid Distributor Aadhar No", "Error", 2000);
-    else if (this.state.password !== "" && !isPassword(this.state.password) ) 
+    else if (this.props.item) {
+      if (this.state.password !== "" && !isPassword(this.state.password) ) 
+        return NotificationManager.error("Password must be 6 characters long", "Error", 2000);
+      else {
+        return this.setState({ valid: true })
+      }
+    }
+    else if (this.state.password === "") 
+      return NotificationManager.error("Please Enter Password", "Error", 2000);
+    else if (!isPassword(this.state.password)){
       return NotificationManager.error("Password must be 6 characters long", "Error", 2000);
+    }
     else { this.setState({ valid: true });}
-
     };
 
   // ****************** componentDidMount Function *****************************
@@ -347,7 +355,6 @@ class AddEditForm extends React.Component {
 
 
   render() {
-    console.log("this.state.bank_acc_no", this.state.op_area)
      return (
       <Form onSubmit={this.props.item ? this.submitFormEdit : this.submitFormAdd}>
         <div className="container">
@@ -380,7 +387,7 @@ class AddEditForm extends React.Component {
                 <div className="form-group row">
                   <label className="col-sm-2 col-form-label">Phone</label>
                   <div className="col-sm-10">
-                    <input type="tel" minLength = "10" maxlength = "10" value={this.state.firm_phone} name="firm_phone"
+                    <input type="tel" minLength = "10" maxLength = "10" value={this.state.firm_phone} name="firm_phone"
                       onChange={this.onChange} className="form-control" />
                   </div>
                 </div>
@@ -429,7 +436,7 @@ class AddEditForm extends React.Component {
                 <div className="form-group row">
                   <label className="col-sm-2 col-form-label">GST No.</label>
                   <div className="col-sm-10">
-                    <input type="text" minLength = "15" maxlength="15" value={this.state.gst_number} name="gst_number"
+                    <input type="text" minLength = "15" maxLength="15" value={this.state.gst_number} name="gst_number"
                       onChange={this.onChange} className="form-control" />
                   </div>
                 </div>
@@ -439,7 +446,7 @@ class AddEditForm extends React.Component {
                 <div className="form-group row">
                   <label className="col-sm-2 col-form-label">Drug Licence</label>
                   <div className="col-sm-10">
-                    <input type="text" maxlength='14' value={this.state.drug_license} name="drug_license"
+                    <input type="text" maxLength='14' value={this.state.drug_license} name="drug_license"
                       onChange={this.onChange} className="form-control" />
                   </div>
                 </div>

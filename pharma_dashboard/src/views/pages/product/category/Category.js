@@ -61,7 +61,7 @@ class Category extends Component {
   render() {
     return (
       <>
-        {this.state.loading ? <div class="loader"></div> :
+        {this.state.loading ? <div className="loader"></div> :
           <Container className="App">
             <div>
               <Row>

@@ -248,7 +248,9 @@ class AddEditForm extends React.Component {
             if (it.url !== imgUrl){
               newFileVis.push(it)
             }
+            return newFileVis
           }
+          
           )
           this.setState({visUrls : newFileVis})
         }
@@ -270,7 +272,7 @@ class AddEditForm extends React.Component {
             if (it.url !== imgUrl){
               newFile.push(it)
             }
-            this.setState({imgUrls : newFile})
+           return this.setState({imgUrls : newFile})
           })
         }
         else {
@@ -314,10 +316,10 @@ class AddEditForm extends React.Component {
         imgMap.map((it) =>
           it.map((item) => {
             if (item.type === "IMG") {
-              selectedImg.push({ url: item.url })
+              return selectedImg.push({ url: item.url })
             }
             else {
-              selectedVis.push({ url: item.url })
+             return selectedVis.push({ url: item.url })
             }
           }))
 
@@ -525,7 +527,7 @@ class AddEditForm extends React.Component {
                   {this.state.imgUrls.length < 50 ?
                   
                   <div style={{position:"relative"}}>
-                  <button onClick={(e) => this.removeimage(f.url)} class="close AClass">
+                  <button onClick={(e) => this.removeimage(f.url)} className="close AClass">
                      <span>&times;</span>
                   </button>
                   <img src={f.url} alt='products' height="80" width="80" /> 
@@ -550,7 +552,7 @@ class AddEditForm extends React.Component {
                 <>
                   {this.state.visUrls.length < 50 ?
                   <div style={{position:"relative"}}>
-                  <button onClick={(e) => this.removeimage(f.url, "Vis")} class="close AClass">
+                  <button onClick={(e) => this.removeimage(f.url, "Vis")} className="close AClass">
                      <span>&times;</span>
                   </button>
                   <img src={f.url} alt='products' height="80" width="80" /> 

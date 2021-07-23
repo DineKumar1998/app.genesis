@@ -15,7 +15,11 @@ const fetcher = async (data) => {
 
         let rs = await axios(RequestData).catch(function (error) {
             if (error.response) {
-                return error.response.data
+                if(error.response.statusText === "Unauthorized") {
+                    localStorage.removeItem('token');
+                    window.location.assign('/')
+                }
+                return  error.response.data
             } else if (error.request) {
                 return error.request
             } else {
