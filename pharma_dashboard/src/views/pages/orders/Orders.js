@@ -44,9 +44,10 @@ class Orders extends Component {
     if (this.state.updated) {
       this.getData()
       this.setState({updated: false});
-
     }
   }
+
+  // ************************ Render ******************************
 
   render() {
     return (
