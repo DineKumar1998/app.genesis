@@ -104,7 +104,7 @@ const Table = (props) => {
                   item.image.length > 1 ?
                     item.image.map((it) => (
                       <>
-                        <img className="grow" src={`${it}`} alt="offers" style={{ height: "50px", width: "50px" }} />  &nbsp;
+                        <img className="grow" src={`${it}`} alt="offers" style={{ height: "50px", width: "50px" ,marginBottom : "5px"}} />
                       </>
                     ))
                     :

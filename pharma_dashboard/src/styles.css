@@ -9,6 +9,11 @@ h5 {
   /* margin-top: 18px; */
 }
 
+.page_margin {
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
 
   
 .h3_cstm {
@@ -532,6 +537,12 @@ input {
   position: relative;
   height: 45px;
 }
+
+.page-item {
+  margin: 6px 12px;
+}
+
+
 /* ----------------------INPUT ERROR----------------------------- */
 
 .login-content .input-div-error {
@@ -546,9 +557,23 @@ input {
 .login-content .input-div-error.one {
   margin-top: 0;
 }
+.input-login {
+  max-width: 90%;
+  z-index: 1;
+}
+
+.email_loading {
+  color: #0059fa;
+}
+
+.p_loading {
+  font-weight: 400;
+}
 
 .input-login-error::placeholder {
-  position: absolute;
+  max-width: 90%;
+  z-index: 1;
+  /* position: absolute; */
   left: 10px;
   margin-top: 5px;
   font-family: "Kotta One", serif;
@@ -558,8 +583,10 @@ input {
 /* -------------------------------------------------------------------- */
 
 .input-login::placeholder {
-  position: absolute;
-  left: 10px;
+  /* position: absolute; */
+  max-width: 90%;
+  z-index: 1;
+  left: 10px;       
   margin-top: 5px;
   font-family: "Kotta One", serif;
   color: #999;
@@ -816,6 +843,14 @@ a-login:hover {
 }
 .contant_box_404 {
   margin-top: -50px;
+}
+
+.eye_btn {
+  z-index: 999;
+  float: right;
+  margin-top: 17px;
+  cursor: pointer;
+  color: #b2abab;
 }
 
 .btn {

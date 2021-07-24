@@ -70,7 +70,6 @@ exports.searchCustomer = async(searchFilter) => {
     if (!searchRecords) return null;
 
     searchRecords = searchRecords.map(it => {
-        console.log("IT", it)
         let repData = it.rep_id? Formatter.RepFormatter(it.rep_id): null;
         let franchiseeData = Formatter.franchiseeFormatter(it.franchisee_id)
         return {

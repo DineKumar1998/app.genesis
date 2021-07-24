@@ -1,6 +1,7 @@
+import { CPagination } from "@coreui/react";
 import React from "react";
 import { Col, Row } from "reactstrap";
-import { GetProducts } from "src/api/products/allProducts/products";
+import { GetProducts, GetProductsCount } from "src/api/products/allProducts/products";
 import Model from '../../model/gallery/gallery'
 import Page404 from "../page404/Page404";
 
@@ -108,7 +109,10 @@ class CardGridView extends React.Component {
     this.state = {
       data: [],
       updated: false,
-      loading: true
+      loading: true,
+      currentPage: 1,
+      totalPage: 0,
+      rowPerPage: 40,
     };
   }
 
@@ -121,13 +125,60 @@ class CardGridView extends React.Component {
     }
   };
 
+   // ****************** ActivePageChange Function *****************************
 
-  async componentDidMount() {
-    let rs = await GetProducts();
+   activePageChange = (item) => {
+    this.setState({ currentPage: item })
+    this.setState({ updated: true })
+    window.scroll({
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth' 
+     });
+  };
 
-    let newData = [];
-    if (rs.success === true) {
-      rs.data.map((it) => {
+
+
+    // ****************** getData Function *****************************
+
+
+
+  getData = async() => {
+
+    this.setState({loading : true})
+    let skip = 0
+      if (this.state.currentPage === 0) {
+        skip = 1 * this.state.rowPerPage
+      }
+
+      else {
+        skip = this.state.currentPage * this.state.rowPerPage
+      }
+
+
+      let skipVal = skip - this.state.rowPerPage
+      let rs = await GetProducts({
+        "limit": this.state.rowPerPage,
+        "skip": skipVal
+      })
+
+      let rsCount = await GetProductsCount()
+      if (rs.success === true && rsCount.success === true) {
+        let page = rsCount.data.count / this.state.rowPerPage
+        let num = Number(page) === page && page % 1 !== 0;
+        if (num === true) {
+          var str = page.toString();
+          var numarray = str.split('.');
+          var a = parseInt(numarray)
+          this.setState({ totalPage: a + 1 });
+        }
+        else {
+          this.setState({ totalPage: page });
+        }
+
+        let newData = [];
+
+        rs.data.map((it) => {
         if (Array.isArray(it.images)) {
           it.images.map((img) => {
             newData.push({
@@ -145,57 +196,108 @@ class CardGridView extends React.Component {
         return null
       });
       this.setState({ data: newData });
-      this.setState({loading : false})
-    }
-    else {
-      this.setState({ data: true });
-      this.setState({loading : false})
-    }
+      }
+
+    // let rs = await GetProducts(
+    // );
+
+    // let newData = [];
+    // if (rs.success === true) {
+    //   rs.data.map((it) => {
+    //     if (Array.isArray(it.images)) {
+    //       it.images.map((img) => {
+    //         newData.push({
+    //           img: img.url,
+    //           imgType: img.type,
+    //           id: it.id,
+    //           name: it.name,
+    //           type: it.type_name,
+    //           category: it.category_name,
+    //           division: it.division_name,
+    //         });
+    //         return null
+    //       });
+    //     }
+    //     return null
+    //   });
+    //   this.setState({ data: newData });
+    // }
+    // else {
+      // this.setState({ data: true });
+    // }
+
+    this.setState({loading : false})
+
+  }
+
+
+  
+
+
+  // ****************** componentDidMount Function *****************************
+
+
+
+  async componentDidMount() {
+    this.getData()
+  
   }
   // ***************************** Component Did Update *******************************
 
   async componentDidUpdate() {
-    let rs = await GetProducts();
+    // let rs = await GetProducts();
     if (this.state.updated === true) {
-      let updatedData = [];
-      if (rs.success === true) {
-        rs.data.map((it) => {
-          if (Array.isArray(it.images)) {
-            it.images.map((img) => {
-              updatedData.push({
-                img: img.url,
-                imgType: img.type,
-                id: it.id,
-                name: it.name,
-                type: it.type_name,
-                category: it.category_name,
-                division: it.division_name,
-                color: "#" + (((1 << 24) * Math.random()) | 0).toString(16),
-              });
-              return null
-            });
-          }
-          return null
-        });
-        this.setState({ data: updatedData });
-        this.setState({ updated: false })
+      // let updatedData = [];
+      // if (rs.success === true) {
+      //   rs.data.map((it) => {
+      //     if (Array.isArray(it.images)) {
+      //       it.images.map((img) => {
+      //         updatedData.push({
+      //           img: img.url,
+      //           imgType: img.type,
+      //           id: it.id,
+      //           name: it.name,
+      //           type: it.type_name,
+      //           category: it.category_name,
+      //           division: it.division_name,
+      //           color: "#" + (((1 << 24) * Math.random()) | 0).toString(16),
+      //         });
+      //         return null
+      //       });
+      //     }
+      //     return null
+      //   });
+      //   this.setState({ data: updatedData });
+      this.getData()
+      this.setState({ updated: false })
       }
-    }
+    
   }
 
   render() {
     return (
       <>
         {this.state.loading ? <div className="loader"></div> :
-          <>
+          <div className="gallery_container" >
           {this.state.data.length === 0 ? <Page404 /> : 
           <div className="card-grid-view row" >
             {this.state.data.map((cardData, index) => (
               <Card updated={this.updateState} data={cardData} key={"card-id-" + index} />
             ))}
+
           </div>
         }
-          </>
+
+            <div className='page_margin'  >
+                   <CPagination
+                    className="pagination justify-content-center"
+                     activePage={this.state.currentPage}
+                     pages={this.state.totalPage}
+                     onActivePageChange={(e) => this.activePageChange(e)}
+                   ></CPagination>
+                 </div>
+
+          </div>
         }
       </>
     );

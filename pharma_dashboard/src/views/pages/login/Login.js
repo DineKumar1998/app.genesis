@@ -7,6 +7,7 @@ import bg from '../../../assets/images/bg.svg'
 import avatar from '../../../assets/images/avatar.svg'
 import { AdminLogin, AdminResetPassword } from "src/api/login/login";
 import { isEmail } from "src/lib/validator";
+import loadingImg from '../../../assets/images/loading.gif'
 
 export default class Login extends Component {
   state ={
@@ -14,12 +15,24 @@ export default class Login extends Component {
     recoverEmail:"",
     password:"",
     prevEmail:"",
+    passwordType : "password", eye_btn : "fa-eye-slash" ,
     prevPass:"",
     valid: false,
     error : false,
     modal : false,
     loading: false,
     loadingR: false
+  }
+
+  changeType = e => {
+    if (this.state.passwordType === "password") {
+      this.setState({passwordType : "text"})
+      this.setState({eye_btn : "fa-eye"})
+    }
+    else {
+      this.setState({passwordType : "password"})
+      this.setState({eye_btn : "fa-eye-slash"})
+    }
   }
 
   // ---------------------------- ON CHANGE ------------------------------------
@@ -46,7 +59,6 @@ export default class Login extends Component {
         email : this.state.email,
         password : this.state.password
       })
-      this.setState({loading: false})
 
       if (rs.success === true){
           localStorage.setItem("token", rs.data.token)
@@ -57,6 +69,8 @@ export default class Login extends Component {
         this.setState({valid : false})
       }
     }
+    this.setState({loading: false})
+
   }
 
   // ----------------------------- PASSWORD RESET FUNCTION --------------------------
@@ -74,17 +88,16 @@ export default class Login extends Component {
       let rs = await AdminResetPassword ({
         email : this.state.recoverEmail
       })
-      this.setState({loadingR: false})
-
       if (rs.success === true){
-        NotificationManager.success("Password Reset SuccessFully", "Info", 2000)
+        NotificationManager.success("Email Sent SuccessFully !!!", "Info", 2000)
       }
       else {
           NotificationManager.error(rs.message, "Info", 2000)
       }
-      this.toggle()
-
     }
+    this.setState({loadingR: false})
+
+    this.toggle()
   }
 
   // --------------------------- VALIDATIONS ------------------------------------
@@ -118,6 +131,7 @@ export default class Login extends Component {
     }
     
     return (
+      
       <div className="login">
         <NotificationContainer />
       <img className="wave" alt="wave" src={wave} />
@@ -147,9 +161,10 @@ export default class Login extends Component {
                 <i className="fas fa-lock login-i" />
               </div>
               <div className="div">
-                <input type="password" className="input-login" placeholder="Password"  
+                <input type={this.state.passwordType}className="input-login" placeholder="Password"  
                 value={this.state.password} onChange={this.onChange} name="password"
                 />
+                  <i class={`fas ${this.state.eye_btn} eye_btn`} onClick={this.changeType}></i>
               </div>
             </div>
 
@@ -159,20 +174,41 @@ export default class Login extends Component {
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
               <ModalHeader toggle={this.toggle}>Forgot Password</ModalHeader>
               <ModalBody>
-              <div className="form-group row" >
-              <label className="col-sm-2 col-form-label">Email</label>
-              <div className="col-sm-10">
-                <input type="email" value={this.state.recoverEmail} name="recoverEmail"
-                  onChange={this.onChange} className="form-control" />
-              </div>
-            </div>
+                {
+                  this.state.loadingR ? 
+                  <>
+                  <img src={loadingImg} alt="loading" /> 
+                  <span id="load" style={{textAlign : "center"}}>
+                  <h6>Please Wait...</h6>
+                  <p className="p_loading">Sending Mail to 
+                    <span className="email_loading"> ramlal@webhopers.in</span>
+                  </p>
+                  </span>
+                  </>
+                  :
+                  <div className="form-group row" >
+                    <label className="col-sm-2 col-form-label">Email</label>
+                    <div className="col-sm-10">
+                      <input type="email" value={this.state.recoverEmail} name="recoverEmail"
+                        onChange={this.onChange} className="form-control" />
+                    </div>
+                  </div>
+                  }
+                  
               </ModalBody>
               <ModalFooter>
-                <Button color="#2ed198 btn-sm" style={{backgroundColor:"#2ed198", color:"white", borderRadius:"30px"}} onClick={this.resetPassword}>
-                { this.state.loading ? <>
+                {/* <Button disabled color="#2ed198 btn-sm" style={{backgroundColor:"#2ed198", color:"white", borderRadius:"30px"}} onClick={this.resetPassword}> */}
+                { this.state.loadingR ? 
+                  <Button disabled color="#2ed198 btn-sm" style={{backgroundColor:"#2ed198", color:"white", borderRadius:"30px"}} onClick={this.resetPassword}>
                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                {" "} Loading... </> : <>Reset Password</>  }
-                </Button>{' '}
+                {" "} Loading...
+                </Button>
+                : 
+                <Button color="#2ed198 btn-sm" style={{backgroundColor:"#2ed198", color:"white", borderRadius:"30px"}} onClick={this.resetPassword}>
+                Reset Password
+                </Button>
+                  }
+                {' '}
               </ModalFooter>
             </Modal>
             <button type="submit" className="btn-login" onClick={this.login}>

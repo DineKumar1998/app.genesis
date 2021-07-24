@@ -4,6 +4,7 @@ const { Console } = require("console");
 
 exports.ProductFormatter = (product) => {
 
+
     // product = product.toObject()
 
     let images = null;

@@ -19,7 +19,7 @@ class Products extends Component {
       totalPage: 0,
       rowPerPage: 20,
       loading: true,
-      search:""
+      search: ""
     };
   }
 
@@ -27,28 +27,28 @@ class Products extends Component {
   // ****************** onSearch Function *****************************
 
   onSearch = (e) => {
-    this.setState({search : e.target.value});
-    if (this.state.search !== ""){
-      this.setState({updated : true})
+    this.setState({ search: e.target.value });
+    if (this.state.search !== "") {
+      this.setState({ updated: true })
     }
   }
 
   // ****************** onClose Function *****************************
 
   onClose = () => {
-    this.setState({search : ""})
-    this.setState({updated : true})
+    this.setState({ search: "" })
+    this.setState({ updated: true })
   }
 
-    // ****************** Add Function *****************************
+  // ****************** Add Function *****************************
 
-    addItemToState = (item) => {
-      this.setState({ updated: true });
-      this.setState((prevState) => ({
-        items: [...prevState.items, item],
-      }));
-    };
-  
+  addItemToState = (item) => {
+    this.setState({ updated: true });
+    this.setState((prevState) => ({
+      items: [...prevState.items, item],
+    }));
+  };
+
 
   // ****************** Update Function *****************************
 
@@ -70,6 +70,11 @@ class Products extends Component {
   activePageChange = (item) => {
     this.setState({ currentPage: item })
     this.setState({ updated: true })
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
   };
 
   // ****************** Get Data Function *****************************
@@ -77,14 +82,16 @@ class Products extends Component {
   GetData = async () => {
     if (this.state.search !== "") {
       let rs = await SearchProducts({
-        "name" : this.state.search
+        "name": this.state.search
       })
-      if(rs.success === true){
-       this.setState({ items: rs.data });
+      if (rs.success === true) {
+        this.setState({ items: rs.data });
       }
     }
 
-    else  {
+    else {
+      this.setState({ loading: true })
+
       let skip = 0
       if (this.state.currentPage === 0) {
         skip = 1 * this.state.rowPerPage
@@ -124,11 +131,11 @@ class Products extends Component {
   // ****************** ComponentDidMount Function *****************************
 
   componentDidMount() {
-    if (this.props.location.name){
-      this.setState({search : this.props.location.name})
-      this.setState({updated : true})
+    if (this.props.location.name) {
+      this.setState({ search: this.props.location.name })
+      this.setState({ updated: true })
     }
-    else{
+    else {
       this.GetData()
     }
   }
@@ -158,18 +165,18 @@ class Products extends Component {
                     {this.state.items === true ? <></> :
                       <div className="row">
                         <div className="col-12 col-md-3">
-                          <UploadImgVis 
-                          updateState={this.updateState}
-                          buttonLabel="Upload Images/Visulate" />
+                          <UploadImgVis
+                            updateState={this.updateState}
+                            buttonLabel="Upload Images/Visulate" />
                         </div>
                         <div className="col-12 col-md-3 ">
-                          <UploadTechDetails 
-                          updateState={this.updateState}
-                          buttonLabel="Upload Technical Details" />
+                          <UploadTechDetails
+                            updateState={this.updateState}
+                            buttonLabel="Upload Technical Details" />
                         </div>
                         <div className="col-12 col-md-3 ">
                           <ImportFromCsv buttonLabel="Import From Csv"
-                          updateState={this.updateState} />
+                            updateState={this.updateState} />
                         </div>
                         <div className="col-12 col-md-3 ">
                           <ModalForm updateState={this.updateState} buttonLabel="Add Product"
@@ -181,15 +188,9 @@ class Products extends Component {
                 </Col>
               </Row>
             </div>
-            
-            {
-             this.state.items.length ===0 ? 
-             <Page404 />
-             :
-             <>
-             <div className="p-2">
+            <div className="p-2">
               <fieldset className="field-container col-6 col-md-12">
-                <input type="text" value={this.state.search} onChange={(e) =>  this.onSearch(e)} 
+                <input type="text" value={this.state.search} onChange={(e) => this.onSearch(e)}
                   placeholder="Search..." className="field-search" />
                 <div className="icons-container">
                   <div className="icon-search"></div>
@@ -200,34 +201,37 @@ class Products extends Component {
                 </div>
               </fieldset>
             </div>
-             <Row>
-             <Col>
-               <Table
-                 loading={this.state.loading}
-                 items={this.state.items}
-                 updateState={this.updateState}
-                 deleteItemFromState={this.deleteItemFromState}
-               />
-               {!this.state.search  ?
-                 <div className={'mt-2'} >
-                   <CPagination
-                     className="pagination"
-                     activePage={this.state.currentPage}
-                     pages={this.state.totalPage}
-                     onActivePageChange={(e) => this.activePageChange(e)}
-                   ></CPagination>
-                 </div>
-                 : 
-                 <></>
-               }
-             </Col>
-           </Row>
-           </>
+            {
+              this.state.items.length === 0 ?
+                <Page404 />
+                :
+                <Row>
+                  <Col>
+                    <Table
+                      loading={this.state.loading}
+                      items={this.state.items}
+                      updateState={this.updateState}
+                      deleteItemFromState={this.deleteItemFromState}
+                    />
+                    {!this.state.search ?
+                      <div className={'mt-2'} >
+                        <CPagination
+                          // aria-label="Page navigation example"
+                          className="pagination justify-content-start"
+                          activePage={this.state.currentPage}
+                          pages={this.state.totalPage}
+                          onActivePageChange={(e) => this.activePageChange(e)}
+                        >
 
-
-
+                        </CPagination>
+                      </div>
+                      :
+                      <></>
+                    }
+                  </Col>
+                </Row>
             }
-          
+
           </Container>
         }
       </>

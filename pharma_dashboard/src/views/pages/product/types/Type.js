@@ -36,11 +36,17 @@ class Type extends Component {
   // ****************** GetData Function ********************
 
   getData = async () => {
+    this.setState({loading : true})
     let rs = await GetType();
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
     if (rs.success === true) {
       this.setState({ items: rs.data });
-      this.setState({ loading: false })
     }
+    this.setState({ loading: false })
   }
 
   // ****************** ComponentDidMount Function ********************
