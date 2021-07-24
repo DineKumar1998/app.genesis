@@ -8,7 +8,7 @@ const fetcher = async (data) => {
 
         let RequestData = {
             method: data.method,
-            url: data.url,
+            url: `/api/web${data.url}`,
             data: data.data,
             headers: { "x-access-token": token }
         }

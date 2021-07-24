@@ -3,6 +3,7 @@ node_modules
 core/uploads
 pharma_dashboard/node_modules
 pharma_dashboard/build
+pharma_dashboard/src/constants.js
 firebase_notification/admin-sdk.json
 .DS_Store
 .idea
