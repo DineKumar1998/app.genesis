@@ -107,7 +107,7 @@ exports.createConstantfileinFrontEnd = (filePath) =>{
     ;
 
     // if(!fs.existsSync(filePath)){
-        let data = `const C = {APP_NAME: '${APP_NAME}', ${props} }; export default C `;
+        let data = `const C = {APP_NAME: '${APP_NAME}', API_URL : "", ${props} }; export default C `;
         fs.writeFileSync(filePath, data)
     // }
 };
