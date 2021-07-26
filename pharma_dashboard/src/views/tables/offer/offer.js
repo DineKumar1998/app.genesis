@@ -14,11 +14,7 @@ const Table = (props) => {
   let history = useHistory();
   const [showModal, updateShowModal] = React.useState(false);
   const [deleteItemId, setDeleteItemId] = React.useState(false);
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [imgUrl, setimgUrl] = React.useState(false)
-  const [alt, setAlt] = React.useState(false)
 
-  const showModalImg = (imgUrl, alt) => { setIsOpen(true); setimgUrl(imgUrl); setAlt(alt) }
   const toggleModal = (id) => { updateShowModal(state => !state); setDeleteItemId(id) };
 
   // *******************Table Headers *****************************
@@ -105,14 +101,15 @@ const Table = (props) => {
             return (
               <td className="py-2">
                 {
-                  item.image.length > 1 ?
+                  item.image.length !==0 ?
                     item.image.map((it) => (
                       <>
-                        <img onClick={() => showModalImg(`${it}`, `Offer - ${item.title}`)} className="grow" src={`${it}`} alt="offers" style={{ height: "50px", width: "50px", marginBottom: "5px" }} />
+                      { console.log("it.image", item.image)}
+                        <img className="grow" src={`${it}`} alt="offers" style={{ height: "50px", width: "50px" ,marginBottom : "5px"}} />
                       </>
                     ))
                     :
-                    <img onClick={() => showModalImg(`${item.image}`, `Offer - ${item.title}`)} className="grow" src={item.image} alt="offers" style={{ height: "50px", width: "50px" }} />
+                    <img className="grow" src="https://via.placeholder.com/150" alt="offers" style={{ height: "50px", width: "50px" }} />
                 }
               </td>)
           },
@@ -157,17 +154,6 @@ const Table = (props) => {
           },
         }}
       />
-      {isOpen === true ? (
-        <div className="modalImg">
-          <span className="closeImg" onClick={() => setIsOpen(false)}>
-            &times;
-          </span>
-          <img className="modal-contentImg" src={imgUrl} alt={alt} />
-          <div className="captionImg">{alt}</div>
-        </div>
-      )
-        : <> </>
-      }
       <ModalContext.Provider value={{ showModal, toggleModal, deleteItem, id: `${deleteItemId}` }}>
         <ConfirmDelete canShow={showModal} updateModalState={toggleModal} />
       </ModalContext.Provider>
