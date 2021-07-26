@@ -11,14 +11,14 @@ const moveFile = require('move-file');
 //Add Offer
 exports.addOffer = async (offerImage, offer) => {
 
-    if (offer.reps) {offer.reps = (offer.reps).split(",");}
-    if (offer.division) {offer.division = (offer.division).split(",");}
-    
+    if (offer.reps) { offer.reps = (offer.reps).split(","); }
+    if (offer.division) { offer.division = (offer.division).split(","); }
+
     if (!offer.title) throw new Error('offer title is Required');
     if (!offer.description) throw new Error('offer description is Required');
     if (!offer.valid_upto) throw new Error('offer valid_upto is Required');
     // if (!offer.division) throw new Error('offer divison is Required');
-    
+
 
     offer.image = null;
 
@@ -27,7 +27,7 @@ exports.addOffer = async (offerImage, offer) => {
     if (offerImage.image) {
         Image = offerImage.image.map(it => {
             moveFile.sync(it.path, "./core/uploads/offers/" + it.originalname)
-            let path = `${process.env.BASE_URL}/core/uploads/offers/` + it.originalname
+            let path = `core/uploads/offers/` + it.originalname
             return path;
         })
     }
@@ -39,7 +39,7 @@ exports.addOffer = async (offerImage, offer) => {
         description: offer.description,
         valid_upto: offer.valid_upto,
         image: offer.image,
-        division : offer.division,
+        division: offer.division,
         reps: offer.reps ? Array.isArray(offer.reps) ? offer.reps : [] : [],
         created_on: new Date(Date.now())
     }
@@ -82,7 +82,7 @@ exports.getOffer = async (offerprops) => {
             id: offerRecords[0]._id,
             title: offerRecords[0].title,
             description: offerRecords[0].description,
-            division : division,
+            division: division,
             image: offerRecords[0].image ?
                 Array.isArray(offerRecords[0].image) ?
                     (offerRecords[0].image).map(it => `${process.env.BASE_URL}/${it}`)
@@ -105,7 +105,7 @@ exports.getOffer = async (offerprops) => {
                 }
             }) : [];
 
-              let division = it.division ? (it.division).map(iit => {
+            let division = it.division ? (it.division).map(iit => {
                 return {
                     id: iit._id,
                     name: iit.name
@@ -117,8 +117,19 @@ exports.getOffer = async (offerprops) => {
                 title: it.title,
                 description: it.description,
                 reps: reps,
-                division : division,
-                image: (it.image) ? `${it.image}` : `${process.env.BASE_URL}/assets/images/offer.png`,
+                division: division,
+                image: (it.image) ?
+                    (it.image).map(iit => {
+                        return `${process.env.BASE_URL}/${iit}`
+                    })
+
+                    // `${process.env.BASE_URL}/${it.image}` 
+
+
+
+                    :
+
+                    `${process.env.BASE_URL}/assets/images/offer.png`,
                 created_on: moment(it.created_on).format("YYYY/MM/DD"),
                 valid_upto: moment(it.valid_upto).format("YYYY/MM/DD")
             }
@@ -150,10 +161,15 @@ exports.updateOffer = async (offerImage, offerprops) => {
     offerprops.image = null;
 
     let Image = [];
-    if (offerImage.image) {
+
+    if (offerImage.image !== undefined && offerImage.image !== null) {
+
+
+
         Image = offerImage.image.map(it => {
+
             moveFile.sync(it.path, "./core/uploads/offers/" + it.originalname)
-            let path = `${process.env.BASE_URL}/core/uploads/offers/` + it.originalname
+            let path = `core/uploads/offers/` + it.originalname
             return path;
         })
     }
@@ -166,7 +182,7 @@ exports.updateOffer = async (offerImage, offerprops) => {
     if (offerprops.valid_upto) filter.valid_upto = offerprops.valid_upto;
     if (offerprops.image) filter.image = offerprops.image;
     if (offerprops.division)
-     if (Array.isArray(offerprops.division)) filter.division = offerprops.division
+        if (Array.isArray(offerprops.division)) filter.division = offerprops.division
     if (offerprops.reps)
         if (Array.isArray(offerprops.reps)) filter.reps = offerprops.reps
 

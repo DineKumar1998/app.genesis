@@ -3,6 +3,7 @@
   "version": "2.1.0",
   "description": "pharma app dashboard",
   "main": "index.js",
+  "proxy" : "http://192.168.0.155:3014",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ramwh/pharma-app-dashboard-new.git"

@@ -1,9 +1,9 @@
 import React from "react";
-import { CBadge, CButton, CDataTable } from "@coreui/react";
+import { CBadge, CButton, CDataTable, CSwitch , } from "@coreui/react";
 import { IconDelete } from "src/views/icon";
 import ModalForm from "src/views/model/distributor/distributorModel";
 import { Link } from "react-router-dom";
-import { DeleteRepAndFranchisee } from "src/api/distributor/distributor";
+import { DeleteRepAndFranchisee} from "src/api/distributor/distributor";
 import { NotificationManager } from "react-notifications";
 import Model from '../../model/distributor/Franchisee'
 import ConfirmDelete from '../../../lib/deleteDilog'
@@ -16,6 +16,15 @@ const Table = (props) => {
   const loading = props.loading
   const [showModal, updateShowModal] = React.useState(false);
   const [deleteItemId, setDeleteItemId] = React.useState(false);
+  // const [active, setActive] =  React.useState(false);
+
+  // const toggle = (status) =>{
+
+  //   let rs = await UpdateRepAndFranchisee({
+
+  //   });
+  
+  // }
 
   const toggleModal = (id) => { updateShowModal(state => !state); setDeleteItemId(id) };
 
@@ -79,7 +88,17 @@ const Table = (props) => {
         active: (item) => {
           return (
             <td className="py-2">
-              <CBadge color={getBadge(item.active)}>{item.active === true ? <span>Active</span> : <span>Inactive</span>}</CBadge>
+
+            {item.active === true ?
+                <CBadge  color={getBadge(item.active)}>
+                  <span>Active</span>
+                </CBadge>
+                :
+                <CBadge  color={getBadge(item.active)}>
+                  <span>Inactive</span>
+                </CBadge>
+                 }
+            
             </td>
           )
         },
@@ -155,6 +174,7 @@ const Table = (props) => {
         },
       }}
     />
+
     <ModalContext.Provider value={{ showModal, toggleModal, deleteItem, id: `${deleteItemId}` }}>
       <ConfirmDelete canShow={showModal} updateModalState={toggleModal} />
     </ModalContext.Provider>

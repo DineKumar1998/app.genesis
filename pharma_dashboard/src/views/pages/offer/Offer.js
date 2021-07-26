@@ -52,8 +52,8 @@ class Offer extends Component {
           title: it.title,
           reps: it.reps,
           description: it.description,
-          division : it.division,
-          image: it.image.split(",")
+          division: it.division,
+          image: it.image
         })
       ))
       this.setState({ items: newRS });
