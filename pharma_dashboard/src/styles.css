@@ -710,12 +710,17 @@ a-login:hover {
 
 @import url("https://fonts.googleapis.com/css2?family=Orelega+One&display=swap");
 
+
+a.c-sidebar-brand.d-md-down-none.active {
+  text-decoration: none;
+}
+
 .logo-text {
-  font-family: "Orelega One", cursive;
+  font-family: "Orelega One",cursive;
+  font-weight: 200;
   padding-top: 17px;
   font-size: 20px;
 }
-
 /* .btn-cstm {
   background-color: #4285f4 !important;
   cursor: pointer;
