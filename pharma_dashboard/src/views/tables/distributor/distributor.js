@@ -1,5 +1,5 @@
 import React from "react";
-import { CBadge, CButton, CDataTable, CSwitch , } from "@coreui/react";
+import { CBadge, CButton, CDataTable,  } from "@coreui/react";
 import { IconDelete } from "src/views/icon";
 import ModalForm from "src/views/model/distributor/distributorModel";
 import { Link } from "react-router-dom";
