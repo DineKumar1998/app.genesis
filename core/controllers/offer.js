@@ -87,9 +87,9 @@ exports.getOffer = async (offerprops) => {
                 Array.isArray(offerRecords[0].image) ?
                     (offerRecords[0].image).map(it => `${process.env.BASE_URL}/${it}`)
                     :
-                    `${process.env.BASE_URL}/${offerRecords[0].image}`
+                    [`${process.env.BASE_URL}/${offerRecords[0].image}`]
                 :
-                `${process.env.BASE_URL}/assets/images/offer.png`,
+                [`${process.env.BASE_URL}/assets/images/offer.png`],
 
             reps: reps,
             created_on: moment(offerRecords[0].created_on).format("YYYY/MM/DD"),
@@ -129,7 +129,7 @@ exports.getOffer = async (offerprops) => {
 
                     :
 
-                    `${process.env.BASE_URL}/assets/images/offer.png`,
+                    [`${process.env.BASE_URL}/assets/images/offer.png`],
                 created_on: moment(it.created_on).format("YYYY/MM/DD"),
                 valid_upto: moment(it.valid_upto).format("YYYY/MM/DD")
             }
