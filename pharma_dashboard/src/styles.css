@@ -1171,3 +1171,30 @@ a.c-sidebar-brand.d-md-down-none.active {
     width: 100%;
   }
 }
+
+
+
+
+.product_border {
+  width: 60px;
+  height: 60px;
+  margin-right: 2.5px;
+  margin-left: 2.5px;
+  border: rgb(20, 204, 255) ; 
+  border-style: double;
+}
+
+.vis_border {
+  width: 60px;
+  height: 60px;
+  margin-right: 2.5px;
+  margin-left: 2.5px;
+  border: rgb(2, 255, 36);
+  border-style: double;
+}
+
+.justify-content-start {
+  /* align-content: center; */
+  -webkit-justify-content: flex-start!important;
+  justify-content: center !important;
+}

@@ -111,10 +111,10 @@ const Table = (props) => {
                     <td className="py-2">
                       {item.images && item.images.length > 0 ? item.images.map((it) => {
                         if (it.type === "IMG") {
-                          return <img onClick={() => showModalImg(`${it.url}`, `PRODUCT - ${item.name}`)} className="grow" style={{ width: "60px", height: "60px", marginRight: "2.5px", marginLeft: "2.5px", border: "dashed", borderColor: "#14ccff" }} src={it.url} alt="product" />
+                          return <img onClick={() => showModalImg(`${it.url}`, `PRODUCT - ${item.name}`)} className="grow product_border"  src={it.url} alt="product" />
                         }
                         else {
-                          return <img onClick={() => showModalImg(`${it.url}`, `VISULATE - ${item.name}`)} className="grow" style={{ width: "60px", height: "60px", marginRight: "2.5px", marginLeft: "2.5px", border: "dashed", borderColor: "#02ff24" }} src={it.url} alt="Visulate" />
+                          return <img onClick={() => showModalImg(`${it.url}`, `VISULATE - ${item.name}`)} className="grow vis_border" src={it.url} alt="Visulate" />
                         }
                       })
                         :
