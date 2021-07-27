@@ -13,7 +13,6 @@ exports.addOffer = async (offerImage, offer) => {
 
     if (offer.reps) { offer.reps = (offer.reps).split(","); }
     if (offer.division) { offer.division = (offer.division).split(","); }
-
     if (!offer.title) throw new Error('offer title is Required');
     if (!offer.description) throw new Error('offer description is Required');
     if (!offer.valid_upto) throw new Error('offer valid_upto is Required');
@@ -21,9 +20,7 @@ exports.addOffer = async (offerImage, offer) => {
 
 
     offer.image = null;
-
     let Image = [];
-
     if (offerImage.image) {
         Image = offerImage.image.map(it => {
             moveFile.sync(it.path, "./core/uploads/offers/" + it.originalname)
@@ -45,7 +42,6 @@ exports.addOffer = async (offerImage, offer) => {
     }
 
     let savedoffer = await addOffer(newoffer);
-
     delete savedoffer.__v
     delete savedoffer.created_on
 
@@ -83,7 +79,8 @@ exports.getOffer = async (offerprops) => {
             title: offerRecords[0].title,
             description: offerRecords[0].description,
             division: division,
-            image: offerRecords[0].image ?
+            image: offerRecords[0].image ? process.env.BASE_URL + offerRecords[0].image : `${process.env.BASE_URL}/assets/images/offer.png`,
+            images: offerRecords[0].image ?
                 Array.isArray(offerRecords[0].image) ?
                     (offerRecords[0].image).map(it => `${process.env.BASE_URL}/${it}`)
                     :
@@ -104,7 +101,6 @@ exports.getOffer = async (offerprops) => {
                     name: iit.name
                 }
             }) : [];
-
             let division = it.division ? (it.division).map(iit => {
                 return {
                     id: iit._id,
@@ -112,24 +108,19 @@ exports.getOffer = async (offerprops) => {
                 }
             }) : [];
 
+            let newImg = Array.isArray(it.image) ? (it.image).map(it => {
+                return `${process.env.BASE_URL}/${it}`
+            }) : '';
+
+
             return {
                 id: it._id,
                 title: it.title,
                 description: it.description,
                 reps: reps,
                 division: division,
-                image: (it.image) ?
-                    (it.image).map(iit => {
-                        return `${process.env.BASE_URL}/${iit}`
-                    })
-
-                    // `${process.env.BASE_URL}/${it.image}` 
-
-
-
-                    :
-
-                    [`${process.env.BASE_URL}/assets/images/offer.png`],
+                image: (it.image) ? newImg.toString() : `${process.env.BASE_URL}/assets/images/offer.png`,
+                images: it.image ? newImg : [`${process.env.BASE_URL}/assets/images/offer.png`],
                 created_on: moment(it.created_on).format("YYYY/MM/DD"),
                 valid_upto: moment(it.valid_upto).format("YYYY/MM/DD")
             }
@@ -163,11 +154,7 @@ exports.updateOffer = async (offerImage, offerprops) => {
     let Image = [];
 
     if (offerImage.image !== undefined && offerImage.image !== null) {
-
-
-
         Image = offerImage.image.map(it => {
-
             moveFile.sync(it.path, "./core/uploads/offers/" + it.originalname)
             let path = `core/uploads/offers/` + it.originalname
             return path;

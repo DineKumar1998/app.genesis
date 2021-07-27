@@ -25,7 +25,15 @@ const AddUpdateAbout = async (data) => {
   bodyFormData.append('pinterest', data.pinterest);
   bodyFormData.append('twitter', data.twitter);
   bodyFormData.append('download_links', JSON.stringify(data.download_links));
-  bodyFormData.append('about_img', data.image);
+  // bodyFormData.append('about_img', data.image);
+
+  if (data.image !== null && data.image.length > 0) {
+    data.image.forEach(it => bodyFormData.append('about_img', it))
+  }
+  else {
+      bodyFormData.append('about_img', data.image);
+  }
+
   bodyFormData.append('whatsapp_greeting', data.whatsapp_greeting);
   bodyFormData.append('corporate_video', data.corporate_video);
 

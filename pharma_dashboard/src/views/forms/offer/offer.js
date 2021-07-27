@@ -204,7 +204,7 @@ class AddEditForm extends React.Component {
       let IMAGES = this.props.item.image
       for (let i = 0; i < IMAGES.length; i++) {
         let fileUrl = IMAGES[i];
-        selectedImages.push({ url: fileUrl, type: "not uploaded" })
+        selectedImages.push({ url: fileUrl, type: "uploaded" })
       }
       this.setState({ imgUrls: selectedImages })
 

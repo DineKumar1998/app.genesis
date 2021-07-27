@@ -94,4 +94,16 @@ function isEmail(inputtxt) {
   }
 }
 
-export {isPhonenumber , isAddress, isAadhar, isPassword, isGstNo, isBankAccNo, isIfsc, isName, isEmail}
+
+function isDescription(inputtxt) {
+  const pattern = RegExp(/^(.|\s)*[a-zA-Z]+(.|\s)*$/);
+  if(pattern.test(inputtxt)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+
+export {isPhonenumber , isAddress, isAadhar, isPassword, isGstNo, isBankAccNo, isIfsc, isName, isEmail , isDescription}

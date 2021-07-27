@@ -4,12 +4,24 @@ const addUpdate = require("../usecases/company_about/addUpdate");
 const getDivision = require("../usecases/division/getDivisions")
 
 //import moment for date formatting
-const moment = require("moment");
+// const moment = require("moment");
 const { CompanyAboutFormatter } = require("../Formatters");
+const moveFile = require("move-file");
 
 
-exports.addUpdateFile = async(aboutCompany) => {
-
+exports.addUpdateFile = async(aboutCompany , img) => {
+    let Image = [];
+    let newImg = [img.about_img]
+    if (img.about_img) {
+        newImg.map(it => 
+            it.map((item) => {
+                moveFile.sync(item.path, "./core/uploads/companyAbout/" + item.originalname)
+                Image.push(`core/uploads/companyAbout/${item.originalname}`)
+            })
+        )
+    }
+    aboutCompany.image = Image.toString()
+    
     let oldData = await get();
     if(oldData.length ==0){
         if(!aboutCompany.phone) throw new Error('Company Phone is Required');
@@ -19,6 +31,8 @@ exports.addUpdateFile = async(aboutCompany) => {
         if(!aboutCompany.about) throw new Error('Company About is Required');
         if(!aboutCompany.address) throw new Error('Company Address is Required');
         if(!aboutCompany.image) throw new Error('Company About Image is Required');
+
+
         let downloadLinks = typeof(aboutCompany.download_links) == "string"? JSON.parse(aboutCompany.download_links) : aboutCompany.download_links
         let obj = {
             phone: aboutCompany.phone,

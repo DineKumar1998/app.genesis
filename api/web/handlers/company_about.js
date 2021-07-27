@@ -1,11 +1,11 @@
 const aboutController = require("../../../core/controllers/company_about")
 
-const addUpdate =async (req, res, next)=>{
+const addUpdate = async (req, res, next) => {
 
     try {
-        if(req.file) req.body.image = req.file.path;
+        if (req.files) req.body.image = req.files.path;
         else req.body.image = undefined;
-        let rs = await aboutController.addUpdateFile(req.body);
+        let rs = await aboutController.addUpdateFile(req.body, req.files);
         req.data = rs;
         next();
     }
@@ -16,7 +16,7 @@ const addUpdate =async (req, res, next)=>{
 }
 
 
-const get = async(req,res,next)=>{
+const get = async (req, res, next) => {
     try {
         let rs = await aboutController.get()
         req.data = rs
@@ -30,4 +30,4 @@ const get = async(req,res,next)=>{
 
 
 
-module.exports = { addUpdate, get}
+module.exports = { addUpdate, get }

@@ -133,6 +133,22 @@ exports.franchiseeFormatter = (franchisee) => {
 
 exports.CompanyAboutFormatter = (about, divisions) => {
 
+     let newImg = [] ;
+     let newRsImg = about.about_img.split(',')
+     about.about_img = []
+
+     if (newRsImg.length >0 ) {
+         newRsImg.map((it)=> {
+            newImg.push(`${process.env.BASE_URL}/${it}`)
+         })
+     }
+
+     
+     about.about_img = newImg.toString()
+
+     console.log("newImg",  about.about_img)
+
+
     return {
         app_live_link: process.env.APP_LIVE_LINK ? process.env.APP_LIVE_LINK : "https://play.google.com/store",
         id: about._id,
@@ -152,7 +168,7 @@ exports.CompanyAboutFormatter = (about, divisions) => {
         corporate_video: about.corporate_video,
         whatsapp_greeting: about.whatsapp_greeting ? about.whatsapp_greeting : "Hello",
         download_links: about.download_links? downloadLinksFormatter(about.download_links, divisions): [],
-        about_img: about.about_img ? fs.existsSync(about.about_img)? `${process.env.BASE_URL}/${about.about_img}` : null : null,
+        about_img: about.about_img ? about.about_img : null,
         created_on: moment(about.created_on).format("LLL"),
         modified_on: moment(about.modified_on).format("LLL"),
     }

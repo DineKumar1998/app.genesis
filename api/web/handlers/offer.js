@@ -39,8 +39,6 @@ const countOffer = async (req, res, next) => {
 }
 
 const updateOffer = async (req, res, next) => {
-    console.log("req", req.files)
-
     try {
         let offerRecords = await offerController.updateOffer(req.files, req.body)
         req.data = offerRecords
