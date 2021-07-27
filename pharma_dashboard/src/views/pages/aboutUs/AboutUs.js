@@ -456,7 +456,7 @@ class AboutUs extends React.Component {
                             </div>
                           </div>
                           <div className="col-lg-5 mx-auto">
-                            <input multiple id="customFile" type="file" className="custom-file-input rounded-pill" accept="image/*" multiple onChange={this.handleUploadImg} />
+                            <input multiple id="customFile" type="file" className="custom-file-input rounded-pill" accept="image/*" onChange={this.handleUploadImg} />
                             <label className="custom-file-label rounded-pill">Choose file</label>
                           </div>
                           <hr className="my-4" />
