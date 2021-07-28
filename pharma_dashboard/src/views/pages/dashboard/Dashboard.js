@@ -17,10 +17,12 @@ const Dashboard = () => {
       let response = await GetAbout()   
 
       if(response.success === true && response.data != null && response.data.about_img != null) {
-        setBanner(response.data.about_img)
+        let newImg = response.data.about_img.split(",")
+        setBanner(newImg[0])
+
       }
       else {
-        setBanner(process.env.PUBLIC_URL + '/images/dashboard/banner.jpg')
+        setBanner(process.env.PUBLIC_URL + 'src/images/dashboard/banner.jpg')
       }
       setLoading(false)
     }

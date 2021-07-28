@@ -72,7 +72,7 @@ export default class Notification extends Component {
     else if (this.state.user.value === "both") {
       return this.setState({ send_to: "Both" })
     }
-    else if (this.state.user.value === "mr") {
+    else if (this.state.user.value === "singleMr") {
       return this.setState({ send_to: this.state.mr.value })
     }
     else if (this.state.user.value === "singleDistributor") {
@@ -136,7 +136,6 @@ export default class Notification extends Component {
 
   // ***************************RENDER FUNCTION ***************************
   render() {
-
     return (
       <Form >
         <MDBRow>
@@ -224,9 +223,11 @@ export default class Notification extends Component {
                       </Col>
                       <Col style={{ marginLeft: "10px" }}>
                         <Select
-                          onChange={(selectedOption) =>
-                            this.state.mr(selectedOption)
-                          }
+                          onChange={(selectedOption) =>{
+                            // console.log("SELECTED", selectedOption)
+                            this.setState({mr : selectedOption})
+                            // this.state.mr(selectedOption)
+                          }}
                           options={Array.isArray(this.state.mrList)
                             ? this.state.mrList.map((item) => {
                               return {

@@ -5,7 +5,7 @@ const check_auth = require("../../../core/middleware/check-auth-admin");
 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './core/uploads/temp')
+        cb(null, './core/uploads/offers')
     },
     filename: function (req, file, cb) {
         cb(null, (file.originalname).replace(/ /g, '_').toLowerCase())

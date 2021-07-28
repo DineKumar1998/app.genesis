@@ -100,15 +100,10 @@ const Table = (props) => {
           image: (item) => {
             return (
               <td className="py-2">
-                {
-                  item.image.length > 1 ?
-                    item.image.map((it) => (
-                      <>
-                        <img className="grow" src={`${it}`} alt="offers" style={{ height: "50px", width: "50px" }} />  &nbsp;
-                      </>
-                    ))
+                { item.image.length > 0 ?
+                    item.image.map((it, index) => <img className="grow" src={`${it}`} alt="offers" style={{ height: "50px", width: "50px", marginBottom: "5px" }} />)
                     :
-                    <img className="grow" src={item.image} alt="offers" style={{ height: "50px", width: "50px" }} />
+                    item.image.map((it, index) => <img className="grow" src={`${it}`} alt="offers" style={{ height: "50px", width: "50px", marginBottom: "5px" }} />)
                 }
               </td>)
           },

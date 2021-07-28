@@ -1,6 +1,7 @@
 const offerController = require("../../../core/controllers/offer")
 
 const addOffer = async (req, res, next) => {
+
     try {
         let Offer = await offerController.addOffer(req.files, req.body)
         req.data = Offer
@@ -38,7 +39,6 @@ const countOffer = async (req, res, next) => {
 }
 
 const updateOffer = async (req, res, next) => {
-
     try {
         let offerRecords = await offerController.updateOffer(req.files, req.body)
         req.data = offerRecords

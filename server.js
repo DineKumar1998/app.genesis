@@ -52,9 +52,9 @@ const app = express();
 
 
 let options = {
-    // cert: fileStream.readFileSync(path.join(__dirname, "..", "..", "sslfiles", "ssl.cert")),
-    // key: fileStream.readFileSync(path.join(__dirname, "..", "..", "sslfiles", "ssl.key")),
-    // ca: fileStream.readFileSync(path.join(__dirname, "..", "..", "sslfiles", "ssl.ca"))
+    cert: fileStream.readFileSync(path.join(__dirname, "..", "..", "sslfiles", "ssl.cert")),
+    key: fileStream.readFileSync(path.join(__dirname, "..", "..", "sslfiles", "ssl.key")),
+    ca: fileStream.readFileSync(path.join(__dirname, "..", "..", "sslfiles", "ssl.ca"))
 }
 let http = httpx.createServer(options, app);
 
@@ -115,12 +115,12 @@ app.get('*', function(req, res) {
     res.sendFile(__dirname + '/pharma_dashboard/build');
 });
 
-// require("./birthday_notification/index.js")
+require("./birthday_notification/index.js")
 let fs = require("./core/lib/FileStream.js");
 
 
 
-// fs.createConfigFileInDashboard('pharma_dashboard/src/config.js');
+fs.createConstantfileinFrontEnd('pharma_dashboard/src/constants.js');
 fs.createEssentialDirectories();
 
 /////////importing state cities/////////////////

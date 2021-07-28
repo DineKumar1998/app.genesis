@@ -1,8 +1,8 @@
 const productController = require("../../../core/controllers/product");
 const packingTypeController = require("../../../core/controllers/packing_type")
 /*************Product handlers *****************/
-const getProduct = async(req,res,next)=>{
-    if(req.franchiseeId) req.body.franchisee_id = req.franchiseeId;
+const getProduct = async (req, res, next) => {
+    if (req.franchiseeId) req.body.franchisee_id = req.franchiseeId;
     try {
         let products = await productController.getProduct(req.body);
 
@@ -11,48 +11,44 @@ const getProduct = async(req,res,next)=>{
 
         let productsResponse = [];
 
-        if(Array.isArray(products)){
-            if(req.repId) favProducts = await productController.getFavProduct({rep_id:req.repId});
-
-            for(let i=0; i< products.length; i++){
+        if (Array.isArray(products)) {
+            if (req.repId) favProducts = await productController.getFavProduct({ rep_id: req.repId });
+            for (let i = 0; i < products.length; i++) {
                 let product = products[i];
                 let dataToPush = null;
-                if(favProducts.length>0){
+                if (favProducts.length > 0) {
                     let flag = 0;
-                    for(let j=0; j<favProducts.length; j++){
+                    for (let j = 0; j < favProducts.length; j++) {
                         let favPro = favProducts[j];
-                        if((product.id).toString() == (favPro.id).toString()){
-                            dataToPush= {...product, favourite: true};
+                        if ((product.id).toString() == (favPro.id).toString()) {
+                            dataToPush = { ...product, favourite: true };
                             flag = 1;
                             break;
                         }
                     }
-    
-                    if(flag == 0) dataToPush = {...product, favourite: false};
-    
+                    if (flag == 0) dataToPush = { ...product, favourite: false };
+
                 }
-                else dataToPush = {...product, favourite: null}
+                else dataToPush = { ...product, favourite: false }
 
-                if(process.env.REMOVE_DUPLICATE_PRODUCTS){
-                    if(process.env.REMOVE_DUPLICATE_PRODUCTS == 'true'){
+                if (process.env.REMOVE_DUPLICATE_PRODUCTS) {
+                    if (process.env.REMOVE_DUPLICATE_PRODUCTS == 'true') {
                         let isDuplicateName = false;
-                        productsResponse.forEach(it=>{ if(it.name == dataToPush.name) isDuplicateName = true});
+                        productsResponse.forEach(it => { if (it.name == dataToPush.name) isDuplicateName = true });
 
-                        if(!isDuplicateName) productsResponse.push(dataToPush);
+                        if (!isDuplicateName) productsResponse.push(dataToPush);
                     }
                     else productsResponse.push(dataToPush);
                 }
                 else productsResponse.push(dataToPush);
             }
         }
-        else{
+        else {
             productsResponse = {
                 ...products,
-                favourite: null
+                favourite: false
             }
         }
-
-    
         req.data = productsResponse;
         next()
     }
@@ -61,8 +57,9 @@ const getProduct = async(req,res,next)=>{
         next(e)
     }
 }
-const getProductNames = async(req,res,next)=>{
-    if(req.franchiseeId) req.body.franchisee_id = req.franchiseeId;
+
+const getProductNames = async (req, res, next) => {
+    if (req.franchiseeId) req.body.franchisee_id = req.franchiseeId;
     try {
         let product = await productController.getProductNames(req.body);
         req.data = product;
@@ -74,56 +71,56 @@ const getProductNames = async(req,res,next)=>{
     }
 }
 
-const getNewProduct = async(req,res,next)=>{
-    if(req.franchiseeId) req.body.franchisee_id = req.franchiseeId
+const getNewProduct = async (req, res, next) => {
+    if (req.franchiseeId) req.body.franchisee_id = req.franchiseeId
     try {
         let products = await productController.getNewProduct(req.body);
         let favProducts = [];
 
         let productsResponse = [];
 
-        if(Array.isArray(products)){
-            if(req.repId) favProducts = await productController.getFavProduct({rep_id:req.repId});
+        if (Array.isArray(products)) {
+            if (req.repId) favProducts = await productController.getFavProduct({ rep_id: req.repId });
 
-            for(let i=0; i< products.length; i++){
+            for (let i = 0; i < products.length; i++) {
                 let product = products[i];
                 let dataToPush = null;
-                if(favProducts.length>0){
+                if (favProducts.length > 0) {
                     let flag = 0;
-                    for(let j=0; j<favProducts.length; j++){
+                    for (let j = 0; j < favProducts.length; j++) {
                         let favPro = favProducts[j];
-                        if((product.id).toString() == (favPro.id).toString()){
-                            dataToPush= {...product, favourite: true};
+                        if ((product.id).toString() == (favPro.id).toString()) {
+                            dataToPush = { ...product, favourite: true };
                             flag = 1;
                             break;
                         }
                     }
-    
-                    if(flag == 0) dataToPush = {...product, favourite: false};
-    
+
+                    if (flag == 0) dataToPush = { ...product, favourite: false };
+
                 }
-                else dataToPush = {...product, favourite: null}
+                else dataToPush = { ...product, favourite: null }
 
-                if(process.env.REMOVE_DUPLICATE_PRODUCTS){
-                    if(process.env.REMOVE_DUPLICATE_PRODUCTS == 'true'){
+                if (process.env.REMOVE_DUPLICATE_PRODUCTS) {
+                    if (process.env.REMOVE_DUPLICATE_PRODUCTS == 'true') {
                         let isDuplicateName = false;
-                        productsResponse.forEach(it=>{ if(it.name == dataToPush.name) isDuplicateName = true});
+                        productsResponse.forEach(it => { if (it.name == dataToPush.name) isDuplicateName = true });
 
-                        if(!isDuplicateName) productsResponse.push(dataToPush);
+                        if (!isDuplicateName) productsResponse.push(dataToPush);
                     }
                     else productsResponse.push(dataToPush);
                 }
                 else productsResponse.push(dataToPush);
             }
         }
-        else{
+        else {
             productsResponse = {
                 ...products,
                 favourite: null
             }
         }
 
-    
+
         req.data = productsResponse;
         next()
     }
@@ -132,8 +129,8 @@ const getNewProduct = async(req,res,next)=>{
         next(e)
     }
 }
-const countProducts = async(req,res,next)=>{
-    if(req.franchiseeId) req.body.franchisee_id = req.franchiseeId
+const countProducts = async (req, res, next) => {
+    if (req.franchiseeId) req.body.franchisee_id = req.franchiseeId
     try {
         let productRecords = await productController.countProducts(req.body)
         req.data = productRecords
@@ -144,8 +141,8 @@ const countProducts = async(req,res,next)=>{
         next(e)
     }
 }
-const countNewProducts = async(req,res,next)=>{
-    if(req.franchiseeId) req.body.franchisee_id = req.franchiseeId
+const countNewProducts = async (req, res, next) => {
+    if (req.franchiseeId) req.body.franchisee_id = req.franchiseeId
     req.body.new_launched = true;
     try {
         let productRecords = await productController.countProducts(req.body)
@@ -157,8 +154,8 @@ const countNewProducts = async(req,res,next)=>{
         next(e)
     }
 }
-const getVisualates = async(req,res,next)=>{
-    if(req.franchiseeId) req.body.franchisee_id = req.franchiseeId
+const getVisualates = async (req, res, next) => {
+    if (req.franchiseeId) req.body.franchisee_id = req.franchiseeId
     try {
         let productVis = await productController.getVisualates(req.body)
         req.data = productVis
@@ -169,8 +166,8 @@ const getVisualates = async(req,res,next)=>{
         next(e)
     }
 }
-const countVisualates = async(req,res,next)=>{
-    if(req.franchiseeId) req.body.franchisee_id = req.franchiseeId
+const countVisualates = async (req, res, next) => {
+    if (req.franchiseeId) req.body.franchisee_id = req.franchiseeId
     try {
         let productVis = await productController.countVisualates(req.body)
         req.data = productVis
@@ -181,56 +178,56 @@ const countVisualates = async(req,res,next)=>{
         next(e)
     }
 }
-const productSearch = async(req,res,next)=>{
-    if(req.franchiseeId) req.body.franchisee_id = req.franchiseeId
+const productSearch = async (req, res, next) => {
+    if (req.franchiseeId) req.body.franchisee_id = req.franchiseeId
     try {
         let products = await productController.searchProduct(req.body);
         let favProducts = [];
 
         let productsResponse = [];
 
-        if(Array.isArray(products)){
-            if(req.repId) favProducts = await productController.getFavProduct({rep_id:req.repId});
+        if (Array.isArray(products)) {
+            if (req.repId) favProducts = await productController.getFavProduct({ rep_id: req.repId });
 
-            for(let i=0; i< products.length; i++){
+            for (let i = 0; i < products.length; i++) {
                 let product = products[i];
                 let dataToPush = null;
-                if(favProducts.length>0){
+                if (favProducts.length > 0) {
                     let flag = 0;
-                    for(let j=0; j<favProducts.length; j++){
+                    for (let j = 0; j < favProducts.length; j++) {
                         let favPro = favProducts[j];
-                        if((product.id).toString() == (favPro.id).toString()){
-                            dataToPush= {...product, favourite: true};
+                        if ((product.id).toString() == (favPro.id).toString()) {
+                            dataToPush = { ...product, favourite: true };
                             flag = 1;
                             break;
                         }
                     }
-    
-                    if(flag == 0) dataToPush = {...product, favourite: false};
-    
+
+                    if (flag == 0) dataToPush = { ...product, favourite: false };
+
                 }
-                else dataToPush = {...product, favourite: null}
+                else dataToPush = { ...product, favourite: null }
 
-                if(process.env.REMOVE_DUPLICATE_PRODUCTS){
-                    if(process.env.REMOVE_DUPLICATE_PRODUCTS == 'true'){
+                if (process.env.REMOVE_DUPLICATE_PRODUCTS) {
+                    if (process.env.REMOVE_DUPLICATE_PRODUCTS == 'true') {
                         let isDuplicateName = false;
-                        productsResponse.forEach(it=>{ if(it.name == dataToPush.name) isDuplicateName = true});
+                        productsResponse.forEach(it => { if (it.name == dataToPush.name) isDuplicateName = true });
 
-                        if(!isDuplicateName) productsResponse.push(dataToPush);
+                        if (!isDuplicateName) productsResponse.push(dataToPush);
                     }
                     else productsResponse.push(dataToPush);
                 }
                 else productsResponse.push(dataToPush);
             }
         }
-        else{
+        else {
             productsResponse = {
                 ...products,
                 favourite: null
             }
         }
 
-    
+
         req.data = productsResponse;
 
         next()
@@ -242,7 +239,7 @@ const productSearch = async(req,res,next)=>{
 }
 
 /*************Product type handlers *****************/
-const getProductType = async(req,res,next)=>{
+const getProductType = async (req, res, next) => {
     try {
         let productType = await productController.getProductType(req.body)
         req.data = productType
@@ -254,7 +251,7 @@ const getProductType = async(req,res,next)=>{
     }
 }
 /*************Product category handlers *****************/
-const getProductCategory = async(req,res,next)=>{
+const getProductCategory = async (req, res, next) => {
     try {
         let productCat = await productController.getProductCategory(req.body)
         req.data = productCat
@@ -267,7 +264,7 @@ const getProductCategory = async(req,res,next)=>{
 }
 
 /*************Packing types handlers *****************/
-const getPackingTypes = async(req,res,next)=>{
+const getPackingTypes = async (req, res, next) => {
     try {
         let packingTypes = await packingTypeController.get(req.body)
         req.data = packingTypes
@@ -280,11 +277,11 @@ const getPackingTypes = async(req,res,next)=>{
 }
 
 /*************Product divisions handlers *****************/
-const getProductDivisions = async(req,res,next)=>{
-    if(req.franchiseeId) req.body.franchisee_id = req.franchiseeId
+const getProductDivisions = async (req, res, next) => {
+    if (req.franchiseeId) req.body.franchisee_id = req.franchiseeId
     try {
         let productDiv = await productController.getDivision(req.body)
-        if(!Array.isArray(productDiv)) productDiv = [productDiv]
+        if (!Array.isArray(productDiv)) productDiv = [productDiv]
         req.data = productDiv
         next()
     }
@@ -295,16 +292,16 @@ const getProductDivisions = async(req,res,next)=>{
 }
 
 /*******************Favourite Product handlers*************************/
-const addFavProduct =async (req, res, next)=>{
+const addFavProduct = async (req, res, next) => {
     req.body.rep_id = req.repId;
     try {
         let favProduct = await productController.addFavProduct(req.body)
         req.data = null;
-        if(favProduct.message){
+        if (favProduct.message) {
             req.message = favProduct.message;
             return next()
         }
-        next(new Error("Something went wrong"));    
+        next(new Error("Something went wrong"));
     }
     catch (e) {
         req.status = 400;
@@ -312,28 +309,28 @@ const addFavProduct =async (req, res, next)=>{
     }
 }
 
-const getFavProduct =async (req, res, next)=>{
+const getFavProduct = async (req, res, next) => {
     try {
-        let favProduct = await productController.getFavProduct({rep_id:req.repId})
+        let favProduct = await productController.getFavProduct({ rep_id: req.repId })
 
         let productsResponse = [];
 
-        if(Array.isArray(favProduct)){
+        if (Array.isArray(favProduct)) {
 
-            for(let i=0; i< favProduct.length; i++){
-               
-                productsResponse.push({...favProduct[i], favourite: true});
-                        
+            for (let i = 0; i < favProduct.length; i++) {
+
+                productsResponse.push({ ...favProduct[i], favourite: true });
+
             }
         }
-        else{
+        else {
             productsResponse = {
                 ...favProduct,
                 favourite: true
             }
         }
 
-    
+
         req.data = productsResponse;
 
 
@@ -345,15 +342,17 @@ const getFavProduct =async (req, res, next)=>{
     }
 }
 
-const deleteFavProduct =async (req, res, next)=>{
+const deleteFavProduct = async (req, res, next) => {
     req.body.rep_id = req.repId;
     try {
         let favProduct = await productController.deleteFavProduct(req.body)
         req.data = null;
-        if(favProduct.Message){
+
+        if (favProduct.Message) {
             req.message = favProduct.Message;
             return next()
         }
+
         next(new Error("Something went wrong"));
     }
     catch (e) {
@@ -362,9 +361,9 @@ const deleteFavProduct =async (req, res, next)=>{
     }
 }
 
-const countFavProduct = async(req,res,next)=>{
+const countFavProduct = async (req, res, next) => {
     try {
-        let favProductCount = await productController.countFavProduct({rep_id:req.repId})
+        let favProductCount = await productController.countFavProduct({ rep_id: req.repId })
         req.data = favProductCount
         next()
     }

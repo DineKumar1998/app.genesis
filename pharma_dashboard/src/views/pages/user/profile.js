@@ -83,8 +83,11 @@ class Profile extends React.Component {
                 oldPassword: this.state.oldPassword,
                 newPassword: this.state.newPassword,
             })
-            if (rs) {
+            if (rs.success === true) {
                 NotificationManager.success("Password Changed Successfully", "Info", 2000);
+            }
+            else{
+                NotificationManager.error("Incorrect Password", "Info", 2000);
             }
         }
     };
@@ -101,9 +104,9 @@ class Profile extends React.Component {
         }
         else {
             if (!this.state.oldPassword) { return NotificationManager.error("Enter your Password", "Info", 2000) };
-            if (!this.state.confirmNewPassword) { return NotificationManager.error("Confirm your Password", "Info", 2000) };
-            if (this.state.oldPassword !== this.state.confirmNewPassword) { return NotificationManager.error("Password don't Match", "Info", 2000) };
             if (!this.state.newPassword) { return NotificationManager.error("Enter new Password", "Info", 2000) };
+            if (!this.state.confirmNewPassword) { return NotificationManager.error("Confirm your Password", "Info", 2000) };
+            if (this.state.newPassword !== this.state.confirmNewPassword) { return NotificationManager.error("Password did not Match", "Info", 2000) };
             this.setState({ valid: true })
         }
 
@@ -265,18 +268,20 @@ class Profile extends React.Component {
                                     </div>
                                     <div className="col-sm">
                                         <div className="form-group">
-                                            <label className="form-control-label">Confirm Password</label>
-                                            <input type="password" className="form-control" value={this.state.confirmNewPassword}
-                                                onChange={(e) => this.setState({ confirmNewPassword: e.target.value })} />
-                                        </div>
-                                    </div>
-                                    <div className="col-sm">
-                                        <div className="form-group">
                                             <label className="form-control-label">New Password</label>
                                             <input type="password" className="form-control" value={this.state.newPassword}
                                                 onChange={(e) => this.setState({ newPassword: e.target.value })} />
                                         </div>
                                     </div>
+
+                                    <div className="col-sm">
+                                        <div className="form-group">
+                                            <label className="form-control-label">Confirm Password</label>
+                                            <input type="password" className="form-control" value={this.state.confirmNewPassword}
+                                                onChange={(e) => this.setState({ confirmNewPassword: e.target.value })} />
+                                        </div>
+                                    </div>
+                                  
                                 </div>
                                 <div style={{marginTop : "40px"}}/>
                                 <button className="prof_save_button" onClick={this.savePassword} 

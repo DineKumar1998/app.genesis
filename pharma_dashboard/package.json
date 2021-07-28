@@ -3,11 +3,9 @@
   "version": "2.1.0",
   "description": "pharma app dashboard",
   "main": "index.js",
-  "private": true,
-  "proxy" : "http://192.168.0.155:3014/api/web",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/akhilwebhopers/dashboard-design.git"
+    "url": "git+https://github.com/ramwh/pharma-app-dashboard-new.git"
   },
   "keywords": [
     "pharma",
@@ -34,7 +32,8 @@
     "react-select": "^4.2.1",
     "react-uuid": "^1.0.2",
     "reactstrap": "^8.9.0",
-    "redux": "4.0.5"
+    "redux": "4.0.5",
+    "rep_portal": "file:.."
   },
   "devDependencies": {
     "auto-changelog": "~2.2.1",

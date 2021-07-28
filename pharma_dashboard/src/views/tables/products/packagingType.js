@@ -40,6 +40,7 @@ const Table = (props) => {
   return (
     <>
     <CDataTable
+    className='justify-content-center'
       items={Data}
       fields={fields}
       //   columnFilter

@@ -68,12 +68,16 @@ class Distributor extends Component {
   activePageChange = (item) => {
     this.setState({ currentPage: item })
     this.setState({ update: true })
+    window.scroll({
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth' 
+     });
   };
 
   // ****************** Get Data Function *****************************
 
   GetData = async () => {
-
     if (this.state.search !== "") {
       let rs = await SearchDistributor({
         "name": this.state.search,
@@ -86,6 +90,8 @@ class Distributor extends Component {
       this.setState({ update: false })
     }
     else {
+          this.setState({loading : true})
+
       let skip = 0
       if (this.state.currentPage === 0) {
         skip = 1 * this.state.rowPerPage
@@ -115,9 +121,10 @@ class Distributor extends Component {
           this.setState({ totalPage: page });
         }
         this.setState({ items: rs.data });
-        this.setState({ loading: false });
       }
     }
+    this.setState({ loading: false });
+
   }
 
   // ****************** ComponentDidMount Function *****************************
@@ -171,9 +178,6 @@ class Distributor extends Component {
                     </div>
                 </div>
               </div>
-
-              {this.state.items.length === 0 ? <Page404 /> :
-                <>
                   <div className="p-2">
                     <fieldset className="field-container col-6 col-md-12">
                       <input type="text" value={this.state.search} onChange={(e) => this.onSearch(e)}
@@ -187,6 +191,7 @@ class Distributor extends Component {
                       </div>
                     </fieldset>
                   </div>
+                  {this.state.items.length === 0 ? <Page404 /> :
                   <Row>
                     <Col>
                       <Table
@@ -210,7 +215,6 @@ class Distributor extends Component {
                       }
                     </Col>
                   </Row>
-                </>
               }
             </Container>
         }

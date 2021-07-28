@@ -57,7 +57,6 @@ async function convertcsvtojson(filePath) {
 //Add rep
 exports.addRep = async(rep) => {
 
-    console.log("reps Data", rep)
     if (!rep.franchisee_id) throw new Error('Franchisee Id is Required'); //will changed by auth
     if (!rep.name) throw new Error('Name is Required');
     if (!rep.email) throw new Error('Email is Required');

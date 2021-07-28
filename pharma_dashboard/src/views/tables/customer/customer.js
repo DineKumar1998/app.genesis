@@ -71,7 +71,7 @@ const Table = () => {
 
       let rsCount = await GetCustomerCount()
 
-      if (rs.success=== true && rsCount.success === true) {
+      if (rs.success === true && rsCount.success === true) {
         let page = rsCount.data.count / rowPerPage
         let num = Number(page) === page && page % 1 !== 0;
         if (num === true) {
@@ -87,7 +87,7 @@ const Table = () => {
 
         if (rs.success === true && rs.data.length > 0) {
           for (let i = 0; i < rs.data.length; i++) {
-            if(rs.data[i].rep_id !== null && rs.data[i].franchisee_id !== null){
+            if (rs.data[i].rep_id !== null && rs.data[i].franchisee_id !== null) {
               rs.data[i].rep_name = rs.data[i].rep_id.name;
               rs.data[i].franchisee_name = rs.data[i].franchisee_id.name;
             }
@@ -101,7 +101,7 @@ const Table = () => {
 
 
   React.useEffect(() => {
-      fetchMyAPI();      
+    fetchMyAPI();
   }, [search])
 
   React.useEffect(() => {
@@ -132,39 +132,39 @@ const Table = () => {
                     <h5 className="h5_cstm"><b>Customer Details</b></h5>
                   </div>
                   {Data === null ? <></> :
-                  <div className="p-2">
-                    <div className="form-inline justify-content-sm-end c-datatable-items-per-page">
-                      <label className="mfe-2">Items per page:</label>
-                      <select className="form-control" aria-label="changes number of visible items" value={rowPerPageSelected}
-                        onChange={(e) => setrowPerPage(e.target.value)}>
-                        <option value={10}>10</option>
-                        <option value={50}>50</option>
-                        <option value={100}>100</option>
-                        <option value={150}>150</option>
-                      </select>
+                    <div className="p-2">
+                      <div className="form-inline justify-content-sm-end c-datatable-items-per-page">
+                        <label className="mfe-2">Items per page:</label>
+                        <select className="form-control" aria-label="changes number of visible items" value={rowPerPageSelected}
+                          onChange={(e) => setrowPerPage(e.target.value)}>
+                          <option value={10}>10</option>
+                          <option value={50}>50</option>
+                          <option value={100}>100</option>
+                          <option value={150}>150</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
                   }
                 </div>
               </Col>
             </Row>
-            
+
           </div>
           {Data === null ? <Page404 /> :
             <>
-            <div className="p-2">
-              <fieldset className="field-container col-6 col-md-12">
-                <input type="text" value={search} onChange={(e) => onSearch(e)}
-                  placeholder="Search..." className="field-search" />
-                <div className="icons-container">
-                  <div className="icon-search"></div>
-                  <div className="icon-close" onClick={onClose}>
-                    <div className="x-up"></div>
-                    <div className="x-down"></div>
+              <div className="p-2">
+                <fieldset className="field-container col-6 col-md-12">
+                  <input type="text" value={search} onChange={(e) => onSearch(e)}
+                    placeholder="Search..." className="field-search" />
+                  <div className="icons-container">
+                    <div className="icon-search"></div>
+                    <div className="icon-close" onClick={onClose}>
+                      <div className="x-up"></div>
+                      <div className="x-down"></div>
+                    </div>
                   </div>
-                </div>
-              </fieldset>
-            </div>
+                </fieldset>
+              </div>
               <CDataTable
                 items={Data}
                 fields={fields}
@@ -195,16 +195,20 @@ const Table = () => {
                   },
                 }}
               />
-              <div className={'mt-2'} >
-                <CPagination
-                  className="pagination"
-                  activePage={currentPage}
-                  pages={totalPage}
-                  onActivePageChange={(i) => { setActivePage(i); }}
-                ></CPagination>
-              </div>
+              {
+                Data.length > 10 && search === "" ?
+                  <div className={'mt-2'} >
+                    <CPagination
+                      className="pagination"
+                      activePage={currentPage}
+                      pages={totalPage}
+                      onActivePageChange={(i) => { setActivePage(i); }}
+                    ></CPagination>
+                  </div>
+                  :
+                  <></>
+              }
             </>}
-
         </>
       }
     </>
