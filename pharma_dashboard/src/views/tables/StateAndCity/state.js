@@ -69,6 +69,7 @@ const Table = (props) => {
           return (
             <td className="py-2">
               <CButton
+                style={{float :"left"}}
                 color="success"
                 size="sm"
                 onClick={() => ViewCity(item.id)}

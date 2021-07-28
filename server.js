@@ -1,12 +1,10 @@
 require('dotenv').config();
 const fileStream = require("fs");
 //creates database connection
-(async () =>{
-    db =  await require("./core/db");
+(async () => {
+    db = await require("./core/db");
     await db();
 })();
-
-
 
 //function that will check all the passed .env variables are set
 //if any is missing then it will terminate the server
@@ -30,7 +28,7 @@ const fileStream = require("fs");
     'ADMIN_ADD_TOKEN',
     'NOTIFICATION_STATUS',
     'PRODUCTION',
-    
+
     'ENABLE_MAIL',
     'SMTP_HOST',
     'SMTP_PORT',
@@ -45,10 +43,6 @@ let httpx = require('./httpx');
 //intialize and start express server
 const express = require('express');
 const app = express();
-
-
-
-
 
 
 let options = {
@@ -90,7 +84,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
 app.use(express.static(__dirname + '/pharma_dashboard/build'));
 app.use('/core/uploads/products/img', express.static('core/uploads/products/img'));
 app.use('/core/uploads/products/vis', express.static('core/uploads/products/vis'));
@@ -111,13 +104,12 @@ let webApi = require("./api/web/routes");
 
 app.use('/api/app/', appApi)
 app.use('/api/web/', webApi)
-app.get('*', function(req, res) {
+app.get('*', function (req, res) {
     res.sendFile(__dirname + '/pharma_dashboard/build');
 });
 
 require("./birthday_notification/index.js")
 let fs = require("./core/lib/FileStream.js");
-
 
 
 fs.createConstantfileinFrontEnd('pharma_dashboard/src/constants.js');
@@ -127,11 +119,8 @@ fs.createEssentialDirectories();
 let stateCityCtrl = require("./core/controllers/stateCity");
 stateCityCtrl.bulkAddStateCities();
 
-
-
-
-    //app.listen(process.env.PORT, () => console.log('Rep Server Running...'))
-http.listen(process.env.PORT, function(err) {
+//app.listen(process.env.PORT, () => console.log('Rep Server Running...'))
+http.listen(process.env.PORT, function (err) {
     if (err) {
         console.log(err);
     } else {
