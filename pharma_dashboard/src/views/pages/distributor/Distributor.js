@@ -201,7 +201,7 @@ class Distributor extends Component {
                         deleteItemFromState={this.deleteItemFromState}
                       />
                       {
-                        this.state.search === "" && this.state.rowPerPage > 20?
+                        this.state.search === "" ?
                           <div className={'mt-2'} >
                             <CPagination
                               className="pagination"
