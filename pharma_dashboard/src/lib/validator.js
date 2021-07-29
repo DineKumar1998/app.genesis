@@ -51,7 +51,7 @@ function isGstNo(inputtxt) {
 }
 
 function isBankAccNo(inputtxt) {
-    if(inputtxt >= 9 && inputtxt <= 18) {
+    if(inputtxt >= 9 || inputtxt <= 18) {
       return true;
     }
     else {
