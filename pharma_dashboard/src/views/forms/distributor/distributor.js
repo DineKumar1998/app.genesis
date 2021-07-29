@@ -7,7 +7,7 @@ import { AddRepAndFranchisee, UpdateRepAndFranchisee } from '../../../api/distri
 import { GetFranchisee } from '../../../api/distributor/franchisee'
 import moment from "moment";
 import CONFIG from "./../../../config";
-import {isAadhar, isAddress, isBankAccNo, isEmail, isGstNo, isIfsc, isName, isPassword, isPhonenumber} from '../../../lib/validator'
+import {isAadhar, isAddress, isEmail, isGstNo, isIfsc, isName, isPassword, isPhonenumber} from '../../../lib/validator'
 
 async function readDataUrl(file) {
   return new Promise((resolve, reject) => {
@@ -261,10 +261,11 @@ class AddEditForm extends React.Component {
         return NotificationManager.error("Please Enter Valid Drug Licence No.", "Error", 2000);
     else if (this.state.bank_name !== "" && this.state.bank_name !== null && !isName(this.state.bank_name)) 
           return NotificationManager.error("Invalid Bank Name", "Error", 2000);
-    else if (this.state.bank_acc_no !== "" && this.state.bank_acc_no !== null){ if(!isBankAccNo(this.state.bank_acc_no)) 
-        return NotificationManager.error("Invalid Bank Acc No.", "Error", 2000);}
+    else if (this.state.bank_acc_no !== "" && this.state.bank_acc_no !== null && !this.state.bank_acc_no > 9)
+        return NotificationManager.error("Invalid Bank Acc No.", "Error", 2000);
     else if (this.state.bank_ifsc !== "" && this.state.bank_ifsc !== null && ! isIfsc(this.state.bank_ifsc)) 
         return NotificationManager.error("Invalid IFSC Code", "Error", 2000);
+
     else if (this.state.bank_payee_name !== "" && !isName(this.state.bank_payee_name)) 
         return NotificationManager.error("Invalid Payee Name", "Error", 2000);
     else if (this.state.name !== null && ! isName(this.state.name)) 
