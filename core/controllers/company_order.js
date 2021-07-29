@@ -165,7 +165,7 @@ exports.getOrder = async(orderprops) => {
                             if(fs.existsSync(img.url))
                             images.push({
                                 type: img.type,
-                                url :`${process.env.BASE_URL}${img.url}`
+                                url :`${process.env.BASE_URL}/${img.url}`
                             })
                         })
                     }
