@@ -5,6 +5,7 @@ import {
   CRow,
 } from '@coreui/react'
 import { GetAbout } from 'src/api/about/about.js'
+import bannerImg from '../../../assets/dashboard/banner.jpg'
 
 const WidgetsDropdown = lazy(() => import('../../widgets/WidgetsDropdown.js'))
 
@@ -39,7 +40,7 @@ const Dashboard = () => {
       <CCard>
         <CCardBody>
           <CRow>
-            <img alt="banner" style={{width:"100%"}} src={banner}/> 
+            <img alt="banner" style={{width:"100%"}} src={bannerImg}/> 
           </CRow>
         </CCardBody>
       </CCard> 
