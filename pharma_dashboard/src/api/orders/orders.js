@@ -3,8 +3,10 @@ import C from '../../constants';
 
 const URL = `${C.API_URL}/orders`;
 
+const URLComp = `${C.API_URL}/companyOrder`;
+
 const GetCompanyOrders = async () => {
-    let rs = await fetcher({ method: "post", url: `${URL}/companyOrder/get` })
+    let rs = await fetcher({ method: "post", url: `${URLComp}/get` })
     return rs
 }
 
@@ -14,7 +16,7 @@ const GetOrders = async () => {
 }
 
 const GetOrdersCount = async () => {
-    let rs = await fetcher({ method: "post", url: `${URL}/companyOrder/count` })
+    let rs = await fetcher({ method: "post", url: `${URLComp}/count` })
     return rs
 }
 
