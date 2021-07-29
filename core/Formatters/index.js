@@ -144,7 +144,7 @@ exports.CompanyAboutFormatter = (about, divisions) => {
      }
 
      
-     about.about_img = newImg.toString()
+     about.about_img = newImg[0].toString()
 
 
     return {
