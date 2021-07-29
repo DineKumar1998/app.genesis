@@ -12,7 +12,7 @@ function isPhonenumber(inputtxt) {
 
 function isAddress(inputtxt) {
     let address = inputtxt.trim()
-    const pattern = RegExp(/^[0-9a-zA-Z. ]+$/);
+    const pattern = RegExp(/^(\w*\s*[\#\-\,\/\.\(\)\&]*)+/);
     if(pattern.test(inputtxt) && address.length > 5) {
       return true;
     }
@@ -51,8 +51,7 @@ function isGstNo(inputtxt) {
 }
 
 function isBankAccNo(inputtxt) {
-    const pattern = RegExp(/^\d{9,18}$/);
-    if(pattern.test(inputtxt)) {
+    if(inputtxt >= 9 && inputtxt <= 18) {
       return true;
     }
     else {
