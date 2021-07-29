@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Container, Row, Col } from "reactstrap";
-import { GetCompanyOrders, GetOrders } from "src/api/orders/orders";
+import { GetOrders } from "src/api/orders/orders";
 import Table from "../../tables/order/order";
 import Page404 from "../page404/Page404";
 import Select from 'react-select'
@@ -36,8 +36,8 @@ class Orders extends Component {
 
   getData = async () => {
 
-    this.setState({ loading: true })
-    let rs = await GetCompanyOrders();
+    this.setState({loading : true})
+    let rs = await GetOrders();
     let rsDiv = await GetDivisionType()
     if (rs.success === true && rsDiv.success === true) {
 
@@ -126,6 +126,7 @@ class Orders extends Component {
                         // isSearchable
                         placeholder="Choose Divison"
                         options={this.state.divisionType} />
+
                     </div>
                   </div>
                 </Col>

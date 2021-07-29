@@ -3,20 +3,13 @@ import C from '../../constants';
 
 const URL = `${C.API_URL}/orders`;
 
-const URLComp = `${C.API_URL}/companyOrder`;
-
-const GetCompanyOrders = async () => {
-    let rs = await fetcher({ method: "post", url: `${URLComp}/get` })
-    return rs
-}
-
 const GetOrders = async () => {
     let rs = await fetcher({ method: "post", url: `${URL}/get` })
     return rs
 }
 
 const GetOrdersCount = async () => {
-    let rs = await fetcher({ method: "post", url: `${URLComp}/count` })
+    let rs = await fetcher({ method: "post", url: `${URL}/count` })
     return rs
 }
 
@@ -26,4 +19,4 @@ const DeleteOrder = async (id) => {
 };
 
 
-export { GetOrders, DeleteOrder, GetOrdersCount, GetCompanyOrders };
+export { GetOrders, DeleteOrder, GetOrdersCount };
