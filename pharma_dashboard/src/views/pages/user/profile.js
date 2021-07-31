@@ -157,7 +157,7 @@ class Profile extends React.Component {
                             <div className="row justify-content-center">
                                 <div className="col-lg-3 order-lg-2"   >
                                     <div className="card-profile-image" style={{ marginTop: "120px" }}>
-                                        <img src={profileImg || this.state.info.image} alt="upload file" style={{ width: "150px", borderRadius: "50%" }} className="d-block mx-auto mb-4 " />
+                                        <img src={profileImg || this.state.info.image} alt="upload file" style={{ width: "150px", height: "150px", borderRadius: "50%" }} className="d-block mx-auto mb-4 " />
                                     </div>
                                 </div>
                             </div>
