@@ -14,7 +14,10 @@ class Card extends React.Component {
       id: "",
       images: [],
       visualate: [],
-      updated: false
+      updated: false,
+      isOpen : false, 
+      imgUrl : false,
+      alt : false
     };
 
     // Define inline styles
@@ -28,6 +31,12 @@ class Card extends React.Component {
     // this.state.updated
 
   }
+
+  showModalImg = (imgUrl, alt) => { 
+    this.setState({isOpen : true})
+    this.setState({imgUrl  : imgUrl})
+    this.setState({alt : alt})
+      }
 
   // ***************************** Component Did Mount *******************************
 
@@ -60,7 +69,12 @@ class Card extends React.Component {
             {imgType === "IMG" ? <div className="ribbon-wrapper-green"><div className="ribbon-green">Image</div></div> :
               <div className="ribbon-wrapper-blue"><div className="ribbon-blue">Visualate</div></div>}
             <div className="imgBox">
-              <img src={img} alt="product" />
+              {
+                imgType === "IMG" ?
+                  <img onClick={() => this.setState({isOpen : true})} src={img} alt="Image" />
+                  :
+                  <img onClick={() => this.setState({isOpen : true})} src={img} alt="visulate" />
+              }
             </div>
             <div className="content">
               <div className="contentBox">
@@ -98,6 +112,27 @@ class Card extends React.Component {
               type={imgType} />
           </Col>
         </Row>
+
+        {this.state.isOpen === true ? (
+              <div className="modalImg">
+                <span className="closeImg" onClick={() => this.setState({isOpen : false})}>
+                  &times;
+                </span>
+                
+                {/* <img className="modal-contentImg" src={imgUrl} alt={alt} /> */}
+
+                {
+                imgType === "IMG" ?
+                  <img src={img} alt="Image" className="modal-contentImg" />
+                  :
+                  <img src={img} alt="visulate"  className="modal-contentImg" />
+              }
+
+                <div className="captionImg">{imgType} - {name}</div>
+              </div>
+            )
+              : <> </>
+            }
       </div>
     );
   }
@@ -125,60 +160,60 @@ class CardGridView extends React.Component {
     }
   };
 
-   // ****************** ActivePageChange Function *****************************
+  // ****************** ActivePageChange Function *****************************
 
-   activePageChange = (item) => {
+  activePageChange = (item) => {
     this.setState({ currentPage: item })
     this.setState({ updated: true })
     window.scroll({
-      top: 0, 
-      left: 0, 
-      behavior: 'smooth' 
-     });
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
   };
 
 
 
-    // ****************** getData Function *****************************
+  // ****************** getData Function *****************************
 
 
 
-  getData = async() => {
+  getData = async () => {
 
-    this.setState({loading : true})
+    this.setState({ loading: true })
     let skip = 0
-      if (this.state.currentPage === 0) {
-        skip = 1 * this.state.rowPerPage
-      }
+    if (this.state.currentPage === 0) {
+      skip = 1 * this.state.rowPerPage
+    }
 
+    else {
+      skip = this.state.currentPage * this.state.rowPerPage
+    }
+
+
+    let skipVal = skip - this.state.rowPerPage
+    let rs = await GetProducts({
+      "limit": this.state.rowPerPage,
+      "skip": skipVal
+    })
+
+    let rsCount = await GetProductsCount()
+    if (rs.success === true && rsCount.success === true) {
+      let page = rsCount.data.count / this.state.rowPerPage
+      let num = Number(page) === page && page % 1 !== 0;
+      if (num === true) {
+        var str = page.toString();
+        var numarray = str.split('.');
+        var a = parseInt(numarray)
+        this.setState({ totalPage: a + 1 });
+      }
       else {
-        skip = this.state.currentPage * this.state.rowPerPage
+        this.setState({ totalPage: page });
       }
 
+      let newData = [];
 
-      let skipVal = skip - this.state.rowPerPage
-      let rs = await GetProducts({
-        "limit": this.state.rowPerPage,
-        "skip": skipVal
-      })
-
-      let rsCount = await GetProductsCount()
-      if (rs.success === true && rsCount.success === true) {
-        let page = rsCount.data.count / this.state.rowPerPage
-        let num = Number(page) === page && page % 1 !== 0;
-        if (num === true) {
-          var str = page.toString();
-          var numarray = str.split('.');
-          var a = parseInt(numarray)
-          this.setState({ totalPage: a + 1 });
-        }
-        else {
-          this.setState({ totalPage: page });
-        }
-
-        let newData = [];
-
-        rs.data.map((it) => {
+      rs.data.map((it) => {
         if (Array.isArray(it.images)) {
           it.images.map((img) => {
             newData.push({
@@ -196,7 +231,7 @@ class CardGridView extends React.Component {
         return null
       });
       this.setState({ data: newData });
-      }
+    }
 
     // let rs = await GetProducts(
     // );
@@ -223,15 +258,15 @@ class CardGridView extends React.Component {
     //   this.setState({ data: newData });
     // }
     // else {
-      // this.setState({ data: true });
+    // this.setState({ data: true });
     // }
 
-    this.setState({loading : false})
+    this.setState({ loading: false })
 
   }
 
 
-  
+
 
 
   // ****************** componentDidMount Function *****************************
@@ -240,7 +275,7 @@ class CardGridView extends React.Component {
 
   async componentDidMount() {
     this.getData()
-  
+
   }
   // ***************************** Component Did Update *******************************
 
@@ -270,8 +305,8 @@ class CardGridView extends React.Component {
       //   this.setState({ data: updatedData });
       this.getData()
       this.setState({ updated: false })
-      }
-    
+    }
+
   }
 
   render() {
@@ -279,24 +314,21 @@ class CardGridView extends React.Component {
       <>
         {this.state.loading ? <div className="loader"></div> :
           <div className="gallery_container" >
-          {this.state.data.length === 0 ? <Page404 /> : 
-          <div className="card-grid-view row" >
-            {this.state.data.map((cardData, index) => (
-              <Card updated={this.updateState} data={cardData} key={"card-id-" + index} />
-            ))}
-
-          </div>
-        }
-
+            {this.state.data.length === 0 ? <Page404 /> :
+              <div className="card-grid-view row" >
+                {this.state.data.map((cardData, index) => (
+                  <Card updated={this.updateState} data={cardData} key={"card-id-" + index} />
+                ))}
+              </div>
+            }
             <div className='page_margin'  >
-                   <CPagination
-                    className="pagination justify-content-center"
-                     activePage={this.state.currentPage}
-                     pages={this.state.totalPage}
-                     onActivePageChange={(e) => this.activePageChange(e)}
-                   ></CPagination>
-                 </div>
-
+              <CPagination
+                className="pagination justify-content-center"
+                activePage={this.state.currentPage}
+                pages={this.state.totalPage}
+                onActivePageChange={(e) => this.activePageChange(e)}
+              ></CPagination>
+            </div>
           </div>
         }
       </>

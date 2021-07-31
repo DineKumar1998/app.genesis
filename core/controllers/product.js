@@ -155,7 +155,7 @@ exports.addProduct = async (productImages, product) => {
         packing_type: product.packing_type ? product.packing_type : null,
         sku: product.sku ? product.sku : null,
         hsn_code: product.hsn_code ? product.hsn_code : null,
-        new_launched: product.new_launched === true,
+        new_launched: product.new_launched ? product.new_launched : false,
         details: product.details ? product.details : null,
         created_on: new Date(Date.now())
     }
