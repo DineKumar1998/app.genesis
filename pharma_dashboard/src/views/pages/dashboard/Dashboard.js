@@ -17,19 +17,19 @@ const Dashboard = () => {
     async function fetchMyAPI() {
       let response = await GetAbout()   
 
-      if(response.success === true && response.data != null && response.data.about_img != null) {
-        let newImg = response.data.about_img.split(",")
-        setBanner(newImg[0])
-
+      if(response.success === true && response.data != null && response.data.about_img != null) {        
+        setBanner(response.data.about_img)
       }
       else {
-        setBanner(process.env.PUBLIC_URL + 'src/images/dashboard/banner.jpg')
+        setBanner(bannerImg)
       }
       setLoading(false)
     }
 
     fetchMyAPI()
   }, [])
+
+  {console.log("banner", banner)}
 
   return (
     <>
@@ -40,7 +40,7 @@ const Dashboard = () => {
       <CCard>
         <CCardBody>
           <CRow>
-            <img alt="banner" style={{width:"100%"}} src={bannerImg}/> 
+            <img alt="banner" style={{width:"100%"}} src={banner}/> 
           </CRow>
         </CCardBody>
       </CCard> 
