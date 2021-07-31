@@ -3,7 +3,11 @@ import "../aboutUs/styles.scss"
 import { NotificationManager } from "react-notifications";
 import { UserChangePassword, UserInfoUpdate, UserProfile } from "src/api/user/user";
 // import Constants from "src/secrets";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from 'reactstrap';
+
 import User from '../../../assets/images/user.png'
+import { AdminLogin } from "src/api/login/login";
+
 
 async function readDataUrl(file) {
     return new Promise((resolve, reject) => {
@@ -18,10 +22,17 @@ class Profile extends React.Component {
     state = {
         info: {}, id: "",
         name: "", email: "", phone: "", company: "",
-        oldPassword: "", newPassword: "", confirmNewPassword: "",
+        oldPassword: "", newPassword: "", confirmNewPassword: "", currentPassword: "",
         file: null, image: null, base64: null, objectUrl: null, valid: false, updated: false,
-        checkImg: false
+        checkImg: false, modal: false, loading: false
     };
+
+
+    toggle = () => {
+        this.setState(prevState => ({
+            modal: !prevState.modal
+        }))
+    }
 
 
     // ******************************ON CHANGE Image*************************************
@@ -54,8 +65,15 @@ class Profile extends React.Component {
 
     saveInfo = async (e) => {
         e.preventDefault();
+        if (!this.state.currentPassword.trim()) {
+            return NotificationManager.error("Please Enter Your Current Password", "Info", 2000)
+        }
         await this.validation("INFO")
         if (this.state.valid === true) {
+
+            // update user info
+            this.setState({ loading: true })
+
             let rs = await UserInfoUpdate({
                 id: this.state.id,
                 profile_pic: this.state.file,
@@ -64,12 +82,35 @@ class Profile extends React.Component {
                 company: this.state.company,
                 phone: this.state.phone
             })
-            if (rs) {
+
+            // login user
+
+            let rsLogin = await AdminLogin({
+                email: this.state.info.email,
+                password: this.state.currentPassword
+            })
+
+
+
+            if (rs.success === true && rsLogin.success === true) {
                 NotificationManager.info("Info Updated Successfully", "Info", 2000);
-                localStorage.removeItem("token")
-                window.location.assign("/")
+                localStorage.setItem("token", rsLogin.data.token)
+                window.location.reload()
             }
+            else {
+                // NotificationManager.error(rs.message, "Info", 2000)
+                NotificationManager.error(rsLogin.message, "Info", 2000)
+                this.setState({ valid: false })
+            }
+
+            // if (rs.success === true) {
+            //     NotificationManager.info("Info Updated Successfully", "Info", 2000);
+            //     localStorage.removeItem("token")
+            //     window.location.assign("/")
+            // }
         }
+        this.setState({ loading: false })
+
     };
 
     // ****************************** CHANGE PASSWORD *************************************
@@ -86,7 +127,7 @@ class Profile extends React.Component {
             if (rs.success === true) {
                 NotificationManager.success("Password Changed Successfully", "Info", 2000);
             }
-            else{
+            else {
                 NotificationManager.error("Incorrect Password", "Info", 2000);
             }
         }
@@ -157,7 +198,7 @@ class Profile extends React.Component {
                             <div className="row justify-content-center">
                                 <div className="col-lg-3 order-lg-2"   >
                                     <div className="card-profile-image" style={{ marginTop: "120px" }}>
-                                        <img src={profileImg || this.state.info.image} alt="upload file" style={{ width: "150px", height: "150px", borderRadius: "50%" }} className="d-block mx-auto mb-4 " />
+                                        <img src={profileImg || this.state.info.image} alt="upload file" style={{ width: "150px", height : "150px", borderRadius: "50%" }} className="d-block mx-auto mb-4 " />
                                     </div>
                                 </div>
                             </div>
@@ -236,7 +277,7 @@ class Profile extends React.Component {
                                 <div className="pl-lg-4">
                                     <div className="row">
                                         <div className="col-lg-5 mx-auto" >
-                                            <img src={base64 || defaultImage} alt="upload file" style={{ width: "100px", height :"100px", borderRadius: "50%" }} className="d-block mx-auto mb-4 " />
+                                            <img src={base64 || defaultImage} alt="upload file" style={{ width: "100px", height: "100px", borderRadius: "50%" }} className="d-block mx-auto mb-4 " />
                                         </div>
                                     </div>
                                     <div className="col-lg-5 mx-auto">
@@ -246,8 +287,8 @@ class Profile extends React.Component {
                                     </div>
                                     {/* <hr className="my-4" /> */}
 
-                                    <div style={{ marginBottom: "100px", marginTop : "40px" }}>
-                                        <button className="prof_save_button" onClick={this.saveInfo} 
+                                    <div style={{ marginBottom: "100px", marginTop: "40px" }}>
+                                        <button className="prof_save_button" onClick={this.toggle}
                                         ><i className="fas fa-save"></i> Save Changes</button>
                                     </div>
                                 </div>
@@ -281,15 +322,32 @@ class Profile extends React.Component {
                                                 onChange={(e) => this.setState({ confirmNewPassword: e.target.value })} />
                                         </div>
                                     </div>
-                                  
+
                                 </div>
-                                <div style={{marginTop : "40px"}}/>
-                                <button className="prof_save_button" onClick={this.savePassword} 
+                                <div style={{ marginTop: "40px" }} />
+                                <button className="prof_save_button" onClick={this.savePassword}
                                 ><i className="fa fa-lock" style={{ color: "white" }}></i> Save Password</button>
                             </div>
                         </div>
                     </div>
                 </div>
+                <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                    <ModalHeader toggle={this.toggle}>Save User Info</ModalHeader>
+                    <ModalBody>
+                        <FormGroup>
+                            <Label for="currentPassword"  >Enter Password</Label>
+                            <Input type="password" name="currentPassword" value={this.state.currentPassword}
+                                onChange={(e) => this.setState({ currentPassword: e.target.value })} />
+                        </FormGroup>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="success" onClick={this.saveInfo}>
+                            {this.state.loading ? <>
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                {" "} Loading... </> : <>Save Info</>}
+                        </Button>{' '}
+                    </ModalFooter>
+                </Modal>
             </div>
         );
     };
