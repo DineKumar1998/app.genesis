@@ -18,7 +18,7 @@ const Table = (props) => {
 
   const fields = [
     { key: "name", label: "Name", },
-    { key: "active", label: "active", },
+    // { key: "active", label: "active", },
     { key: "Edit", label: "", _style: { width: "1%" }, sorter: false, filter: false,},
     { key: "Delete", label: "", _style: { width: "1%" }, sorter: false, filter: false,},
   ];
@@ -69,13 +69,13 @@ const Table = (props) => {
             </td>
           )
         },
-        active: (item) => {
-          return (
-            <td className="py-2">
-              <CBadge color={getBadge(item.active)}>{item.active === true ? <span>Active</span> : <span>Inactive</span>}</CBadge>
-            </td>
-          )
-        },
+        // active: (item) => {
+        //   return (
+        //     <td className="py-2">
+        //       <CBadge color={getBadge(item.active)}>{item.active === true ? <span>Active</span> : <span>Inactive</span>}</CBadge>
+        //     </td>
+        //   )
+        // },
         Edit: (item) => {
           return (
             <td className="py-2">
