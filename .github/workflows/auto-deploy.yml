@@ -26,4 +26,4 @@ jobs:
             git pull https://${{ secrets.GIT_RAM_USERNAME }}:${{ secrets.GIT_RAM_PASSWORD }}@github.com/ramwh/pharma-app-dashboard-new.git master
             git status
             npm run build
-            pm2 restart pharma_demo_new
+            pm2 restart PharmaAppDemo
