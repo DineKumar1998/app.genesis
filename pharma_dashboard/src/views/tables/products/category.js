@@ -4,7 +4,7 @@ import ModalForm from "src/views/model/products/categoryType";
 import { IconDelete } from "../../icon";
 import NotificationManager from "react-notifications/lib/NotificationManager";
 import { DeleteCategoryType } from "src/api/products/category/category";
-import ConfirmDelete from '../../../lib/deleteDilog'
+import ConfirmDelete from '../../../lib/deleteDilog';
 import { ModalContext } from "src/lib/context";
 
 const Table = (props) => {

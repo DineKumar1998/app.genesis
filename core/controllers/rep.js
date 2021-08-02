@@ -851,6 +851,12 @@ exports.repSearch = async(repSearchFilter) => {
         let filter = {}
         if (repSearchFilter) filter = repSearchFilter;
         let repRecords = await searchReps(filter);
+
+        
+    if (!repRecords) return null;
+    repRecords = repRecords.map(it => {
+        return Formatter.RepFormatter(it)
+    })
     
     return repRecords;
 }
