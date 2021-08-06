@@ -48,6 +48,17 @@ const AddRepAndFranchisee = async (data) => {
  return rs
 }
 
+const ActivateDistributer = async (data) => {
+  var bodyFormData = new FormData();
+  bodyFormData.append('id', data.id);
+  bodyFormData.append('active', data.active);
+  let DsRs = await fetcher({ method: "post", url: `${URL}/update`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" } })
+
+  return DsRs
+  
+}
+
+
 const UpdateRepAndFranchisee = async (data) => {
 
   var bodyFormData = new FormData();
@@ -78,6 +89,9 @@ const UpdateRepAndFranchisee = async (data) => {
   bodyFormDataDst.append('aadhar_no', data.aadhar_no);
   bodyFormDataDst.append('image', data.profile_pic);
   bodyFormDataDst.append('active', data.active);
+  bodyFormDataDst.append('employee', data.employee);
+
+
 
   let rs = await fetcher({ method: "post", url: `${URLDist}/update`, data: bodyFormData, headers: { "Content-Type": "multipart/form-data" } })
   let DsRs = await fetcher({ method: "post", url: `${URL}/update`, data: bodyFormDataDst, headers: { "Content-Type": "multipart/form-data" } })
@@ -122,4 +136,4 @@ const UploadDistributorExcel = async (data) => {
 }
 
 
-export { GetDistributor, SearchDistributor, UploadDistributorExcel, AddRepAndFranchisee, DeleteRepAndFranchisee, DistributorCount, UpdateRepAndFranchisee };
+export { GetDistributor, SearchDistributor, ActivateDistributer , UploadDistributorExcel, AddRepAndFranchisee, DeleteRepAndFranchisee, DistributorCount, UpdateRepAndFranchisee };

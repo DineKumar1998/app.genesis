@@ -4,7 +4,7 @@ import { NotificationManager } from "react-notifications";
 import { UserChangePassword, UserInfoUpdate, UserProfile } from "src/api/user/user";
 // import Constants from "src/secrets";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, FormGroup, Label, Input } from 'reactstrap';
-
+import { isAddress, isEmail, isName, isPhonenumber } from "src/lib/validator";
 import User from '../../../assets/images/user.png'
 import { AdminLogin } from "src/api/login/login";
 
@@ -86,7 +86,7 @@ class Profile extends React.Component {
             // login user
 
             let rsLogin = await AdminLogin({
-                email: this.state.info.email,
+                email: this.state.email,
                 password: this.state.currentPassword
             })
 
@@ -137,10 +137,10 @@ class Profile extends React.Component {
 
     validation = (type) => {
         if (type === "INFO") {
-            if (!this.state.name.trim()) { return NotificationManager.error("Enter your Name", "Info", 2000) }
-            if (!this.state.company.trim()) { return NotificationManager.error("Enter your Company", "Info", 2000) }
-            if (!this.state.phone.trim()) { return NotificationManager.error("Enter your Phone", "Info", 2000) }
-            if (!this.state.email.trim()) { return NotificationManager.error("Enter your Email", "Info", 2000) }
+            if (! isName(this.state.name)) { return NotificationManager.error("Enter your Name", "Info", 2000) }
+            if (! isAddress(this.state.company)) { return NotificationManager.error("Enter your Company", "Info", 2000) }
+            if (!isPhonenumber(this.state.phone)) { return NotificationManager.error("Enter your Phone", "Info", 2000) }
+            if (!isEmail(this.state.email)) { return NotificationManager.error("Enter your Email", "Info", 2000) }
             this.setState({ valid: true })
         }
         else {

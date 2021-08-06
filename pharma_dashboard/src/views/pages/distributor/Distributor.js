@@ -15,7 +15,7 @@ class Distributor extends Component {
       update: false,
       currentPage: 1,
       totalPage: 0,
-      rowPerPage: 20,
+      rowPerPage: 10,
       loading: true,
       search: ""
     };

@@ -7,6 +7,7 @@ const repSchema = new mongoose.Schema({
     email: { type: String, required: [true, "Rep Email is Required"] },
     phone: { type: String, required: [true, "Rep Phone Number is Required"] },
     aadhar_no: { type: String, default: null },
+    employee: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee', required: [true, "Rep Employee Id is Required"] },
     city: { type: String },
     state: { type: String },
     address: { type: String, default: null },

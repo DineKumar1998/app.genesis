@@ -38,7 +38,11 @@ const RegisterRepandFranchisee = async(req,res,next)=>{
     if (!req.body.password) return next( new Error('rep password is Required'));
     // if (!req.body.op_area) return next( new Error('rep Operation area is Required'));
     // if(!req.body.city) req.body.city = "";
-    // if(!req.body.state) req.body.state = "";
+    // if(!req.body.state) req.body.state = ""
+
+    if (!req.body.employee) return next( new Error('Employee Name is Required'));
+
+
     let franchiseeData = {
         name:req.body.firm_name,
         gst_number:req.body.gst_number,
@@ -64,7 +68,8 @@ const RegisterRepandFranchisee = async(req,res,next)=>{
         dob:req.body.dob,
         password:req.body.password,
         op_area:req.body.op_area,
-        is_owner :true
+        is_owner :true,
+        employee : req.body.employee,
     }
     try {
         let repCheck = await repController.getRep({email:repData.email})

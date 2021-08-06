@@ -24,6 +24,7 @@ const Download = React.lazy(() => import('./views/pages/download/Download'))
 const State = React.lazy(() => import('./views/pages/stateAndCity/State'))
 const City = React.lazy(() => import('./views/pages/stateAndCity/City'))
 const Profile = React.lazy(() => import('./views/pages/user/profile'))
+const Employee = React.lazy(() => import('./views/pages/employee'))
 
 
 const routes = [
@@ -48,6 +49,8 @@ const routes = [
   { path: '/enquiries', name: 'Enquiries', component: Enquiries },
   { path: '/download', name: 'Download', component: Download },
   { path: '/state',exact: true, name: 'State', component: State },
+  { path: '/employee',exact: true, name: 'Employee', component: Employee },
+
   { path: '/state/city/:id', name: 'City', component: City },
 ];
 

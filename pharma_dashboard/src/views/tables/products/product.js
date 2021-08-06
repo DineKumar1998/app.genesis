@@ -34,6 +34,7 @@ const Table = (props) => {
     { key: "type_name", label: "Type Name", },
     { key: "price_", label: "Price", },
     { key: "images", label: "Images & Visualate", },
+    { key: "division_name", label: "Division", },
     { key: "sku_", label: "SKU", },
     { key: "hsn_code", label: "HSN", },
     { key: "Edit", label: "", _style: { width: "1%" }, sorter: false, filter: false, },
@@ -96,6 +97,14 @@ const Table = (props) => {
                   return (
                     <td className="py-2">
                       {item.hsn_code === null || item.sku === "undefined" ? <b>--</b> : <p>{item.hsn_code}</p>}
+                    </td>
+                  )
+                },
+                division_name
+                : (item) => {
+                  return (
+                    <td className="py-2">
+                      {item.division_name === null || item.sku === "undefined" ? <b>--</b> : <p style={{fontSize : "11px", color : "green"}}>{item.division_name}</p>}
                     </td>
                   )
                 },

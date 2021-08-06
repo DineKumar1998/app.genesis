@@ -3,7 +3,7 @@ import { CBadge, CButton, CDataTable,  } from "@coreui/react";
 import { IconDelete } from "src/views/icon";
 import ModalForm from "src/views/model/distributor/distributorModel";
 import { Link } from "react-router-dom";
-import { DeleteRepAndFranchisee} from "src/api/distributor/distributor";
+import { ActivateDistributer, DeleteRepAndFranchisee,} from "src/api/distributor/distributor";
 import { NotificationManager } from "react-notifications";
 import Model from '../../model/distributor/Franchisee'
 import ConfirmDelete from '../../../lib/deleteDilog'
@@ -16,7 +16,7 @@ const Table = (props) => {
   const loading = props.loading
   const [showModal, updateShowModal] = React.useState(false);
   const [deleteItemId, setDeleteItemId] = React.useState(false);
-  // const [active, setActive] =  React.useState(false);
+  // const [active, setActive] =  React.useState(Data.active);
 
   // const toggle = (status) =>{
 
@@ -26,7 +26,33 @@ const Table = (props) => {
   
   // }
 
-  const toggleModal = (id) => { updateShowModal(state => !state); setDeleteItemId(id) };
+  const toggleModal = (id) => { updateShowModal(state => !state); setDeleteItemId(id); console.log("run") };
+
+
+  const activeDist = async (id, active) => {
+
+    let status = false
+
+    if (active === true) { status = false}
+    else { status = true }
+    
+    let rs = await ActivateDistributer({
+      id : id ,
+      active : status
+    });
+    if (rs.success === true) {
+      props.updateState(true);
+      if (rs.data.active === true) {
+        NotificationManager.success("Distributor Activated Successfully", "Success", 2000);
+      } else {
+        NotificationManager.info("Distributor DeActivated Successfully", "Info", 2000);
+      }
+    }
+    else {
+      NotificationManager.error('Something went wrong', "Error", 2000);
+    }
+    toggleModal();
+  }
 
   const fields = [
     { key: "name", label: "Name" },
@@ -47,7 +73,7 @@ const Table = (props) => {
       case true:
         return "success";
       case false:
-        return "secondary";
+        return "danger";
       default:
 
     }
@@ -90,12 +116,12 @@ const Table = (props) => {
             <td className="py-2">
 
             {item.active === true ?
-                <CBadge  color={getBadge(item.active)}>
+                <CBadge style={{cursor : "pointer"}} onClick={() => activeDist(item.id, item.active)}  color={getBadge(item.active)}>
                   <span>Active</span>
                 </CBadge>
                 :
-                <CBadge  color={getBadge(item.active)}>
-                  <span>Inactive</span>
+                <CBadge style={{cursor : "pointer"}} onClick={() => activeDist(item.id, item.active)}   color={getBadge(item.active)}>
+                  <span>Click to Activate</span>
                 </CBadge>
                  }
             
@@ -174,7 +200,6 @@ const Table = (props) => {
         },
       }}
     />
-
     <ModalContext.Provider value={{ showModal, toggleModal, deleteItem, id: `${deleteItemId}` }}>
       <ConfirmDelete canShow={showModal} updateModalState={toggleModal} />
     </ModalContext.Provider>

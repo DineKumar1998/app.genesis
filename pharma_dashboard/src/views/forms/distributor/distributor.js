@@ -8,6 +8,7 @@ import { GetFranchisee } from '../../../api/distributor/franchisee'
 import moment from "moment";
 import CONFIG from "./../../../config";
 import {isAadhar, isAddress, isEmail, isGstNo, isIfsc, isName, isPassword, isPhonenumber} from '../../../lib/validator'
+import { GetEmployee } from "src/api/employee";
 
 async function readDataUrl(file) {
   return new Promise((resolve, reject) => {
@@ -49,6 +50,9 @@ class AddEditForm extends React.Component {
     aadhar_no: "",
     active: "true",
     file: null, image: null, base64: null, objectUrl: null,
+    employee : '',
+    employeeList : [],
+    selectEmployee : [],
 
     divisionsList: [],
     selectedDivision: [],
@@ -170,6 +174,7 @@ class AddEditForm extends React.Component {
     e.preventDefault();
     await this.validation();
     let newActive = null;
+    let employee = ""
     let divisions = []
     if (Array.isArray(this.state.selectedDivision)) {
       this.state.selectedDivision.map((it) => {
@@ -177,8 +182,10 @@ class AddEditForm extends React.Component {
         return true
       })
     }
+    if (this.state.selectEmployee.value !== null){employee = this.state.selectEmployee.value}
     if (this.state.active === "true") { newActive = true }
     else { newActive = false }
+    
     if (this.state.valid === true) {
 
       let fields = {
@@ -210,7 +217,9 @@ class AddEditForm extends React.Component {
         state: this.state.state,
         aadhar_no: this.state.aadhar_no,
         active: newActive,
+        employee : employee ,
       }
+
       
       // if (CONFIG.FIRM_GST_NUMBER) fields.gst_number = this.state.gst_number;
       // if (CONFIG.FIRM_DRUG_LICENCE) fields.drug_license = this.state.drug_license;
@@ -297,14 +306,36 @@ class AddEditForm extends React.Component {
       return NotificationManager.error("Password must be 6 characters long", "Error", 2000);
     }
     else { this.setState({ valid: true });}
-    };
+    }
 
   // ****************** componentDidMount Function *****************************
 
   async componentDidMount() {
     if (this.props.item) {
-      const { id, name, email, phone, address, op_area, aadhar_no } = this.props.item;
-      this.setState({ id, name, email, phone, address, op_area, aadhar_no });
+      const { id, name, email, phone, address, op_area, aadhar_no,  } = this.props.item;
+      this.setState({ id, name, email, phone, address, op_area, aadhar_no ,  });
+
+      let respEmp = await GetEmployee()
+
+      if (respEmp.success === true){
+        let EmpList = []
+        if (Array.isArray(respEmp.data)) {
+          respEmp.data.map((it) => {
+            EmpList.push({ value: it.id, label: it.name })
+            return true
+          })
+        }
+         this.setState({employeeList : EmpList})
+      }
+
+      let newEmp = null ;
+
+      if(this.props.employee_id !== null) {
+         newEmp = {value : this.props.item.employee_id , label : this.props.item.employee}
+      }
+      this.setState({selectEmployee : newEmp})
+
+      
       if (this.props.item.profile_pic_url != null) {
         this.setState({ base64: this.props.item.profile_pic_url })
       }
@@ -356,6 +387,7 @@ class AddEditForm extends React.Component {
 
 
   render() {
+
      return (
       <Form onSubmit={this.props.item ? this.submitFormEdit : this.submitFormAdd}>
         <div className="container">
@@ -555,60 +587,70 @@ class AddEditForm extends React.Component {
                 </div>
               )}
 
-              {CONFIG.REP_DOB && (
-                <div className="form-group row">
-                  <label className="col-sm-2 col-form-label">Date Of Birth</label>
-                  <div className="col-sm-10">
-                    <input type="date" value={this.state.dob} name="dob" max={moment().format("YYYY-MM-DD")}
-                      onChange={this.onChange} className="form-control" />
-                  </div>
-                </div>
-              )}
+               {CONFIG.REP_DOB && (
+                 <div className="form-group row">
+                   <label className="col-sm-2 col-form-label">Date Of Birth</label>
+                   <div className="col-sm-10">
+                     <input type="date" value={this.state.dob} name="dob" max={moment().format("YYYY-MM-DD")}
+                       onChange={this.onChange} className="form-control" />
+                   </div>
+                 </div>
+               )}
 
-              {CONFIG.REP_OP_AREA && (
-                <div className="form-group row">
-                  <label className="col-sm-2 col-form-label">Operation Area</label>
-                  <div className="col-sm-10">
-                    <input type="text" value={this.state.op_area} name="op_area"
-                      onChange={this.onChange} className="form-control" />
-                  </div>
-                </div>
-              )}
-
-
-              <div className="form-group row">
-                <label className="col-sm-2 col-form-label">Password</label>
-                <div className="col-sm-10">
-                  <input type="text" value={this.state.password} name="password" placeholder="************"
-                    onChange={this.onChange} className="form-control" />
-                </div>
-              </div>
-
-              {CONFIG.REP_AADHAR_NO && (
-                <div className="form-group row">
-                  <label className="col-sm-2 col-form-label">Aadhar Number</label>
-                  <div className="col-sm-10">
-                    <input type="text"  value={this.state.aadhar_no} name="aadhar_no"
-                      onChange={this.onChange} className="form-control" />
-                  </div>
-                </div>
-              )}
+               {CONFIG.REP_OP_AREA && (
+                 <div className="form-group row">
+                   <label className="col-sm-2 col-form-label">Operation Area</label>
+                   <div className="col-sm-10">
+                     <input type="text" value={this.state.op_area} name="op_area"
+                       onChange={this.onChange} className="form-control" />
+                   </div>
+                 </div>
+               )}
 
 
-              <div className="form-group row">
-                <label className="col-sm-2 col-form-label">Status</label>
-                <div className="col-sm-10">
-                  <div className="form-check form-check-inline">
-                    <input id="active" className="form-check-input" checked={this.state.active === "true"}
-                      onChange={(e) => this.setState({ active: e.target.value })} type="radio" name="inlineRadioOptions" value={"true"} />
-                    <label for="active" className="form-check-label" >Active</label>
-                  </div>
-                  <div className="form-check form-check-inline">
-                    <input id="inactive" className="form-check-input" checked={this.state.active === "false"} onChange={(e) => this.setState({ active: e.target.value })} type="radio" name="inlineRadioOptions" value={"false"} />
-                    <label for="inactive" className="form-check-label" >In-Active</label>
-                  </div>
-                </div>
-              </div>
+               <div className="form-group row">
+                 <label className="col-sm-2 col-form-label">Password</label>
+                 <div className="col-sm-10">
+                   <input type="text" value={this.state.password} name="password" placeholder="************"
+                     onChange={this.onChange} className="form-control" />
+                 </div>
+               </div>
+
+               {CONFIG.REP_AADHAR_NO && (
+                 <div className="form-group row">
+                   <label className="col-sm-2 col-form-label">Aadhar Number</label>
+                   <div className="col-sm-10">
+                     <input type="text" value={this.state.aadhar_no} name="aadhar_no"
+                       onChange={this.onChange} className="form-control" />
+                   </div>
+                 </div>
+               )}
+
+
+               <div className="form-group row">
+                 <label className="col-sm-2 col-form-label">Employee</label>
+                 <div className="col-sm-10">
+                   <Select value={this.state.selectEmployee} onChange={(selectedOption) => this.setState({ selectEmployee: selectedOption })} options={this.state.employeeList}
+                    />
+                 </div>
+               </div>
+
+               <div className="form-group row">
+                 <label className="col-sm-2 col-form-label">Status</label>
+                 <div className="col-sm-10">
+                   <div className="form-check form-check-inline">
+                     <input id="active" className="form-check-input" checked={this.state.active === "true"}
+                       onChange={(e) => this.setState({ active: e.target.value })} type="radio" name="inlineRadioOptions" value={"true"} />
+                     <label for="active" className="form-check-label" >Active</label>
+                   </div>
+                   <div className="form-check form-check-inline">
+                     <input id="inactive" className="form-check-input" checked={this.state.active === "false"} onChange={(e) => this.setState({ active: e.target.value })} type="radio" name="inlineRadioOptions" value={"false"} />
+                     <label for="inactive" className="form-check-label" >In-Active</label>
+                   </div>
+                 </div>
+               </div>
+
+               
 
               <div className=" d-flex flex-row-reverse">
                 <Button color="danger" onClick={this.props.toggle}>Cancel</Button>

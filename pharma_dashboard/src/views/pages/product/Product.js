@@ -8,6 +8,8 @@ import ImportFromCsv from "src/views/model/products/UploadList";
 import UploadImgVis from "src/views/model/products/UploadImgVisulate";
 import { CPagination } from "@coreui/react";
 import Page404 from "../page404/Page404";
+import Select from 'react-select'
+import { GetDivisionType } from "src/api/products/divisionType/divisionType";
 
 class Products extends Component {
   constructor(props) {
@@ -17,11 +19,17 @@ class Products extends Component {
       updated: false,
       currentPage: 1,
       totalPage: 0,
+      divisionType: [], divisionTypeSelect: null,
       rowPerPage: 20,
       loading: true,
       search: ""
     };
   }
+
+  handleChange = (newValue, actionMeta) => {
+    this.setState({ divisionTypeSelect: newValue })
+    this.setState({ updated: true })
+  };
 
 
   // ****************** onSearch Function *****************************
@@ -80,7 +88,21 @@ class Products extends Component {
   // ****************** Get Data Function *****************************
 
   GetData = async () => {
-    if (this.state.search !== "") {
+    let rsDiv = await GetDivisionType()
+
+    if(rsDiv.success === true){
+      let divRes = []
+      if (rsDiv.data.length > 0) {
+        rsDiv.data.map((it) => {
+          return divRes.push({ value: it.id, label: it.name })
+        })
+      }
+      this.setState({ divisionType: divRes })
+    }
+
+
+
+     if (this.state.search !== "") {
       let rs = await SearchProducts({
         "name": this.state.search
       })
@@ -103,10 +125,25 @@ class Products extends Component {
 
 
       let skipVal = skip - this.state.rowPerPage
-      let rs = await GetProducts({
+
+    
+    let rs = null ;
+
+    if (this.state.divisionTypeSelect !== null) {
+      rs = await GetProducts({
+        "division_id" : this.state.divisionTypeSelect.value,
         "limit": this.state.rowPerPage,
         "skip": skipVal
       })
+    }
+    else {
+      rs = await GetProducts({
+        "limit": this.state.rowPerPage,
+        "skip": skipVal
+      })
+    }
+
+     
 
       let rsCount = await GetProductsCount()
       if (rs.success === true && rsCount.success === true) {
@@ -188,19 +225,38 @@ class Products extends Component {
                 </Col>
               </Row>
             </div>
-            <div className="p-2">
-              <fieldset className="field-container col-6 col-md-12">
-                <input type="text" value={this.state.search} onChange={(e) => this.onSearch(e)}
-                  placeholder="Search..." className="field-search" />
-                <div className="icons-container">
-                  <div className="icon-search"></div>
-                  <div className="icon-close" onClick={this.onClose}>
-                    <div className="x-up"></div>
-                    <div className="x-down"></div>
+
+            <Row style={{ marginTop: "20px" }}>
+
+
+              <Col xs="12" sm="6">
+                <fieldset className="field-container" style={{ marginBottom: "8px" }}>
+                  <input type="text" value={this.state.search} onChange={(e) => this.onSearch(e)}
+                    placeholder="Search..." className="field-search" />
+                  <div className="icons-container">
+                    <div className="icon-search"></div>
+                    <div className="icon-close" onClick={this.onClose}>
+                      <div className="x-up"></div>
+                      <div className="x-down"></div>
+                    </div>
                   </div>
+                </fieldset>
+              </Col>
+              <Col xs="12" sm="6">
+                <div style={{ float: "right", width: "50%" }}>
+                  <Select
+                    value={this.state.divisionTypeSelect}
+                    onChange={this.handleChange}
+                    isClearable
+                    // isSearchable
+                    placeholder="Choose Divison"
+                    options={this.state.divisionType} />
+
                 </div>
-              </fieldset>
-            </div>
+              </Col>
+
+            </Row>
+
             {
               this.state.items.length === 0 ?
                 <Page404 />

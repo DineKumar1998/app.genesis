@@ -84,8 +84,12 @@ exports.RepFormatter = (rep) => {
         op_area: rep.op_area,
         joined_on: rep.joined_on,
         profile_pic_url: (rep.profile_pic_url == null) ? null : fs.existsSync(rep.profile_pic_url)? `${process.env.BASE_URL}/${rep.profile_pic_url}` : null,
-        franchisee_id: rep.franchisee_id._id,
-        franchisee_name: rep.franchisee_id.name,
+        franchisee_id: rep.franchisee_id !== null  ? rep.franchisee_id._id : null ,
+        franchisee_name: rep.franchisee_id !== null ? rep.franchisee_id.name : null ,
+        
+        employee : rep.employee !== null ? rep.employee.name : null ,
+        employee_id : rep.employee !== null ? rep.employee.id : null ,
+
         is_owner: rep.is_owner,
         aadhar_no: rep.aadhar_no,
         active: rep.active,
