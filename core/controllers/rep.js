@@ -61,7 +61,6 @@ exports.addRep = async (rep) => {
     if (!rep.name) throw new Error('Name is Required');
     if (!rep.email) throw new Error('Email is Required');
     if (!Validator.validateEmail(rep.email)) throw new Error("Invalid Email");
-    if (!rep.employee) throw new Error("Employee Name is Required");
 
     if (!rep.phone) throw new Error('Phone Number is Required');
     let phone = Validator.validatePhone(rep.phone);
@@ -72,6 +71,7 @@ exports.addRep = async (rep) => {
     if (!rep.dob) rep.dob = null;
     if (!rep.password) throw new Error('Password is Required');
     if (!rep.op_area) rep.op_area = "NA";
+    if (!rep.employee) rep.employee = null;
 
     if (!rep.active) rep.active = false;
     if (!rep.is_owner) rep.is_owner = false;
