@@ -315,18 +315,7 @@ class AddEditForm extends React.Component {
       const { id, name, email, phone, address, op_area, aadhar_no,  } = this.props.item;
       this.setState({ id, name, email, phone, address, op_area, aadhar_no ,  });
 
-      let respEmp = await GetEmployee()
-
-      if (respEmp.success === true){
-        let EmpList = []
-        if (Array.isArray(respEmp.data)) {
-          respEmp.data.map((it) => {
-            EmpList.push({ value: it.id, label: it.name })
-            return true
-          })
-        }
-         this.setState({employeeList : EmpList})
-      }
+    
 
       let newEmp = null ;
 
@@ -381,6 +370,20 @@ class AddEditForm extends React.Component {
 
     if (rs.success === true) {
       this.setState({ divisionsList: rs.data })
+
+      let respEmp = await GetEmployee()
+
+      if (respEmp.success === true){
+        let EmpList = []
+        if (Array.isArray(respEmp.data)) {
+          respEmp.data.map((it) => {
+            EmpList.push({ value: it.id, label: it.name })
+            return true
+          })
+        }
+         this.setState({employeeList : EmpList})
+      }
+      
     }
   }
 

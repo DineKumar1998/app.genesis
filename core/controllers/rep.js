@@ -332,6 +332,8 @@ exports.getRep = async (repprops) => {
 
     if (repprops.city) filter.city = repprops.city;
 
+    if (repprops.employee) filter.employee = repprops.employee;
+
     if (repprops.state) filter.state = repprops.state;
 
     if (repprops.email) filter.email = repprops.email;
@@ -379,6 +381,7 @@ exports.getRep = async (repprops) => {
     repRecords = repRecords.map(it => {
         return Formatter.RepFormatter(it)
     })
+
 
     return repRecords;
 }
