@@ -87,8 +87,8 @@ exports.RepFormatter = (rep) => {
         franchisee_id: rep.franchisee_id !== null  ? rep.franchisee_id._id : null ,
         franchisee_name: rep.franchisee_id !== null ? rep.franchisee_id.name : null ,
         
-        employee : rep.employee !== null ? rep.employee.name : null ,
-        employee_id : rep.employee !== null ? rep.employee.id : null ,
+        employee : rep.employee && rep.employee !== null ? rep.employee.name : null ,
+        employee_id : rep.employee && rep.employee !== null ? rep.employee.id : null ,
 
         is_owner: rep.is_owner,
         aadhar_no: rep.aadhar_no,
