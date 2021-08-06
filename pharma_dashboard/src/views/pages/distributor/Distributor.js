@@ -204,7 +204,7 @@ class Distributor extends Component {
                         this.state.search === "" ?
                           <div className={'mt-2'} >
                             <CPagination
-                              className="pagination"
+                              className="pagination justify-content-start"
                               activePage={this.state.currentPage}
                               pages={this.state.totalPage}
                               onActivePageChange={(e) => this.activePageChange(e)}
