@@ -10,8 +10,8 @@ const GetProducts = async (data) => {
   return rs
 }
 
-const GetProductsCount = async () => {
-  let rs = await fetcher({ method: "post", url: `${URL}/count` })
+const GetProductsCount = async (data) => {
+  let rs = await fetcher({ method: "post", url: `${URL}/count`, data: data  })
   return rs
 }
 

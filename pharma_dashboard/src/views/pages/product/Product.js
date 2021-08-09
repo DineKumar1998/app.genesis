@@ -90,7 +90,7 @@ class Products extends Component {
   GetData = async () => {
     let rsDiv = await GetDivisionType()
 
-    if(rsDiv.success === true){
+    if (rsDiv.success === true) {
       let divRes = []
       if (rsDiv.data.length > 0) {
         rsDiv.data.map((it) => {
@@ -102,14 +102,36 @@ class Products extends Component {
 
 
 
-     if (this.state.search !== "") {
-      let rs = await SearchProducts({
-        "name": this.state.search
-      })
-      if (rs.success === true) {
-        this.setState({ items: rs.data });
+    if (this.state.search !== "") {
+
+      let resp = null;
+
+      if (this.state.divisionTypeSelect !== null) {
+        resp = await SearchProducts({
+          "name": this.state.search
+        })
+        let data = []
+        if (resp.success === true) {
+          resp.data.map((item) => {
+            if (item.division_id === this.state.divisionTypeSelect.value) {
+              return data.push(item)
+            }
+          })
+          this.setState({ items: data });
+        }
       }
+      else {
+
+        let rs = await SearchProducts({
+          "name": this.state.search
+        })
+        if (rs.success === true) {
+          this.setState({ items: rs.data });
+        }
+      }
+
     }
+
 
     else {
       this.setState({ loading: true })
@@ -126,26 +148,29 @@ class Products extends Component {
 
       let skipVal = skip - this.state.rowPerPage
 
-    
-    let rs = null ;
 
-    if (this.state.divisionTypeSelect !== null) {
-      rs = await GetProducts({
-        "division_id" : this.state.divisionTypeSelect.value,
-        "limit": this.state.rowPerPage,
-        "skip": skipVal
-      })
-    }
-    else {
-      rs = await GetProducts({
-        "limit": this.state.rowPerPage,
-        "skip": skipVal
-      })
-    }
+      let rs = null;
+      let rsCount = null;
 
-     
+      if (this.state.divisionTypeSelect !== null) {
+        rs = await GetProducts({
+          "division_id": this.state.divisionTypeSelect.value,
+          "limit": this.state.rowPerPage,
+          "skip": skipVal
+        })
 
-      let rsCount = await GetProductsCount()
+        rsCount = await GetProductsCount({ "division_id": this.state.divisionTypeSelect.value, })
+      }
+      else {
+        rs = await GetProducts({
+          "limit": this.state.rowPerPage,
+          "skip": skipVal
+        })
+
+        rsCount = await GetProductsCount()
+
+      }
+
       if (rs.success === true && rsCount.success === true) {
         let page = rsCount.data.count / this.state.rowPerPage
         let num = Number(page) === page && page % 1 !== 0;
