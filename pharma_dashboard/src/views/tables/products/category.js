@@ -1,5 +1,5 @@
 import React from "react";
-import { CBadge, CButton, CDataTable } from "@coreui/react";
+import { CButton, CDataTable } from "@coreui/react";
 import ModalForm from "src/views/model/products/categoryType";
 import { IconDelete } from "../../icon";
 import NotificationManager from "react-notifications/lib/NotificationManager";
@@ -24,16 +24,6 @@ const Table = (props) => {
   ];
 
 
-  const getBadge = (active) => {
-    switch (active) {
-      case true:
-        return "success";
-      case false:
-        return "secondary";
-      default:
-
-    }
-  };
 
   // *******************Delete City*****************************
 

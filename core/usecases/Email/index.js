@@ -6,8 +6,6 @@ const path = require("path");
 
 module.exports = async(data) => {
 
-    console.log("data", data)
-
     if(process.env.ENABLE_MAIL == "true"){
 
         let transporter = nodeMailer.createTransport({

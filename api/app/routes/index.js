@@ -1,20 +1,20 @@
 const router = require('express').Router()
 //import handler and setting endpoints routes
 
-router.get('/check', async (req, res, next)=>{
-    
+router.get('/check', async (req, res, next) => {
+
     try {
         const adminInfo = await require("../../../core/controllers/admin").getAdminDetails();
-        
 
-        if(process.env.APP_STATUS){
-            if(process.env.APP_STATUS === "1"){
+
+        if (process.env.APP_STATUS) {
+            if (process.env.APP_STATUS === "1") {
                 throw new Error(`<p>Your app has been closed. Contact to admin</p><a href="${adminInfo.email || ''}"> ${adminInfo.email || ""}</a><br/><a href="tel:${adminInfo.phone || ''}"> ${adminInfo.phone || ""}</a>`);
             }
-            else if(process.env.APP_STATUS === "2"){
+            else if (process.env.APP_STATUS === "2") {
                 throw new Error(`<p>Your app has been closed due to technical issue. Contact to admin</p><a href="${adminInfo.email || ''}"> ${adminInfo.email || ""}</a><br/><a href="tel:${adminInfo.phone || ''}"> ${adminInfo.phone || ""}</a>`);
             }
-            else if(process.env.APP_STATUS === "3"){
+            else if (process.env.APP_STATUS === "3") {
                 throw new Error(`<p>Your service has been temporary suspended. Contact to admin</p><a href="${adminInfo.email || ''}"> ${adminInfo.email || ""}</a><br/><a href="tel:${adminInfo.phone || ''}"> ${adminInfo.phone || ""}</a>`);
             }
             else {
@@ -34,12 +34,12 @@ router.get('/check', async (req, res, next)=>{
 })
 
 //rep registration fields
-router.get('/registration/fields', async (req, res, next)=>{
-    
-    try {    
+router.get('/registration/fields', async (req, res, next) => {
+
+    try {
         req.data = {
-            firm:{
-                GST_NUMBER: process.env.FIRM_GST_NUMBER == undefined ? true : process.env.FIRM_GST_NUMBER == "true" ? true : false ,
+            firm: {
+                GST_NUMBER: process.env.FIRM_GST_NUMBER == undefined ? true : process.env.FIRM_GST_NUMBER == "true" ? true : false,
                 DRUG_LICENCE: process.env.FIRM_DRUG_LICENCE == undefined ? true : process.env.FIRM_DRUG_LICENCE == "true" ? true : false,
                 PHONE: process.env.FIRM_PHONE == undefined ? true : process.env.FIRM_PHONE == "true" ? true : false,
                 EMAIL: process.env.FIRM_EMAIL == undefined ? true : process.env.FIRM_EMAIL == "true" ? true : false,
@@ -52,8 +52,8 @@ router.get('/registration/fields', async (req, res, next)=>{
                 BANK_NAME: process.env.FIRM_BANK_NAME == undefined ? true : process.env.FIRM_BANK_NAME == "true" ? true : false,
                 BANK_PAYEE_NAME: process.env.FIRM_BANK_PAYEE_NAME == undefined ? true : process.env.FIRM_BANK_PAYEE_NAME == "true" ? true : false
             },
-            
-            rep:{
+
+            rep: {
                 CITY: process.env.REP_CITY == undefined ? true : process.env.REP_CITY == "true" ? true : false,
                 STATE: process.env.REP_STATE == undefined ? true : process.env.REP_STATE == "true" ? true : false,
                 ADDRESS: process.env.REP_ADDRESS == undefined ? true : process.env.REP_ADDRESS == "true" ? true : false,
@@ -72,20 +72,20 @@ router.get('/registration/fields', async (req, res, next)=>{
     }
 })
 
-
 router.use('/franchisee/', require("./franchisee"))
-router.use('/rep/',require("./rep"));
-router.use('/customer/',require("./customer"));
-router.use("/product/",require("./product"));
-router.use("/order/",require("./order"))
-router.use("/companyOrder/",require("./company_order"))
-router.use("/offer/",require("./offer"))
-router.use("/states/",require("./stateCity"));
-router.use("/about/",require("./company_about"));
-router.use("/enquiry/",require("./enquiry"));
+router.use('/rep/', require("./rep"));
+router.use('/customer/', require("./customer"));
+router.use("/product/", require("./product"));
+router.use("/order/", require("./order"))
+router.use("/companyOrder/", require("./company_order"))
+router.use("/offer/", require("./offer"))
+router.use("/states/", require("./stateCity"));
+router.use("/about/", require("./company_about"));
+router.use("/enquiry/", require("./enquiry"));
 
 router.use("/dashboard/", require("./dashboard"));
 
+router.use("/employee/", require("./employee"))
 
 //not found checker
 router.use((req, res, next) => {
@@ -101,7 +101,7 @@ router.use((req, res, next) => {
 router.use((req, res, next) => {
     const data = req.data
     let message = null;
-    if(req.message) message = req.message;
+    if (req.message) message = req.message;
     res.send({ success: true, message, data })
 })
 

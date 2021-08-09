@@ -6,12 +6,6 @@ import Page404 from "../page404/Page404";
 import Select from 'react-select'
 import { GetDivisionType } from "src/api/products/divisionType/divisionType";
 
-const options = [
-  { value: 'Divisions', label: 'Divisons' },
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
-]
 
 class Orders extends Component {
   constructor(props) {

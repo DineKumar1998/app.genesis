@@ -55,22 +55,24 @@ async function convertcsvtojson(filePath) {
 }
 
 //Add rep
-exports.addRep = async(rep) => {
+exports.addRep = async (rep) => {
 
     if (!rep.franchisee_id) throw new Error('Franchisee Id is Required'); //will changed by auth
     if (!rep.name) throw new Error('Name is Required');
     if (!rep.email) throw new Error('Email is Required');
-    if(!Validator.validateEmail(rep.email)) throw new Error("Invalid Email");
+    if (!Validator.validateEmail(rep.email)) throw new Error("Invalid Email");
 
     if (!rep.phone) throw new Error('Phone Number is Required');
     let phone = Validator.validatePhone(rep.phone);
-    if(typeof phone == "boolean") throw new Error('Invalid Phone number');
+    if (typeof phone == "boolean") throw new Error('Invalid Phone number');
     rep.phone = phone;
 
     if (!rep.address) rep.address = "NA" //throw new Error('rep address is Required');
     if (!rep.dob) rep.dob = null;
     if (!rep.password) throw new Error('Password is Required');
     if (!rep.op_area) rep.op_area = "NA";
+    if (!rep.employee) rep.employee = null;
+
     if (!rep.active) rep.active = false;
     if (!rep.is_owner) rep.is_owner = false;
     if (!rep.city) rep.city = "";
@@ -78,11 +80,11 @@ exports.addRep = async(rep) => {
     if (!rep.aadhar_no) rep.aadhar_no = "";
     let profile_pic = null;
     if (rep.profile_pic) profile_pic = rep.profile_pic
-        //hashing password
+    //hashing password
     let passwordHash = bcrypt.hashSync(rep.password, 10);
     let rep_active = false
-    if(rep.active === "true") { rep_active = true}
-    else {rep_active = false}
+    if (rep.active === "true") { rep_active = true }
+    else { rep_active = false }
 
     let newrep = {
         franchisee_id: rep.franchisee_id,
@@ -92,6 +94,7 @@ exports.addRep = async(rep) => {
         address: rep.address,
         email: rep.email,
         phone: rep.phone,
+        employee: rep.employee,
         dob: rep.dob,
         profile_pic_url: profile_pic,
         aadhar_no: rep.aadhar_no,
@@ -102,7 +105,7 @@ exports.addRep = async(rep) => {
         created_on: new Date(Date.now())
     }
 
-    if(newrep.active == false && newrep.is_owner == true){
+    if (newrep.active == false && newrep.is_owner == true) {
 
 
         //get admin details
@@ -122,7 +125,7 @@ exports.addRep = async(rep) => {
             Subject: "New Distributor Registered on the App at " + moment(new Date(Date.now())).format("LLL"),
             Body: msg
         }
-    
+
         let emailResponse = await sendEmail(EmailData)
     }
 
@@ -141,7 +144,7 @@ const csv = require('csvtojson');
 const fs = require('fs');
 const searchReps = require("../usecases/rep/searchReps");
 
-exports.bulkUpload = async(productFile) => {
+exports.bulkUpload = async (productFile) => {
 
     /**get all reps */
     let repRecordstmp = await exports.getRep({ is_owner: true });
@@ -184,7 +187,7 @@ exports.bulkUpload = async(productFile) => {
             errorData.push("Distributor Phone Cannot be Empty. Error at Row NO: " + tmp)
         else
             repData[i].phone = fileJsonData[i].phone;
-        
+
         /****************distributor password */
         if (fileJsonData[i].password === undefined || fileJsonData[i].password == "")
             errorData.push("Distributor password Cannot be Empty. Error at Row NO: " + tmp)
@@ -194,11 +197,11 @@ exports.bulkUpload = async(productFile) => {
         /****************distributor address */
         if (fileJsonData[i].address != undefined || fileJsonData[i].address != "")
             repData[i].address = fileJsonData[i].address;
-        
+
         /****************distributor aadhar_no */
         if (fileJsonData[i].aadhar_no != undefined || fileJsonData[i].aadhar_no != "")
             repData[i].aadhar_no = fileJsonData[i].aadhar_no;
-        
+
         /****************distributor city */
         if (fileJsonData[i].city != undefined || fileJsonData[i].city != "")
             repData[i].city = fileJsonData[i].city;
@@ -206,7 +209,7 @@ exports.bulkUpload = async(productFile) => {
         /****************distributor state */
         if (fileJsonData[i].state != undefined || fileJsonData[i].state != "")
             repData[i].state = fileJsonData[i].state;
-            
+
         /****************distributor op area */
         if (fileJsonData[i].op_area) repData[i].op_area = fileJsonData[i].op_area;
 
@@ -241,19 +244,19 @@ exports.bulkUpload = async(productFile) => {
             franchiseeData[i].email = fileJsonData[i].firm_email;
         /****************Firm address */
         if (fileJsonData[i].firm_address === undefined || fileJsonData[i].firm_address == "")
-        //errorData.push("Distributor firm_address Cannot be Empty. Error at Row NO: "+tmp)
+            //errorData.push("Distributor firm_address Cannot be Empty. Error at Row NO: "+tmp)
             franchiseeData[i].address = "NA"
         else
             franchiseeData[i].address = fileJsonData[i].firm_address;
         /****************Firm state */
         if (fileJsonData[i].firm_state === undefined || fileJsonData[i].firm_state == "")
-        //errorData.push("Distributor firm_state Cannot be Empty. Error at Row NO: "+tmp)
+            //errorData.push("Distributor firm_state Cannot be Empty. Error at Row NO: "+tmp)
             franchiseeData[i].state = "NA"
         else
             franchiseeData[i].state = fileJsonData[i].firm_state;
         /****************Firm district */
         if (fileJsonData[i].firm_district === undefined || fileJsonData[i].firm_district == "")
-        //errorData.push("Distributor firm_district Cannot be Empty. Error at Row NO: "+tmp)
+            //errorData.push("Distributor firm_district Cannot be Empty. Error at Row NO: "+tmp)
             franchiseeData[i].district = "NA"
         else
             franchiseeData[i].district = fileJsonData[i].firm_district;
@@ -309,16 +312,18 @@ exports.bulkUpload = async(productFile) => {
 }
 
 //get reps
-exports.getRep = async(repprops) => {
+exports.getRep = async (repprops) => {
     let filter = {}
     filter.skip = 0;
     filter.limit = 1000;
+
 
     if (repprops.skip) filter.skip = repprops.skip;
     if (repprops.limit) filter.limit = repprops.limit;
     if (repprops.franchisee_id) filter.franchisee_id = repprops.franchisee_id;
 
     if (repprops.id) filter._id = repprops.id;
+
 
     if (repprops.name) filter.name = {
         $regex: repprops.name,
@@ -327,46 +332,48 @@ exports.getRep = async(repprops) => {
 
     if (repprops.city) filter.city = repprops.city;
 
+    if (repprops.employee) filter.employee = repprops.employee;
+
     if (repprops.state) filter.state = repprops.state;
 
     if (repprops.email) filter.email = repprops.email;
 
     if (repprops.phone) filter.phone = repprops.phone;
 
-    if (repprops.active ==true || repprops.active == false) filter.active = repprops.active;
+    if (repprops.active == true || repprops.active == false) filter.active = repprops.active;
 
     if (repprops.is_owner == true || repprops.is_owner == false) filter.is_owner = repprops.is_owner;
     else filter.is_owner = false;
 
     if (repprops.search) filter.search = repprops.search;
 
-    if(repprops.searchBy) filter.searchBy = repprops.searchBy;
+    if (repprops.searchBy) filter.searchBy = repprops.searchBy;
 
-    if (repprops.divisions){
+    if (repprops.divisions) {
         let params = [];
-        if(Array.isArray(repprops.divisions)) params = repprops.divisions;
+        if (Array.isArray(repprops.divisions)) params = repprops.divisions;
         else params = [repprops.divisions]
-        let franchiseeRecords = await getFranchisee({divisions: {$in: params}});
-        
-        let franchiseeIds = franchiseeRecords.map(it=> it._id);
-        
-        filter.franchisee_id = {
-            $in : franchiseeIds
-        }
-    } 
+        let franchiseeRecords = await getFranchisee({ divisions: { $in: params } });
 
-    if (repprops.division_id){
-        let params = [];
-        if(Array.isArray(repprops.division_id)) params = repprops.division_id;
-        else params = [repprops.division_id]
-        let franchiseeRecords = await getFranchisee({divisions: {$in: params}});
-        
-        let franchiseeIds = franchiseeRecords.map(it=> it._id);
-        
+        let franchiseeIds = franchiseeRecords.map(it => it._id);
+
         filter.franchisee_id = {
-            $in : franchiseeIds
+            $in: franchiseeIds
         }
-    } 
+    }
+
+    if (repprops.division_id) {
+        let params = [];
+        if (Array.isArray(repprops.division_id)) params = repprops.division_id;
+        else params = [repprops.division_id]
+        let franchiseeRecords = await getFranchisee({ divisions: { $in: params } });
+
+        let franchiseeIds = franchiseeRecords.map(it => it._id);
+
+        filter.franchisee_id = {
+            $in: franchiseeIds
+        }
+    }
 
     let repRecords = await getRep(filter);
 
@@ -375,31 +382,32 @@ exports.getRep = async(repprops) => {
         return Formatter.RepFormatter(it)
     })
 
+
     return repRecords;
 }
 
 //search rep account and send otp to mail
-exports.searchAccountOfRep = async(repprops) => {
+exports.searchAccountOfRep = async (repprops) => {
     let filter = {};
 
     filter.skip = 0;
     filter.limit = 1;
 
-    if (repprops.email){
-        if(!Validator.validateEmail(repprops.email)) throw new Error("Invalid Email");
+    if (repprops.email) {
+        if (!Validator.validateEmail(repprops.email)) throw new Error("Invalid Email");
         filter.email = repprops.email;
     }
-    if (repprops.phone){ 
+    if (repprops.phone) {
         let phone = Validator.validatePhone(repprops.phone);
-        if(typeof phone == "boolean") throw new Error('Invalid Phone number');
+        if (typeof phone == "boolean") throw new Error('Invalid Phone number');
         filter.phone = phone;
     }
 
 
     let data = null;
     let repRecords = await getRep(filter);
-    if (repRecords.length>0) {
-        data =  {
+    if (repRecords.length > 0) {
+        data = {
             id: repRecords[0]._id,
             name: repRecords[0].name,
             email: repRecords[0].email
@@ -408,28 +416,28 @@ exports.searchAccountOfRep = async(repprops) => {
         let password = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
         let currTime = new Date();
         let EmailData = {
-            To : data.email,
-            Subject: `OTP for Pharma App password change request at ${ moment(currTime).format("LLL")}`,
+            To: data.email,
+            Subject: `OTP for Pharma App password change request at ${moment(currTime).format("LLL")}`,
             Body: `Hello ${data.name}!, Your OTP for Pharma App is ${password}. This OTP is valid upto 15 minutes.`
         }
-       await Redis.saveData(data.id, password);
+        await Redis.saveData(data.id, password);
 
-       let emailResponse = await sendEmail(EmailData)
-       return data;
+        let emailResponse = await sendEmail(EmailData)
+        return data;
     }
-    else{
+    else {
         throw new Error("No Account Found ")
     }
 
-    
+
 
 }
 
 // verify OTP
-exports.verifyOtp = async(key, otp) => {
+exports.verifyOtp = async (key, otp) => {
     let data = await Redis.getData(key);
-    if(data == null) return false;
-    else if(data.toString() == otp.toString()) {
+    if (data == null) return false;
+    else if (data.toString() == otp.toString()) {
         await Redis.saveData(key, "session", 120);
         return true;
     }
@@ -437,9 +445,9 @@ exports.verifyOtp = async(key, otp) => {
 }
 
 
-exports.repLogin = async(repprops) => {
+exports.repLogin = async (repprops) => {
 
-    
+
     let repRecord = await getRep({ email: repprops.email })
 
     if (repRecord.length == 0)
@@ -454,13 +462,13 @@ exports.repLogin = async(repprops) => {
         await exports.updateRep({ id: repRecord[0]._id, device_token: repprops.device_token })
 
     const token = jwt.sign({
-            repId: repRecord[0]._id,
-            is_owner: repRecord[0].is_owner,
-            franchiseeId: repRecord[0].franchisee_id._id
-        },
+        repId: repRecord[0]._id,
+        is_owner: repRecord[0].is_owner,
+        franchiseeId: repRecord[0].franchisee_id._id
+    },
         "secret",
         {
-            expiresIn:(86400*30)
+            expiresIn: (86400 * 30)
         }
     );
 
@@ -472,14 +480,14 @@ exports.repLogin = async(repprops) => {
 }
 
 
-exports.logout = async(repId) => {
-    
-    await updateRep(repId, {device_token: null});
+exports.logout = async (repId) => {
+
+    await updateRep(repId, { device_token: null });
     return true;
 }
 
 //get individual rep
-exports.getSingleRep = async(repprops) => {
+exports.getSingleRep = async (repprops) => {
     let filter = {}
     if (repprops.id) filter._id = repprops.id;
 
@@ -489,7 +497,7 @@ exports.getSingleRep = async(repprops) => {
 }
 
 //update rep
-exports.updateRep = async(repprops) => {
+exports.updateRep = async (repprops) => {
     let repId = repprops.id;
     if (!repprops.id) throw new Error("Please provide rep Id");
     let filter = {}
@@ -497,13 +505,13 @@ exports.updateRep = async(repprops) => {
     if (repprops.city) filter.city = repprops.city;
     if (repprops.state) filter.state = repprops.state;
     if (repprops.address) filter.address = repprops.address;
-    if (repprops.email){
-        if(!Validator.validateEmail(repprops.email)) throw new Error("Invalid Email");
+    if (repprops.email) {
+        if (!Validator.validateEmail(repprops.email)) throw new Error("Invalid Email");
         filter.email = repprops.email;
     }
-    if (repprops.phone){ 
+    if (repprops.phone) {
         let phone = Validator.validatePhone(repprops.phone);
-        if(typeof phone == "boolean") throw new Error('Invalid Phone number');
+        if (typeof phone == "boolean") throw new Error('Invalid Phone number');
         filter.phone = phone;
     }
     if (repprops.dob != null && repprops.dob != "null" && repprops.dob != "NA") {
@@ -511,6 +519,8 @@ exports.updateRep = async(repprops) => {
     }
 
     if (repprops.op_area) filter.op_area = repprops.op_area;
+    if (repprops.employee) filter.employee = repprops.employee;
+
     if (repprops.joined_on) filter.joined_on = repprops.joined_on;
     if (repprops.active) filter.active = repprops.active;
     if (repprops.is_owner) filter.is_owner = repprops.is_owner;
@@ -522,10 +532,10 @@ exports.updateRep = async(repprops) => {
     filter.modified_on = new Date(Date.now());
     let repRecord = await updateRep(repId, filter);
     return Formatter.RepFormatter(repRecord)
-    
+
 }
 
-exports.changePassword = async(repprops) => {
+exports.changePassword = async (repprops) => {
     let repId = repprops.id;
     if (!repprops.id) throw new Error("Please provide rep Id");
     if (!repprops.oldPassword) throw new Error("Please provide Old Password");
@@ -544,21 +554,21 @@ exports.changePassword = async(repprops) => {
 }
 
 //reset password if of rep
-exports.resetPassword = async(repprops) => {
+exports.resetPassword = async (repprops) => {
 
 
     let repId = repprops.id;
     if (!repprops.id) throw new Error("Please provide rep Id");
     if (!repprops.password) throw new Error("Please provide rep New Password");
 
-    if(repprops.fromOtp){
+    if (repprops.fromOtp) {
         let data = await Redis.getData(repId);
-        if(data == null) return false;
-        else if(data.toString() != "session") return false;
+        if (data == null) return false;
+        else if (data.toString() != "session") return false;
     }
 
     let filter = {}
-        //hashing password
+    //hashing password
     let passwordHash = bcrypt.hashSync(repprops.password, 10);
     filter.password_hash = passwordHash
     filter.modified_on = new Date(Date.now());
@@ -568,14 +578,14 @@ exports.resetPassword = async(repprops) => {
 }
 
 //activate rep same as update only pass active is true
-exports.activateRep = async(repId) => {
-        if (!repId) throw new Error("Please provide rep Id");
-        let filter = { active: true }
-        let repRecord = await updateRep(repId, filter);
-        return Formatter.RepFormatter(repRecord)
-    }
-    //deactivate rep same as update only pass active is true
-exports.deactivateRep = async(repId) => {
+exports.activateRep = async (repId) => {
+    if (!repId) throw new Error("Please provide rep Id");
+    let filter = { active: true }
+    let repRecord = await updateRep(repId, filter);
+    return Formatter.RepFormatter(repRecord)
+}
+//deactivate rep same as update only pass active is true
+exports.deactivateRep = async (repId) => {
     if (!repId) throw new Error("Please provide rep Id");
     let filter = { active: false }
     let repRecord = await updateRep(repId, filter);
@@ -583,16 +593,16 @@ exports.deactivateRep = async(repId) => {
 }
 
 //deleteRep
-exports.deleteRep = async(repId) => {
+exports.deleteRep = async (repId) => {
 
     if (!repId) throw new Error("Please provide rep Id");
 
-    let repInfo = await exports.getRep({id: repId});
-    if(repInfo.length >0){
+    let repInfo = await exports.getRep({ id: repId });
+    if (repInfo.length > 0) {
         let singleRep = repInfo[0];
-        if(singleRep.is_owner == true){
-            let allMrs = await exports.getRep({franchisee_id: singleRep.franchisee_id, is_owner: false});
-            for(let i=0; i< allMrs.length; i++){
+        if (singleRep.is_owner == true) {
+            let allMrs = await exports.getRep({ franchisee_id: singleRep.franchisee_id, is_owner: false });
+            for (let i = 0; i < allMrs.length; i++) {
                 let mr = allMrs[i];
                 await exports.deleteRep(mr.id);
             }
@@ -612,17 +622,17 @@ exports.deleteRep = async(repId) => {
     if (OrderTemp.length != 0)
         throw new Error("Unable to Delete Distributor, Because It is Linked with Some Customer Order Detail(s)")
 
-    let RepVisitTemp = await exports.getRepVisit({rep_id: repId});
-    if(RepVisitTemp.length != 0)
+    let RepVisitTemp = await exports.getRepVisit({ rep_id: repId });
+    if (RepVisitTemp.length != 0)
         throw new Error("Unable to Delete Distributor, Because It is Linked with Some Rep Visit(s)");
 
-    
+
     ///////////////////////////////////////////////////////////////////////
     return await deleteRep(repId);
 }
 
 //get rep count
-exports.getRepCount = async(repprops) => {
+exports.getRepCount = async (repprops) => {
     let filter = {}
     if (repprops.franchisee_id) filter.franchisee_id = repprops.franchisee_id;
     if (repprops.is_owner == true || repprops.is_owner == false) filter.is_owner = repprops.is_owner;
@@ -631,7 +641,7 @@ exports.getRepCount = async(repprops) => {
     return { count: repRecords - 1 };
 }
 
-exports.distributorsCount = async() => {
+exports.distributorsCount = async () => {
     let filter = {}
     filter.is_owner = true;
     // filter.active = true;
@@ -641,7 +651,7 @@ exports.distributorsCount = async() => {
 
 
 //get report of rep by dates
-exports.getReport = async(repprops) => {
+exports.getReport = async (repprops) => {
 
     let filter = {}
     let result = {};
@@ -679,7 +689,7 @@ exports.getReport = async(repprops) => {
         }
     })
 
-    let Visits = underscore.chain(repVisits).groupBy("rep_id").pairs().map(function(currentItem) { return underscore.object(underscore.zip(["rep_id", "reps"], currentItem)); }).value();
+    let Visits = underscore.chain(repVisits).groupBy("rep_id").pairs().map(function (currentItem) { return underscore.object(underscore.zip(["rep_id", "reps"], currentItem)); }).value();
 
     Visits = Visits.map(it => {
         return {
@@ -738,7 +748,7 @@ exports.getReport = async(repprops) => {
         }
     })
 
-    let Orders = underscore.chain(repOrders).groupBy("rep_id").pairs().map(function(currentItem) { return underscore.object(underscore.zip(["rep_id", "orders"], currentItem)); }).value();
+    let Orders = underscore.chain(repOrders).groupBy("rep_id").pairs().map(function (currentItem) { return underscore.object(underscore.zip(["rep_id", "orders"], currentItem)); }).value();
 
     Orders = Orders.map(it => {
         return {
@@ -768,7 +778,7 @@ exports.getReport = async(repprops) => {
 
 /****************Rep visit controller functions******************** */
 
-exports.addRepVisit = async(visit) => {
+exports.addRepVisit = async (visit) => {
 
     if (!visit.customer_id) throw new Error('customer Id is Required');
     if (!visit.place) throw new Error('Meeting place is Required');
@@ -786,7 +796,7 @@ exports.addRepVisit = async(visit) => {
 
     var visitProducts = null;
     if (visit.products) {
-        if (typeof(visit.products) == "string")
+        if (typeof (visit.products) == "string")
             visitProducts = JSON.parse(visit.products)
         else
             visitProducts = visit.products
@@ -815,7 +825,7 @@ exports.addRepVisit = async(visit) => {
 
 
 //{"OrderDateTime":{ $gte:ISODate("2019-02-10"), $lt:ISODate("2019-02-21") }
-exports.getRepVisit = async(repprops) => {
+exports.getRepVisit = async (repprops) => {
 
     let repVisits = await getRepVisit(repprops);
     if (!repVisits)
@@ -847,23 +857,23 @@ exports.getRepVisit = async(repprops) => {
     return repVisits;
 }
 
-exports.repSearch = async(repSearchFilter) => {
-        let filter = {}
-        if (repSearchFilter) filter = repSearchFilter;
-        let repRecords = await searchReps(filter);
+exports.repSearch = async (repSearchFilter) => {
+    let filter = {}
+    if (repSearchFilter) filter = repSearchFilter;
+    let repRecords = await searchReps(filter);
 
-        
+
     if (!repRecords) return null;
     repRecords = repRecords.map(it => {
         return Formatter.RepFormatter(it)
     })
-    
+
     return repRecords;
 }
 
 
 
-exports.getRepVisitAnalysis = async(props) => {
+exports.getRepVisitAnalysis = async (props) => {
 
     let filters = {};
     filters.$or = [];
@@ -924,51 +934,51 @@ exports.getRepVisitAnalysis = async(props) => {
         return null;
 
     repVisits = repVisits.map(it => {
-            let tmpProducts = null;
-            if (it.products) {
-                tmpProducts = (it.products).map(product => {
+        let tmpProducts = null;
+        if (it.products) {
+            tmpProducts = (it.products).map(product => {
 
-                    return {
-                        id: product._id,
-                        name: product.name,
-                        description: product.description,
-                        division_name: product.division_id.name,
-                        type_name: product.type_id.name,
-                        category_name: product.category_id.name
-                    }
-                })
-            }
+                return {
+                    id: product._id,
+                    name: product.name,
+                    description: product.description,
+                    division_name: product.division_id.name,
+                    type_name: product.type_id.name,
+                    category_name: product.category_id.name
+                }
+            })
+        }
 
-            return {
-                id: it._id,
+        return {
+            id: it._id,
 
-                customer_id: it.customer_id._id,
-                customer_name: it.customer_id.name,
-                customer_phone: it.customer_id.phone,
-                customer_email: it.customer_id.email,
-                customer_profession: it.customer_id.profession,
-                customer_working_place: it.customer_id.working_place,
+            customer_id: it.customer_id._id,
+            customer_name: it.customer_id.name,
+            customer_phone: it.customer_id.phone,
+            customer_email: it.customer_id.email,
+            customer_profession: it.customer_id.profession,
+            customer_working_place: it.customer_id.working_place,
 
 
-                rep_id: it.rep_id._id,
-                rep_name: it.rep_id.name,
-                rep_phone: it.rep_id.phone,
-                rep_op_area: it.rep_id.op_area,
+            rep_id: it.rep_id._id,
+            rep_name: it.rep_id.name,
+            rep_phone: it.rep_id.phone,
+            rep_op_area: it.rep_id.op_area,
 
-                products: tmpProducts,
-                place: it.place,
-                remark: it.remark,
-                time: moment(it.time).format("LLL"),
-                latitude: it.latitude || null,
-                longitude: it.longitude || null,
+            products: tmpProducts,
+            place: it.place,
+            remark: it.remark,
+            time: moment(it.time).format("LLL"),
+            latitude: it.latitude || null,
+            longitude: it.longitude || null,
 
-                created_on: moment(it.created_on).format("LLL"),
-            }
-        })
+            created_on: moment(it.created_on).format("LLL"),
+        }
+    })
 
     //
-        // ─── CUSTOMER VIEW FOR PRODUCT WISE START ────────────────────────────────────────────────────────
-        //
+    // ─── CUSTOMER VIEW FOR PRODUCT WISE START ────────────────────────────────────────────────────────
+    //
 
     let finalProductCustomersResponse = [];
     let groupByCustomerstmp = groupBy('customer_id');

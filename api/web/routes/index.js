@@ -15,6 +15,9 @@ router.use("/promo", require("./promotional_material"))
 router.use("/enquiry/", require("./enquiry"))
 router.use("/certificate/", require("./certificate"))
 
+router.use("/employee/", require("./employee"))
+
+
 
 
 //not found checker
