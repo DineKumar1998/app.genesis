@@ -8,7 +8,6 @@ import { GetFranchisee } from '../../../api/distributor/franchisee'
 import moment from "moment";
 import CONFIG from "./../../../config";
 import {isAadhar, isAddress, isEmail, isGstNo, isIfsc, isName, isPassword, isPhonenumber} from '../../../lib/validator'
-import { GetEmployee } from "src/api/employee";
 
 async function readDataUrl(file) {
   return new Promise((resolve, reject) => {
@@ -50,9 +49,6 @@ class AddEditForm extends React.Component {
     aadhar_no: "",
     active: "true",
     file: null, image: null, base64: null, objectUrl: null,
-    employee : '',
-    employeeList : [],
-    selectEmployee : [],
 
     divisionsList: [],
     selectedDivision: [],
@@ -174,7 +170,7 @@ class AddEditForm extends React.Component {
     e.preventDefault();
     await this.validation();
     let newActive = null;
-    let employee = ""
+
     let divisions = []
     if (Array.isArray(this.state.selectedDivision)) {
       this.state.selectedDivision.map((it) => {
@@ -182,7 +178,6 @@ class AddEditForm extends React.Component {
         return true
       })
     }
-    if (this.state.selectEmployee.value !== null){employee = this.state.selectEmployee.value}
     if (this.state.active === "true") { newActive = true }
     else { newActive = false }
     
@@ -217,7 +212,6 @@ class AddEditForm extends React.Component {
         state: this.state.state,
         aadhar_no: this.state.aadhar_no,
         active: newActive,
-        employee : employee ,
       }
 
       
@@ -315,15 +309,6 @@ class AddEditForm extends React.Component {
       const { id, name, email, phone, address, op_area, aadhar_no,  } = this.props.item;
       this.setState({ id, name, email, phone, address, op_area, aadhar_no ,  });
 
-    
-
-      let newEmp = null ;
-
-      if(this.props.employee_id !== null) {
-         newEmp = {value : this.props.item.employee_id , label : this.props.item.employee}
-      }
-      this.setState({selectEmployee : newEmp})
-
       
       if (this.props.item.profile_pic_url != null) {
         this.setState({ base64: this.props.item.profile_pic_url })
@@ -370,19 +355,6 @@ class AddEditForm extends React.Component {
 
     if (rs.success === true) {
       this.setState({ divisionsList: rs.data })
-
-      let respEmp = await GetEmployee()
-
-      if (respEmp.success === true){
-        let EmpList = []
-        if (Array.isArray(respEmp.data)) {
-          respEmp.data.map((it) => {
-            EmpList.push({ value: it.id, label: it.name })
-            return true
-          })
-        }
-         this.setState({employeeList : EmpList})
-      }
       
     }
   }
@@ -630,13 +602,6 @@ class AddEditForm extends React.Component {
                )}
 
 
-               <div className="form-group row">
-                 <label className="col-sm-2 col-form-label">Employee</label>
-                 <div className="col-sm-10">
-                   <Select value={this.state.selectEmployee} onChange={(selectedOption) => this.setState({ selectEmployee: selectedOption })} options={this.state.employeeList}
-                    />
-                 </div>
-               </div>
 
                <div className="form-group row">
                  <label className="col-sm-2 col-form-label">Status</label>

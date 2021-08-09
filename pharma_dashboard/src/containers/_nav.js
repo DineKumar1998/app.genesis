@@ -107,12 +107,6 @@ const _nav =  [
   },
   {
     _tag: 'CSidebarNavItem',
-    name: 'Employee',
-    to: '/employee',
-    icon: <CIcon name="cil-user" customClasses="c-sidebar-nav-icon"/>,
-  },
-  {
-    _tag: 'CSidebarNavItem',
     name: 'Download',
     to: '/download',
     icon: <CIcon name="cil-share-boxed" customClasses="c-sidebar-nav-icon"/>,
