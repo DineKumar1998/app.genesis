@@ -33,10 +33,11 @@ const Table = (props) => {
     { key: "name", label: "Name", },
     { key: "type_name", label: "Type Name", },
     { key: "price_", label: "Price", },
-    { key: "images", label: "Images & Visualate", },
+    { key: "images", label: "Images & Visualaids", },
     { key: "division_name", label: "Division", },
-    { key: "sku_", label: "SKU", },
-    { key: "hsn_code", label: "HSN", },
+  { key: "category_name", label: "Category", },
+    // { key: "sku_", label: "SKU", },
+    // { key: "hsn_code", label: "HSN", },
     { key: "Edit", label: "", _style: { width: "1%" }, sorter: false, filter: false, },
     { key: "Delete", label: "", _style: { width: "1%" }, sorter: false, filter: false, },
   ];
@@ -100,8 +101,7 @@ const Table = (props) => {
                     </td>
                   )
                 },
-                division_name
-                : (item) => {
+                division_name: (item) => {
                   return (
                     <td className="py-2">
                       {item.division_name === null || item.sku === "undefined" ? <b>--</b> : <p style={{fontSize : "11px", color : "green"}}>{item.division_name}</p>}
@@ -123,7 +123,7 @@ const Table = (props) => {
                           return <img onClick={() => showModalImg(`${it.url}`, `PRODUCT - ${item.name}`)} className="grow product_border"  src={it.url} alt="product" />
                         }
                         else {
-                          return <img onClick={() => showModalImg(`${it.url}`, `VISULATE - ${item.name}`)} className="grow vis_border" src={it.url} alt="Visulate" />
+                          return <img onClick={() => showModalImg(`${it.url}`, `VISUALAIDS - ${item.name}`)} className="grow vis_border" src={it.url} alt="Visulate" />
                         }
                       })
                         :

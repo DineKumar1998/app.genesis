@@ -188,9 +188,15 @@ input {
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 
+
+.gallery_container {
+  margin-left: 100px;
+}
+
 .container-gallery {
   /* position:relative; */
   display: flex;
+
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;

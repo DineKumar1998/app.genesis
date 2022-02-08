@@ -67,7 +67,7 @@ class Card extends React.Component {
         <div id="vueBind" className="container-gallery">
           <div v-for="data in content" className="card">
             {imgType === "IMG" ? <div className="ribbon-wrapper-green"><div className="ribbon-green">Image</div></div> :
-              <div className="ribbon-wrapper-blue"><div className="ribbon-blue">Visualate</div></div>}
+              <div className="ribbon-wrapper-blue"><div className="ribbon-blue">Visualaids</div></div>}
             <div className="imgBox">
               {
                 imgType === "IMG" ?
@@ -125,7 +125,7 @@ class Card extends React.Component {
                 imgType === "IMG" ?
                   <img src={img} alt="Image" className="modal-contentImg" />
                   :
-                  <img src={img} alt="visulate"  className="modal-contentImg" />
+                  <img src={img} alt="Visualaids"  className="modal-contentImg" />
               }
 
                 <div className="captionImg">{imgType} - {name}</div>

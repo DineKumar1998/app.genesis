@@ -10,6 +10,17 @@ import { CPagination } from "@coreui/react";
 import Page404 from "../page404/Page404";
 import Select from 'react-select'
 import { GetDivisionType } from "src/api/products/divisionType/divisionType";
+import { GetType } from "src/api/products/productType/productType";
+import { GetCategoryType } from "src/api/products/category/category";
+
+
+const options = [
+  { value: 'Division', label: 'Division' },
+  { value: 'Type', label: 'Type' },
+  { value: 'Category', label: 'Category' },
+  { value: 'newLaunch', label: 'New Launch' },
+  { value: 'upComing', label: 'Coming Soon' }
+]
 
 class Products extends Component {
   constructor(props) {
@@ -19,15 +30,33 @@ class Products extends Component {
       updated: false,
       currentPage: 1,
       totalPage: 0,
+      filter: options, filterSelected: null,
       divisionType: [], divisionTypeSelect: null,
+      categoryType: [], categoryTypeSelect: null,
+      type: [], typeSelect: null,
       rowPerPage: 20,
       loading: true,
       search: ""
     };
   }
 
-  handleChange = (newValue, actionMeta) => {
+  handleChangeDiv = (newValue) => {
     this.setState({ divisionTypeSelect: newValue })
+    this.setState({ updated: true })
+  };
+
+  handleChangeType = (newValue) => {
+    this.setState({ typeSelect: newValue })
+    this.setState({ updated: true })
+  };
+
+  handleChangecategory = (newValue) => {
+    this.setState({ categoryTypeSelect: newValue })
+    this.setState({ updated: true })
+  };
+
+  handleChangeFilter = (newValue) => {
+    this.setState({ filterSelected: newValue })
     this.setState({ updated: true })
   };
 
@@ -89,89 +118,170 @@ class Products extends Component {
 
   GetData = async () => {
     let rsDiv = await GetDivisionType()
+    let rsType = await GetType()
+    let rsCategory = await GetCategoryType()
 
-    if (rsDiv.success === true) {
+
+    if (rsDiv.success === true && rsType.success === true && rsCategory.success === true) {
       let divRes = []
+      let typeRes = []
+      let typeCategory = []
+
       if (rsDiv.data.length > 0) {
         rsDiv.data.map((it) => {
           return divRes.push({ value: it.id, label: it.name })
         })
       }
+
+      if (rsType.data.length > 0) {
+        rsType.data.map((it) => {
+          return typeRes.push({ value: it.id, label: it.name })
+        })
+      }
+
+      if (rsCategory.data.length > 0) {
+        rsCategory.data.map((it) => {
+          return typeCategory.push({ value: it.id, label: it.name })
+        })
+      }
+
       this.setState({ divisionType: divRes })
+      this.setState({ type: typeRes })
+      this.setState({ categoryType: typeCategory })
     }
 
-
+    // if searching with filter 
 
     if (this.state.search !== "") {
-
       let resp = null;
-
-      if (this.state.divisionTypeSelect !== null) {
+      if (this.state.filterSelected !== null) {
         resp = await SearchProducts({
           "name": this.state.search
         })
+
         let data = []
+
         if (resp.success === true) {
-          resp.data.map((item) => {
-            if (item.division_id === this.state.divisionTypeSelect.value) {
-              return data.push(item)
+          this.setState({ items: data });
+            if (this.state.filterSelected !== null && this.state.filterSelected.value === "Division") {
+              resp.data.map((item) => {
+                if (item.division_id === this.state.divisionTypeSelect.value) {
+                  return data.push(item)
+                }
+              })
             }
-          })
+            else if (this.state.filterSelected !== null && this.state.filterSelected.value === "upComing") {
+              resp.data.map((item) => {
+                if (item.upcoming === true) {
+                  return data.push(item)
+                }
+              })
+            }
+            else if (this.state.filterSelected !== null && this.state.filterSelected.value === "newLaunch") {
+              resp.data.map((item) => {
+                if (item.new_launched === true) {
+                  return data.push(item)
+                }
+              })
+            }
+            else if (this.state.filterSelected !== null && this.state.filterSelected.value === "Type") {
+              resp.data.map((item) => {
+                if (item.type_id === this.state.typeSelect.value) {
+                  return data.push(item)
+                }
+              })
+            }
+            else if (this.state.filterSelected !== null && this.state.filterSelected.value === "Category") {
+              resp.data.map((item) => {
+                if (item.category_id === this.state.categoryTypeSelect.value) {
+                  return data.push(item)
+                }
+              })
+            }
           this.setState({ items: data });
         }
       }
-      else {
+        // if searching without filter 
 
-        let rs = await SearchProducts({
-          "name": this.state.search
-        })
-        if (rs.success === true) {
-          this.setState({ items: rs.data });
+        else {
+          let rs = await SearchProducts({
+            "name": this.state.search
+          })
+          if (rs.success === true) {
+            this.setState({ items: rs.data });
+          }
         }
-      }
+      
 
     }
 
-
     else {
       this.setState({ loading: true })
-
       let skip = 0
       if (this.state.currentPage === 0) {
         skip = 1 * this.state.rowPerPage
       }
-
       else {
         skip = this.state.currentPage * this.state.rowPerPage
       }
-
-
       let skipVal = skip - this.state.rowPerPage
-
-
       let rs = null;
       let rsCount = null;
 
-      if (this.state.divisionTypeSelect !== null) {
-        rs = await GetProducts({
-          "division_id": this.state.divisionTypeSelect.value,
-          "limit": this.state.rowPerPage,
-          "skip": skipVal
-        })
-
-        rsCount = await GetProductsCount({ "division_id": this.state.divisionTypeSelect.value, })
+      if (this.state.filterSelected !== null) {
+        if (this.state.filterSelected.value === "upComing") {
+          rs = await GetProducts({
+            "upcoming": true,
+            "limit": this.state.rowPerPage,
+            "skip": skipVal
+          })
+          rsCount = { success : true ,data : { count : rs.data.length}}
+        }
+        if (this.state.filterSelected.value === "newLaunch") {
+          rs = await GetProducts({
+            "new_launched": true,
+            "limit": this.state.rowPerPage,
+            "skip": skipVal
+          })
+          rsCount = { success : true ,data : { count : rs.data.length}}
+        }
+         else if (this.state.filterSelected.value === "Division" && this.state.divisionTypeSelect !== null) {
+              rs = await GetProducts({
+                "division_id": this.state.divisionTypeSelect.value,
+                "limit": this.state.rowPerPage,
+                "skip": skipVal
+              })
+              rsCount = await GetProductsCount({ "division_id": this.state.divisionTypeSelect.value, })
+            }
+            else if (this.state.filterSelected.value === "Type" && this.state.typeSelect !== null) {
+             
+              rs = await GetProducts({
+                "type_id": this.state.typeSelect.value,
+                "limit": this.state.rowPerPage,
+                "skip": skipVal
+              })
+              rsCount = await GetProductsCount({ "type_id": this.state.typeSelect.value, })
+            }
+            else if (this.state.filterSelected.value === "Category" && this.state.categoryTypeSelect !== null) {
+             
+              rs = await GetProducts({
+                "category_id": this.state.categoryTypeSelect.value,
+                "limit": this.state.rowPerPage,
+                "skip": skipVal
+              })
+              rsCount = await GetProductsCount({ "category_id": this.state.categoryTypeSelect.value, })
+          }
       }
+
       else {
         rs = await GetProducts({
           "limit": this.state.rowPerPage,
           "skip": skipVal
         })
-
         rsCount = await GetProductsCount()
-
       }
 
-      if (rs.success === true && rsCount.success === true) {
+      if (rs !== null && rsCount !== null && rs.success === true && rsCount.success === true) {
         let page = rsCount.data.count / this.state.rowPerPage
         let num = Number(page) === page && page % 1 !== 0;
         if (num === true) {
@@ -187,7 +297,6 @@ class Products extends Component {
       }
     }
     this.setState({ loading: false });
-
   }
 
   // ****************** ComponentDidMount Function *****************************
@@ -213,6 +322,7 @@ class Products extends Component {
   }
 
   render() {
+
     return (
       <>
         {this.state.loading ? <div className="loader"></div> :
@@ -270,13 +380,56 @@ class Products extends Component {
               <Col xs="12" sm="6">
                 <div style={{ float: "right", width: "50%" }}>
                   <Select
-                    value={this.state.divisionTypeSelect}
-                    onChange={this.handleChange}
+                    value={this.state.filterSelected}
+                    onChange={this.handleChangeFilter}
                     isClearable
                     // isSearchable
-                    placeholder="Choose Divison"
-                    options={this.state.divisionType} />
+                    placeholder="Choose Filter"
+                    options={this.state.filter} />
 
+                  {this.state.filterSelected !== null && this.state.filterSelected.value === "Division" ?
+                    <div style={{ marginTop: "10px" }}>
+                      <Select
+                        value={this.state.divisionTypeSelect}
+                        onChange={this.handleChangeDiv}
+                        isClearable
+                        // isSearchable
+                        placeholder="Choose Divison"
+                        options={this.state.divisionType} />
+                    </div>
+                    :
+                    <>
+                      {
+                        this.state.filterSelected !== null && this.state.filterSelected.value === "Type" ?
+                          <div style={{ marginTop: "10px" }}>
+                            <Select
+                              value={this.state.typeSelect}
+                              onChange={this.handleChangeType}
+                              isClearable
+                              // isSearchable
+                              placeholder="Choose Type"
+                              options={this.state.type} />
+                          </div>
+                          :
+                          <>
+                            {this.state.filterSelected !== null && this.state.filterSelected.value === "Category" ?
+                              <div style={{ marginTop: "10px" }}>
+                                <Select
+                                  value={this.state.categoryTypeSelect}
+                                  onChange={this.handleChangecategory}
+                                  isClearable
+                                  // isSearchable
+                                  placeholder="Choose Category"
+                                  options={this.state.categoryType} />
+                              </div>
+                              :
+                              <></>
+                            }
+
+                          </>
+                      }
+                    </>
+                  }
                 </div>
               </Col>
 

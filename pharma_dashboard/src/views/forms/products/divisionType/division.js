@@ -74,9 +74,9 @@ class AddEditForm extends React.Component {
     if (!this.state.name) {
       return NotificationManager.error("Please Enter Division", "Info", 2000);
     }
-    else if (! isName(this.state.name)) {
-      return NotificationManager.error("Invalid Division", "Info", 2000);
-    }
+    // else if (!this.state.name.trim()) {
+    //   return NotificationManager.error("Invalid Division", "Info", 2000);
+    // }
     else if (!this.state.email) {
       return NotificationManager.error("Please Enter Email", "Info", 2000);
     }

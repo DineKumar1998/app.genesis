@@ -29,7 +29,7 @@ class ModalForm extends Component {
                   onClick={this.toggle}>
                   <IconEdit />
                   </CButton> 
-        title = 'Edit Packaging Type'
+        title = 'Edit division'
       } else {
         button = <button
                   size="sm"
@@ -38,7 +38,7 @@ class ModalForm extends Component {
                   onClick={this.toggle}>
                   {label}{' '}<i className="fas fa-plus"></i>
                 </button>
-        title = 'Add Packaging Type'
+        title = 'Add division'
       }
 
       return (

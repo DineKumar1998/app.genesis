@@ -40,7 +40,7 @@ const RegisterRepandFranchisee = async(req,res,next)=>{
     // if(!req.body.city) req.body.city = "";
     // if(!req.body.state) req.body.state = ""
 
-    if (!req.body.employee) return next( new Error('Employee Name is Required'));
+    // if (!req.body.employee) return next( new Error('Employee Name is Required'));
 
 
     let franchiseeData = {

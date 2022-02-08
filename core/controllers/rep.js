@@ -59,8 +59,8 @@ exports.addRep = async (rep) => {
 
     if (!rep.franchisee_id) throw new Error('Franchisee Id is Required'); //will changed by auth
     if (!rep.name) throw new Error('Name is Required');
-    if (!rep.email) throw new Error('Email is Required');
-    if (!Validator.validateEmail(rep.email)) throw new Error("Invalid Email");
+    if (!rep.email) rep.email = ''
+    // if (!Validator.validateEmail(rep.email)) throw new Error("Invalid Email");
 
     if (!rep.phone) throw new Error('Phone Number is Required');
     let phone = Validator.validatePhone(rep.phone);
@@ -71,7 +71,7 @@ exports.addRep = async (rep) => {
     if (!rep.dob) rep.dob = null;
     if (!rep.password) throw new Error('Password is Required');
     if (!rep.op_area) rep.op_area = "NA";
-    if (!rep.employee) rep.employee = null;
+    // if (!rep.employee) rep.employee = null;
 
     if (!rep.active) rep.active = false;
     if (!rep.is_owner) rep.is_owner = false;
@@ -94,7 +94,6 @@ exports.addRep = async (rep) => {
         address: rep.address,
         email: rep.email,
         phone: rep.phone,
-        employee: rep.employee,
         dob: rep.dob,
         profile_pic_url: profile_pic,
         aadhar_no: rep.aadhar_no,
@@ -332,7 +331,7 @@ exports.getRep = async (repprops) => {
 
     if (repprops.city) filter.city = repprops.city;
 
-    if (repprops.employee) filter.employee = repprops.employee;
+    // if (repprops.employee) filter.employee = repprops.employee;
 
     if (repprops.state) filter.state = repprops.state;
 
@@ -519,7 +518,7 @@ exports.updateRep = async (repprops) => {
     }
 
     if (repprops.op_area) filter.op_area = repprops.op_area;
-    if (repprops.employee) filter.employee = repprops.employee;
+    // if (repprops.employee) filter.employee = repprops.employee;
 
     if (repprops.joined_on) filter.joined_on = repprops.joined_on;
     if (repprops.active) filter.active = repprops.active;

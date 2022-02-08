@@ -15,7 +15,7 @@ const searchCustomer = require("../usecases/customer/searchCustomer");
 exports.addCustomer = async(Customer) => {
     if (!Customer.name) throw new Error('Customer Name is Required');
     if (!Customer.phone) throw new Error('Customer phone is Required');
-    if (!Customer.email) throw new Error('Customer email is Required');
+    if (!Customer.email) Customer.email = '';
     if (!Customer.address) throw new Error('Customer address is Required');
     if (!Customer.rep_id) throw new Error('Rep Id is Required');
     if (!Customer.franchisee_id) throw new Error('Franchisee Id is Required');

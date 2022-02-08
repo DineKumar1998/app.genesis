@@ -9,14 +9,13 @@ const RepCtrl = require("../controllers/rep");
 //import moment for date formatting
 const moment = require("moment");
 const fs = require("fs");
-const { Console } = require("console");
 
 //Add Order 
 exports.addOrder = async(order) => {
 
     if (!order.customer_id) throw new Error('Customer Id is Required');
     if (!order.orderlist) throw new Error('Order List is Required');
-    
+
     let neworder = {
         customer_id: order.customer_id,
         rep_id: order.rep_id,
@@ -39,7 +38,7 @@ exports.addOrder = async(order) => {
             let rep = distributors[i];
             if(rep.device_token){
                 let message = "Order From " + orderDEtails[0].rep_name + " MR is Recived on " + orderDEtails[0].created_on;
-                 await sendNotification({ title: "New Order Received", message: message }, rep.device_token)
+                let notificationResponse = await sendNotification({ title: "New Order Received", message: message }, rep.device_token)
             }
         }
     }
@@ -53,7 +52,7 @@ exports.getOrder = async(orderprops) => {
     if (orderprops.rep_id) filter.rep_id = orderprops.rep_id;
     if (orderprops.customer_id) filter.customer_id = orderprops.customer_id;
     if (orderprops.franchisee_id) filter.franchisee_id = orderprops.franchisee_id;
-    let orderRecords = await getOrder(filter);    
+    let orderRecords = await getOrder(filter);
     if (!orderRecords)
         return null;
 

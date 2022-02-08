@@ -60,7 +60,7 @@ const fs = require("fs");
 const sizeOf = require('image-size');
 const division = require("../models/division");
 
-const IMG_SIZE = process.env.IMG_SIZE || 40000; //40KB
+const IMG_SIZE = process.env.IMG_SIZE || 60000; //40KB
 const VIS_SIZE = process.env.VIS_SIZE || 120000; //120KB
 
 const IMG_HEIGHT = process.env.IMG_HEIGHT || 500; //500PX

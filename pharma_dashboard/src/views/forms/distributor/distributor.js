@@ -452,7 +452,7 @@ class AddEditForm extends React.Component {
 
               {CONFIG.FIRM_DRUG_LICENCE && (
                 <div className="form-group row">
-                  <label className="col-sm-2 col-form-label">Drug Licence</label>
+                  <label className="col-sm-2 col-form-label">Drug Licence/Reg No.</label>
                   <div className="col-sm-10">
                     <input type="text" maxLength='14' value={this.state.drug_license} name="drug_license"
                       onChange={this.onChange} className="form-control" />
