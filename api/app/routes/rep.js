@@ -30,6 +30,11 @@ router.get('/count', checkAuth, repHandler.getRepCount)
 
 router.get('/deactivate/:Id', checkAuth, repHandler.deactivateRep)
 
+// Delete Rep
+router.delete('/mr-delete/:id', checkAuth, repHandler.deleteMr)
+
+router.post('/mr-update', checkAuth, repHandler.updateMr)
+
 /*****************Rep daily report by date ************/
 router.post('/report', checkAuth, repHandler.getReport)
 

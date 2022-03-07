@@ -163,7 +163,7 @@ export default class Login extends Component {
                 <input type={this.state.passwordType}className="input-login" placeholder="Password"  
                 value={this.state.password} onChange={this.onChange} name="password"
                 />
-                  <i class={`fas ${this.state.eye_btn} eye_btn`} onClick={this.changeType}></i>
+                  <i className={`fas ${this.state.eye_btn} eye_btn`} onClick={this.changeType}></i>
               </div>
             </div>
 

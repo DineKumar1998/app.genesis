@@ -870,7 +870,9 @@ exports.repSearch = async (repSearchFilter) => {
     return repRecords;
 }
 
-
+exports.deleteMr = async (props) => {
+    return await deleteRep(props.id)
+}
 
 exports.getRepVisitAnalysis = async (props) => {
 

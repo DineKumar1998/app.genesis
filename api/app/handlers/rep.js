@@ -305,6 +305,34 @@ const logout = async(req, res, next) => {
     }
 }
 
+const deleteMr = async (req, res, next) => {
+    let filter = { id: req.params.id };
+
+    if(!filter.id)
+        throw new Error("Please provide MR id !!")
+
+    try {
+        let rs = await repController.deleteMr(filter)
+        req.message = "Mr Deleted !!";
+        req.data = null;
+        next()
+    } catch (e) {
+        req.status = 400;
+        next(e)
+    }
+}
+
+const updateMr = async (req, res, next) => {
+    try {
+        let repRecords = await repController.updateRep(req.body)
+        req.data = repRecords
+        next()
+    } catch (e) {
+        req.status = 400;
+        next(e)
+    }
+}
+
 
 module.exports = {
     addRep,
@@ -325,5 +353,7 @@ module.exports = {
     addRepVisit,
     getRepVisit,
     getRepVisitAnalysis,
-    logout
+    logout,
+    deleteMr,
+    updateMr
 }
